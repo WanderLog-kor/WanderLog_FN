@@ -8,6 +8,7 @@ const PrivateRoute = ({ element, ...rest }) => {
     const [cookie, setCookie] = useState(null);
     const navigate = useNavigate();  // navigate 훅 사용
 
+    
     useEffect(() => {
 
         axios.post('http://localhost:9000/api/cookie/validate', {}, { withCredentials: true })
