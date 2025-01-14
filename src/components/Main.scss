@@ -1,172 +1,184 @@
-// 메인페이지 전체
-.main-wrapper {
+.swiper-wrapper {
+    transition-timing-function: linear !important;
+    /* 선형 이동 */
+}
+
+/* .swiper-section 상대적 위치 설정 */
+.swiper-section {
+    position: relative;
+}
+
+/* Swiper 화살표 기본 스타일 */
+.swiper-button-prev,
+.swiper-button-next {
+    // background-color: rgba(0, 0, 0, 0.5); /* 배경색 */
+    // border-radius: 50%; /* 원형 모양 */
+    color: #333;
+    /* 화살표 색상 */
+    padding: 10px;
+    /* 여백 */
+}
+
+/* 화살표를 감싸는 navigation-wrapper 스타일 */
+.navigation-wrapper {
+    position: absolute;
+    /* 절대위치로 지정 */
+    top: 50%;
+    /* 수직 중앙 */
+    left: 50%;
+    /* 수평 중앙 */
+    transform: translate(-50%, -50%);
+    /* 정확히 중앙에 배치 */
+    width: 105%;
+    /* 원하는 넓이 지정 */
+    display: flex;
+    /* 화살표들을 가로로 배치 */
+    justify-content: space-between;
+    /* 양쪽 끝으로 배치 */
+    z-index: 10;
+    /* 다른 요소들 위에 표시되도록 */
+}
+
+/* Swiper 화살표 위치 */
+.swiper-button-prev {
+    left: 0;
+    /* 왼쪽 화살표 */
+}
+
+.swiper-button-next {
+    right: 0;
+    /* 오른쪽 화살표 */
+}
+
+
+
+// 메인페이지 헤더 영역
+.main-header {
     background-image: url('/images/trip2.png');
     flex: 1;
-    height: calc(100vh - 80px);
-    background-size: cover;
-    background-position: center;
+    height: 400px;
     position: relative;
 
-    z-index: 101; //헤더에 있는 사진위로 
-    transform: scale(1.1);
-    animation: fadeInBackground 1.5s ease forwards; // 1.5초 동안 서서히 나타남
-    * {
-        z-index: 2;
+    .main-header__text {
+        position: absolute;
+        left: 39%;
+        top: 45%;
+        font-size: 1.6rem;
+        color: white;
     }
 }
 
-// 메인페이지 제목
-.main-title {
-    position: fixed;
-    margin-top:30px;
-    font-size: 2.5rem;
-    text-align: center;
-    top: 35%;
-    left: 15%;
-    color: #343a40;
+// 메인페이지 메인 부분
+.main-main {
+    width: 1200px;
+    margin: 0 auto;
+    height: 1200px;
 
-    /* 초기 상태 */
-    opacity: 0;
-    transform: translateY(50px);
-    animation: fadeInUp 1.5s ease forwards; // 1.5초 동안 서서히 나타남
+
+    .swiper-section {
+        .mySwiper {
+            height: 520px;
+        }
+
+        margin-top: 80px;
+
+        .board-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 0 20px;
+            border-bottom: 1px solid #777;
+            margin-bottom: 20px;
+
+            strong {
+                font-size: 1.7rem;
+                font-weight: 800;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
+                font-size: 32px;
+            }
+
+
+        }
+
+        /* 개별 플래너 항목 */
+        .main-planner-item {
+
+            margin: 10px;
+
+            border-radius: 20px;
+            // border: 1px solid #888;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            height: 500px;
+
+
+            /* border와 내부 영역에 그라데이션을 적용 */
+            /* 썸네일 이미지 스타일 */
+            .main-planner-thumbnail img {
+                width: 100%;
+                height: 360px;
+                border-radius: 10px;
+                padding: 5px;
+                margin-right: 20px;
+            }
+
+            .main-planner-info {
+                padding: 10px 15px 15px 15px;
+
+                /* 플래너 제목 스타일 */
+                .main-planner-title {
+                    font-size: 1.5rem;
+                    color: #333;
+                    margin: 0;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+
+                }
+
+                /* 플래너 작성자 정보 스타일 */
+                .main-planner-username {
+                    font-size: 1rem;
+                    color: #777;
+                    margin: 5px 0;
+                }
+
+                /* 플래너 기간 스타일 */
+                .main-planner-duration {
+                    font-size: 1rem;
+                    color: #777;
+                    margin: 5px 0;
+                }
+
+                /* 작성일 스타일 */
+                .main-planner-created-at {
+                    font-size: 0.9rem;
+                    color: #555;
+                }
+
+            }
+        }
+
+        /* 호버시 카드 효과 */
+        .main-planner-item:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+
+
+
+    }
+
 }
 
-// 플래너 생성 버튼
-.main-makeplanner-btn {
-    position: fixed;
-    top: 60%;
-    left: 13%;
-    width:250px;
-    height: 100px;
-    padding: 20px;
-    text-align: center;
-    border: 0; // 테두리 없음
-    color: #343a40; // 폰트 색상 흰색
-    background: #caf0f8; // 버튼 배경색 검은색
-    font-size: 1.2rem; // 글자 크기
-    font-weight: normal; // 글자 두께
-    border-radius: 30px; // 네모 모양으로 변경
-    transition: background-color 0.3s ease, color 0.3s ease; // 부드러운 전환 효과
-        /* 초기 상태 */
-        opacity: 0;
-        transform: translateY(50px);
-        animation: fadeInUp 1.5s ease forwards; // 1.5초 동안 서서히 나타남
-}
 
-.main-makeplanner-btn:hover {
-    background-color: #90e0ef; // 호버 시 배경색 조금 밝게
-    color: white; // 폰트 색상 유지
-    text-shadow: none; // 네온 효과 제거
-}
-
-// 게시판 버튼
-.main-board-btn {
-    position: fixed;
-    top: 60%;
-    left: 30%;
-    width:300px;
-    height: 100px;
-    padding: 20px;
-    border: 0; // 테두리 없음
-    text-align: center;
-    color: #343a40; // 폰트 색상 흰색
-    background: #caf0f8; // 버튼 배경색 검은색
-    font-size: 1.2rem; // 글자 크기
-    font-weight: normal; // 글자 두께
-    border-radius: 30px; // 네모 모양으로 변경
-    transition: background-color 0.3s ease, color 0.3s ease; // 부드러운 전환 효과
-        /* 초기 상태 */
-        opacity: 0;
-        transform: translateY(50px);
-        animation: fadeInUp 1.5s ease forwards; // 1.5초 동안 서서히 나타남
-}
-
-.main-board-btn:hover {
-    background-color: #90e0ef; // 호버 시 배경색 조금 밝게
-    color: white; // 폰트 색상 유지
-    text-shadow: none; // 네온 효과 제거
-}
-
-/* 애니메이션 정의 */
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInBackground {
-    0% {
-        opacity: 0;
-        transform: scale(1.1); // 약간 확대된 상태
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1); // 원래 크기
-    }
-}
-
-// 반응형 스타일
-@media (max-width: 1024px) {
-    .main-title {
-        font-size: 2rem; // 제목 글씨 크기 축소
-    }
-
-    .main-makeplanner-btn,
-    .main-board-btn {
-        width: 25vw; // 버튼 너비 조정
-        font-size: 0.9rem; // 폰트 크기 축소
-    }
-}
-
-@media (max-width: 768px) {
-    .main-title {
-        font-size: 1.8rem;
-    }
-
-    .main-makeplanner-btn,
-    .main-board-btn {
-        width: 30vw;
-        height: 10vh;
-        font-size: 0.8rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-title {
-        font-size: 1.5rem;
-        left: 5%; // 여백 축소
-        right: 5%;
-    }
-
-    .main-makeplanner-btn,
-    .main-board-btn {
-        width: 35vw;
-        height: 12vh;
-        font-size: 0.7rem;
-    }
-
-    .total-plans-display {
-        font-size: 1rem; // 여행 계획 표시 폰트 크기 축소
-        padding: 8px 10px;
-    }
-}
-
-// 여행 계획 수 표시
-.total-plans-display {
-    position: fixed;
-    right: 160px;
-    bottom:60px;
-    font-size: 1.2rem;
-    font-weight: normal;
-    color: white;
-    background-color: black;
-    opacity: 0.9;
-    padding: 10px 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+// 메인 페이지 푸터
+.main-footer {
+    height: 300px;
+    border: 1px solid;
 }
