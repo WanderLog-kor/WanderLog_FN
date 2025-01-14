@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Mypage from "./Mypage";
 import Destination from "../board/BoardInfo";
 
-const AppRouter = () => {
+const MypageRouter = () => {
   return (
     <Routes>
       <Route path="user/mypage" element={<Mypage />} />
@@ -12,4 +12,4 @@ const AppRouter = () => {
   );
 };
 
-export default AppRouter;
+export default MypageRouter;

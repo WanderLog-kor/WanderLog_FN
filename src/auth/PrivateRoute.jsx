@@ -8,47 +8,80 @@ const PrivateRoute = ({ element, ...rest }) => {
     const [cookie, setCookie] = useState(null);
     const navigate = useNavigate();  // navigate 훅 사용
 
-    useEffect(() => {
-
-        axios.post('http://localhost:9000/api/cookie/validate', {}, { withCredentials: true })
-            .then(response => {
+    useEffect(()=> {
+        const validateCookie = async () =>{
+            try{
+                const response = await axios.post(
+                    "http://localhost:9000/api/cookie/validate",
+                    {},
+                    {withCredentials:true}
+                );
                 setIsAuthenticated(true);
-                setCookie(response.data);  // 응답 데이터로 쿠키 정보 설정
-                console.log("쿠키 정보:", response.data);  // 쿠키 정보를 콘솔에 출력
+                setCookie(response.data); //쿠키정보 저장
+                console.log("쿠키정보 :" ,response.data);
+            }catch (err) {
+                console.log("엑세스 토큰 갱신 시도");
+                await handleTokenRefresh();
+            }
+        };
 
-                const userid = localStorage.getItem("userid");
-
-                if (userid) {
-                    console.log("Userid found in 로컬스토리지:", userid);
-                } else {
-                    console.log("userid 값이 로컬 스토리지에 없습니다.");
-                }
-            })
-            .catch(err => {
+        const handleTokenRefresh = async () => {
+            const userid = localStorage.getItem("userid");
+            if(!userid) {
+                console.error("userid가 로컬 스토리지에 없습니다");
                 setIsAuthenticated(false);
-                alert('로그인이 필요한 서비스입니다.')
                 navigate("/user/login");
-                console.log("쿠키 오류:", err);  // 쿠키 정보를 콘솔에 출력
-            });
+                return ;
+            }
+
+            try{
+                const tokens = await refreshAccessToken(userid);
+                console.log("토큰 갱신 성공", tokens);
+
+                //갱신 후 쿠키 유효성 재검사
+                const retryResponse = await axios.post(
+                    "http://localhost:9000/api/cookie/validate",
+                    {},
+                    {withCredentials : true}
+                );
+                setIsAuthenticated(true);
+                setCookie(retryResponse.data);
+                console.log("갱신 후 쿠키 정보:", retryResponse.data);
+            } catch( refreshError) {
+                console.error("토큰 갱신 실패:", refreshError);
+                setIsAuthenticated(false);
+                localStorage.removeItem("userid");
+                navigate("/user/login");
+            }
+        };
+
+        validateCookie();
+       
     }, [navigate]);
 
-    if (isAuthenticated === null) {
-        return <div>Loading...</div> //인증 상태가 결정될 때까지 대기
+    if(isAuthenticated === null) {
+        return <div>Loading...</div>; //인증 상태 결정 대기
+
     }
 
 
     return isAuthenticated ? React.cloneElement(element, { cookie }) : null;
 };
 
-
-const refreshAccessToken = async (userid, refreshToken) => {
-    try {
-        const response = await axios.post('http://localhost:9000/api/refresh', { userid, refreshToken }, {
-            withCredentials: true,
+const refreshAccessToken = async (userid) => {
+    try{
+        const response = await axios.post('http://localhost:9000/api/cookie/refresh',{userid} ,{
+            withCredentials : true,
+            headers : {
+                userid : userid,
+            },
         });
-        return response.data; //엑세스 토큰과 리프레시 토큰 반환
-    } catch (error) {
+        return response.data; 
+    }catch (error) {
+
+
         console.log("엑세스 토큰 재발급 실패", error);
+        localStorage.removeItem("userid");
         throw new Error("엑세스 토큰 재발급 실패");
     }
 };

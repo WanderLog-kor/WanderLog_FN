@@ -20,9 +20,8 @@ import UseridInputPage from '../login/components/UseridInputPage.jsx';
 import EmailAuthPage from '../login/components/EmailAuthPage.jsx';
 import VerifyCodePage from '../login/components/VerifyCodePage.jsx';
 import PasswordResetPage from '../login/components/PasswordResetPage.jsx';
-import Mypage from '../mypage/MypageRouter.jsx';
-
-
+import SocialLoginHandler from '../login/SocialLoginHandler.jsx';
+import Mypage from '../mypage/Mypage.jsx';
 const Body = () => {
 
 
@@ -45,6 +44,7 @@ const Body = () => {
             <Route path="/email-auth" element={<EmailAuthPage />}></Route>
             <Route path="/verify-code" element={<VerifyCodePage />}></Route>
             <Route path="/reset-password" element={<PasswordResetPage />}></Route>
+            <Route path="/oauth2/success" element={<SocialLoginHandler />}></Route>
 
             {/* 계획 생성 */}
             <Route path="/makePlanner" element={<PrivateRoute element={<MakePlanner />} />} />

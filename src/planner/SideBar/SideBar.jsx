@@ -316,6 +316,7 @@ const SideBar = (props) => {
   const indexOfFirstResult = indexOfLastResult - resultsPerPage;
   const currentResults = search.slice(indexOfFirstResult, indexOfLastResult)
 
+
   // 총 페이지 수 계산
   const totalPages = Math.ceil(search.length / resultsPerPage);
 

@@ -71,15 +71,12 @@ const Header = () => {
                         <Link to="/user/join">
                             <button className="join-btn">회원가입</button>
                         </Link>
-                        
                     </>
                 ) : (
                     <>
-
                         <Link to="/user/mypage">
-                            <button className="join-btn">마이페이지지</button>
+                            <button className="join-btn">마이페이지</button>
                         </Link>
-
 
                         <Link to="/user/logout">
                             <button className="logout-btn">로그아웃</button>

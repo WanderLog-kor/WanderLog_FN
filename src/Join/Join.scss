@@ -1,20 +1,25 @@
 .all{
 
-    margin-top: 100px;
+    // margin-top: 100px;
 
-    width: 100%;
-    height: 100%;
-
+    width: 50%;
+    height: 80%;
     place-items: center; // 가로와 세로 중앙정렬
     position: relative;
-
-    // border: 1px solid blue;
-    
+    margin-top: 90px;
+    margin-bottom: 90px;
+    left: 25%;
+    border: 5px solid rgba(55, 55, 61, 0.629);
+    border-radius: 45px;
+    h1{
+        font-size: 2rem;
+        margin-top: 40px;
+    }
 
     form{
 
         
-        border: 1px solid rgb(21, 195, 29);
+        // border: 1px solid rgb(21, 195, 29);
         place-items: center;
 
          // 유효성 메세지 색깔 체크
@@ -82,7 +87,7 @@
         #imgbutton{
             justify-content: center;
             align-items: center;
-            width: 900px;
+            width: auto;
             height: 50px;
             // border: 1px solid red;
             display: flex;
@@ -90,11 +95,11 @@
             align-items: center;
            
             #imgupload{
-                width: 100px;
+                width: auto;
             }
 
             #imgcancel{
-                width: 100px;
+                width: auto;
             }
         }
         
@@ -120,7 +125,8 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
-        
+
+
                 input {
                     flex: 1;
                     padding-right: 150px; // 인증 코드 버튼 공간
@@ -151,7 +157,7 @@
             position: relative;
             display: flex;
             flex-direction: column;
-            width: 400px;
+            width: 400;
             margin-top: 10px;
 
             &.auth-message{
@@ -163,7 +169,7 @@
                 display: flex;
                 align-items: center;
                 width: 100%;
-                border: 1px solid blue;
+                
                 // margin-bottom: 50px ;
         
                 .auth-code {
@@ -173,7 +179,7 @@
                     border-radius: 4px;
                     font-size: 0.9rem;
                     width: 100%;
-                    border: 1px solid red;
+                    // border: 1px solid red;
                     position: relative;
                     // margin-bottom:  0px;
                 }
@@ -181,7 +187,7 @@
                 #timer {
                     position: absolute;
                     right: -250px; // 버튼과 간격 조정
-                    top: 50%;
+                    top: 65%;
                     transform: translateY(-50%);
                     font-size: 0.9rem;
                     color: #333;

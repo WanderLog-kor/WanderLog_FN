@@ -1,146 +1,100 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import useFileAndImageHandler from "./useFileAndImageHandler";
-import useValidationHandler from "./useValidationHandler";
-import useAuthHandler from "./useAuthHandler";
-import useSaveChanges from "./useSaveChanges";
-import useFormDataHandler from "./useFormDataHandler";
-import "./Mypage.scss";
-
-
+import useMyPage from "./useMyPage"; // Custom hook import
+import useProfileImage from "./useProfileImage";
+import "./MyInformation.scss"
 
 const MyInformation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
+
+  // 비밀번호 필드 활성화 상태 추가
+
   const [isEmailEditing, setIsEmailEditing] = useState(false);
-  const [isPasswordEditing, setIsPasswordEditing] = useState(false);
-  const [isAuthCodeVerified, setIsAuthCodeVerified] = useState(false);
-  
+  const [isPasswordValid, setIsPasswordValid] = useState(false); // 비밀번호 유효성 여부
 
-  // 초기 데이터 준비
-  const initialUserData = userData
-    ? {
-        userid: userData.userid || "",
-        username: userData.username || "",
-        email: userData.email || "",
-        profileImage: userData.img || "/ProfileImg/anonymous.jpg",
-      }
-    : {
-        userid: "",
-        username: "",
-        email: "",
-        profileImage: "/ProfileImg/anonymous.jpg",
-      };
-
-      const {
-        formData,
-        setFormData,
-        resetFormData, // 초기화 메서드 추가
-        updateFormData,
-        handleEmailChange,
-        handleUsernameChange,
-        handleChange,
-        handlePasswordChange,
-        handleAuthCodeVerification,
-        handleSendAuthCode,
-      } = useFormDataHandler(initialUserData);
-    
-      const {
-        validationMessages,
-        setValidationMessages,
-        validatePassword,
-        validateEmail,
-        validateUsername,
-      } = useValidationHandler(initialUserData);
-      
-      const {
-        imagePreview,
-        fileInputRef,
-        handleFileInputClick,
-        handleFileChange,
-        handleCancelImage,
-        handleResetToDefaultImage,
-        handleDrop,
-        setImagePreview,
-        handleDragOver,
-      } = useFileAndImageHandler(setFormData, userData); // 함수 자체로 전달
-    
-
- 
+  const [formData, setFormData] = useState({
+    profileImage: "/ProfileImg/anonymous.jpg",
+    userid: "",
+    username: "",
+    email: "",
+    gender: "",
+  });
   const {
+    setValidationMessages,
+    validationMessages,
     authCodeSent,
-    isAuthCodeLocked,
     timer,
+    isAuthCodeLocked,
+    validatePassword,
+    handlePasswordEditClick,
+    handleCancelPasswordEditing,
+    validateEmail,
+    isPasswordEditing,
+    handleChange,
     sendAuthCode,
     verifyAuthCode,
     resetAuthState,
-    handleVerifyAuthCode,
-  } = useAuthHandler({ setValidationMessages });
+  } = useMyPage(formData, setFormData);
 
-   // 핸들러 가져오기
- 
+  const {
+    imagePreview,
+    fileInputRef,
+    handleFileInputClick,
+    handleFileChange,
+    handleDrop,
+    handleDragOver,
+    handleCancelImage,
+    handleResetToDefaultImage,
+    setImagePreview,
+  } = useProfileImage(formData, setFormData); // 함수 자체로 전달
 
-
-  // Save Changes Hook
-  const { handleSaveChanges } = useSaveChanges({
-    formData,
-    setUserData,
-    setIsEditing,
-    isEmailEditing,
-    isAuthCodeVerified,
-    setValidationMessages,
-  });
-
-
-
-
+  // Fetch user data on load
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
+
+        // 쿠키 유효성 확인
         await axios.post(
           "http://localhost:9000/api/cookie/validate",
           {},
-          { withCredentials: true }
+          {
+            withCredentials: true,
+          }
         );
 
+        // 사용자 데이터 가져오기
         const userResponse = await axios.get(
           "http://localhost:9000/user/mypage",
-          { withCredentials: true }
+          {
+            withCredentials: true,
+          }
         );
-        setUserData(userResponse.data); // userData 설정
-        console.log("1.Mypage", userResponse.data); // 디버깅 추가
+
+        setUserData(userResponse.data);
         setFormData({
           profileImage: userResponse.data.img || "/ProfileImg/anonymous.jpg",
-          userid: userResponse.data.userid || "",
-          username: userResponse.data.username || "",
-          email: userResponse.data.email || "",
-          gender: userResponse.data.gender || "",
+          userid: userResponse.data.userid,
+          username: userResponse.data.username,
+          email: userResponse.data.email,
+          gender: userResponse.data.gender,
         });
         setLoading(false);
       } catch (err) {
+        console.error("오류:", err);
         setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
-      } finally {
         setLoading(false);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, []); // userData 제거 // 의존성 배열에서 `userData`를 제외하여 무한 루프 방지
 
-  const handleCancelChanges = () => {
-    if (userData) {
-      setFormData({
-        profileImage: userData.img || "/ProfileImg/anonymous.jpg",
-        userid: userData.userid || "",
-        username: userData.username || "",
-        email: userData.email || "",
-      });
-    }
-    setIsEditing(false); // 수정 모드 종료
-  };
+  if (loading) return <div>로딩 중...</div>;
+  if (error) return <div>{error}</div>;
 
   // 수정 버튼 클릭 시 현재 프로필 이미지를 미리보기로 설정
   const handleEditClick = () => {
@@ -152,47 +106,183 @@ const MyInformation = () => {
       );
       setFormData({
         profileImage: userData.img || "/ProfileImg/anonymous.jpg",
-        userid: userData.userid || "",
-        username: userData.username || "",
-        email: userData.email || "",
+        userid: userData.userid,
+        username: userData.username,
+        email: userData.email,
       });
     }
     setIsEditing(true); // 수정 모드 활성화
   };
 
-  // 비밀번호 편집 모드
-  const handlePasswordEditClick = () => {
-    setIsPasswordEditing(true);
-    setIsEmailEditing(false); // 이메일 수정 모드 비활성화
-    setFormData((prev) => ({
-      ...prev,
+  const handleCancelChanges = () => {
+    setFormData({
+      profileImage: userData.img || "/ProfileImg/anonymous.jpg",
+      userid: userData.userid,
+      username: userData.username,
+      email: userData.email,
       password: "",
       repassword: "",
-    }));
+    });
+    setIsEditing(false);
   };
 
-  const handleCancelPasswordEditing = () => {
-    setIsPasswordEditing(false);
-    setFormData((prev) => ({
-      ...prev,
-      password: "",
-      repassword: "",
-    }));
-    setValidationMessages((prev) => ({
-      ...prev,
-      password: "",
-      repassword: "",
-    }));
-  };
-
-  // 이메일 편집 취소
-  const cancelEmailEditing = () => {
+  const handleCancelEmailEditing = () => {
     setIsEmailEditing(false);
     setFormData((prev) => ({
       ...prev,
       email: userData.email,
     }));
     resetAuthState();
+  };
+
+  const handleEmailChange = (e) => {
+    const { value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      email: value,
+    }));
+
+    // 이메일 입력 시 상태 초기화
+    resetAuthState();
+    setValidationMessages((prev) => ({
+      ...prev,
+      email: "",
+      authCode: "",
+    }));
+  };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+
+    // 비밀번호 변경
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // 비밀번호 유효성 검사 호출
+    if (name === "password") {
+      const validationResult = validatePassword(value);
+      setValidationMessages((prev) => ({
+        ...prev,
+        password: validationResult.message,
+        passwordColor: validationResult.color,
+      }));
+    }
+
+    // 비밀번호 확인 로직
+    if (name === "repassword") {
+      if (formData.password !== value) {
+        setValidationMessages((prev) => ({
+          ...prev,
+          repassword: "비밀번호 확인이 일치하지 않습니다.",
+          repasswordColor: "validation-error",
+        }));
+        setIsPasswordValid(false);
+      } else {
+        setValidationMessages((prev) => ({
+          ...prev,
+          repassword: "비밀번호가 일치합니다.",
+          repasswordColor: "validation-success",
+        }));
+        setIsPasswordValid(true);
+      }
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    // 비밀번호, 사용자 이름, 이메일 확인
+    if (isPasswordEditing && !isPasswordValid) {
+      alert("비밀번호 확인을 다시 확인해주세요.");
+      return;
+    }
+
+    if (isEmailEditing && !isAuthCodeLocked) {
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
+
+    if (!formData.username) {
+      alert("이름을 입력해 주세요.");
+      return;
+    }
+
+    // if (!formData.email || !isAuthCodeLocked) {
+    //   alert("이메일 인증을 완료해주세요.");
+    //   return;
+    // }
+
+    if (
+      formData.username === userData.username &&
+      formData.email === userData.email &&
+      formData.profileImage === userData.img &&
+      (!formData.password || formData.password === "")
+    ) {
+      alert("변경된 사항이 없습니다.");
+      return;
+    }
+
+    try {
+      // 사용자 정보 업데이트
+      await axios.put(
+        "http://localhost:9000/user/mypage/userupdate",
+        {
+          profileImg: formData.profileImage,
+          username: formData.username,
+          email: formData.email,
+          password: formData.password, // 비밀번호도 함께 업데이트
+        },
+        { withCredentials: true }
+      );
+      console.log("유저 정보가 성공적으로 변경되었습니다.");
+      alert("유저 정보가 성공적으로 변경되었습니다.");
+
+      // 새로고침
+      window.location.reload();
+    } catch (err) {
+      console.error("유저 정보 변경 중 오류:", err);
+      setValidationMessages((prev) => ({
+        ...prev,
+        username: "서버 오류로 유저 정보를 변경할 수 없습니다.",
+        usernameColor: "validation-error",
+      }));
+    }
+  };
+
+  // 사용자 이름 유효성 검사 (영어, 한글만 허용)
+  const validateUsername = (username) => {
+    const usernameRegex = /^[a-zA-Z가-힣]+$/; // 영어, 한글만 허용
+    if (!usernameRegex.test(username)) {
+      setValidationMessages((prev) => ({
+        ...prev,
+        username: "이름은 영어 및 한글만 사용할 수 있습니다.",
+        usernameColor: "validation-error",
+      }));
+      return false;
+    } else {
+      setValidationMessages((prev) => ({
+        ...prev,
+        username: "",
+        usernameColor: "validation-success",
+      }));
+      return true;
+    }
+  };
+
+  const handleUsernameChange = (e) => {
+    const { value } = e.target;
+    setFormData((prev) => ({ ...prev, username: value }));
+
+    // 사용자 이름 유효성 검사
+    validateUsername(value);
+  };
+
+  const handleEmailValidation = (e) => {
+    const { value } = e.target;
+    setFormData((prev) => ({ ...prev, email: value }));
+
+    // 이메일 유효성 검사
+    validateEmail(value);
   };
 
   const handleDelet = async () => {
@@ -220,18 +310,13 @@ const MyInformation = () => {
     }
   };
 
-
-  if (loading) return <div>로딩 중...</div>;
-  if (error) return <div>{error}</div>;
-  if (!userData) return <div>데이터를 불러오지 못했습니다.</div>;
-
-
   return (
     <div className="mypage-container">
       <h2>{userData.username}님의 마이페이지</h2>
-      <div className="user-info">
+      <div className="image-preview-container">
         {isEditing ? (
           <>
+            {/* Profile Image */}
             <div
               className="image-preview-container"
               onDrop={handleDrop}
@@ -296,10 +381,10 @@ const MyInformation = () => {
                 />
                 {isEmailEditing ? (
                   <>
-                    <button type="button" onClick={handleSendAuthCode}>
+                    <button type="button" onClick={sendAuthCode}>
                       인증 코드 받기
                     </button>
-                    <button type="button" onClick={cancelEmailEditing}>
+                    <button type="button" onClick={handleCancelEmailEditing}>
                       취소
                     </button>
                   </>
@@ -337,7 +422,7 @@ const MyInformation = () => {
                     </div>
                     <button
                       type="button"
-                      onClick={handleAuthCodeVerification}
+                      onClick={verifyAuthCode}
                       disabled={isAuthCodeLocked}
                     >
                       인증 코드 확인
@@ -360,10 +445,9 @@ const MyInformation = () => {
               placeholder="비밀번호"
               value={formData.password}
               onChange={handlePasswordChange}
-              disabled={!isPasswordEditing} // 잠금 상태 제어
+              disabled={!isPasswordEditing}
             />
-
-            {isPasswordEditing && validationMessages.password && (
+            {validationMessages.password && (
               <div
                 className={`validation-message ${validationMessages.passwordColor}`}
               >
@@ -426,9 +510,7 @@ const MyInformation = () => {
             <p>이메일: {userData.email}</p>
             <p>성별 : {userData.gender}</p>
             <p>생년월일 : {userData.birth}</p>
-            <button type="button" onClick={handleEditClick}>
-              수정
-            </button>
+            <button onClick={handleEditClick}>수정</button>
             <button type="button" onClick={handleDelet}>
               회원탈퇴
             </button>

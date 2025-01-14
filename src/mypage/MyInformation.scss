@@ -1,0 +1,175 @@
+// SCSS 파일
+.mypage-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .image-preview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+
+    img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    #imgbutton {
+      display: flex;
+      gap: 10px;
+
+      button {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f7f7f7;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #eaeaea;
+        }
+      }
+
+      input[type="file"] {
+        display: none;
+      }
+    }
+  }
+
+  .info-section {
+    width: 100%;
+    max-width: 600px;
+
+    p {
+      font-size: 16px;
+      margin: 10px 0;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      max-width: 400px;
+      padding: 8px 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .validation-message {
+      font-size: 14px;
+      margin-top: 4px;
+
+      &.validation-error {
+        color: red;
+      }
+
+      &.validation-success {
+        color: green;
+      }
+    }
+
+    .emailbox {
+      margin-top: 15px;
+
+      .email-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        input[type="email"] {
+          flex-grow: 1;
+        }
+      }
+    }
+
+    .auth-codebox {
+      margin-top: 10px;
+
+      .auth-code-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        input[type="text"] {
+          flex-grow: 1;
+        }
+
+        #timer {
+          font-size: 14px;
+          color: #555;
+        }
+      }
+    }
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #f7f7f7;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #eaeaea;
+      }
+    }
+  }
+
+  .default-view {
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      margin-bottom: 10px;
+    }
+
+    .user-details {
+      margin-top: 10px;
+
+      p {
+        font-size: 16px;
+        margin: 5px 0;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+
+      button {
+        padding: 8px 16px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f7f7f7;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #eaeaea;
+        }
+      }
+    }
+  }
+}

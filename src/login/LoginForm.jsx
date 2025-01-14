@@ -59,7 +59,6 @@ const LoginForm = () => {
       localStorage.setItem("userid",formData.userid); //로컬 스토리지에 userid 저장
       //로그인 성공 시 처리
       alert("로그인 성공 !");
-
       window.location.href = "/";
 
     } catch (err) {
