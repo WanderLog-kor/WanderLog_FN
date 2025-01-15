@@ -1,14 +1,12 @@
-
 @font-face {
-    font-family: 'Jalnan';
-    src: url('/public/font/Jalnan2TTF.ttf') format('woff2');
+    font-family: 'S-CoreDream-3Light';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
 body {
-    font-family: 'Jalnan', sans-serif !important;
-	/* font-size: 1rem; */
+    font-family: 'S-CoreDream-3Light', sans-serif !important;
 }
 
 .ACTIVE {

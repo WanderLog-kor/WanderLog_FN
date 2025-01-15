@@ -413,19 +413,19 @@ const SideBar = (props) => {
           <div 
             className="optionButton"
             onClick={handleStateTitle}>
-            <span>Title</span>
+            <span>제목</span>
           </div>
 
           <div className="optionButton" onClick={alertDay}>
-            <span>Day & Area</span>
+            <span>날짜 및 지역 선택</span>
           </div>
 
           <div className="optionButton" onClick={alertList}>
-            <span>Planner</span>
+            <span>상세 계획</span>
           </div>
 
           <div className="optionButton" onClick={addPlanner}>
-            <span>Complete!</span>
+            <span>일정 생성</span>
           </div>
         </div>
         {(
