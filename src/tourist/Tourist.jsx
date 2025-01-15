@@ -49,7 +49,7 @@ const Tourist = () => {
 
         const currentEncodedData = encodeUTF8();
         const data = {
-            keyword: currentEncodedData,  // 원하는 키워드 데이터를 넣어야 합니다.
+            keyword: currentEncodedData, 
             pageNo: currentPage,
             hashtag: categoryFilter,  // 해시태그 필터가 있다면 설정
             regionCode: regionFilter,
