@@ -11,7 +11,7 @@
     // flex-wrap: wrap;
 }
 
-.header-logo{
+.header-logo {
     text-decoration: none;
     display: flex; // 가로 정렬을 유지
     align-items: center;
@@ -22,27 +22,27 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    position:relative;
+    position: relative;
 
     .logo-text {
         font-size: 3rem;
         font-weight: bold;
-        margin-left:50px;
-        margin-top:5px;
+        margin-left: 50px;
+        margin-top: 5px;
         color: white;
         text-shadow:
-            -1px -1px 0 #000,   
+            -1px -1px 0 #000,
             1px -1px 0 #000,
             -1px 1px 0 #000,
             1px 1px 0 #000; // 글자 테두리 효과
     }
 
-    .logo-icon{
+    .logo-icon {
         position: absolute;
         // top:10%;
-        left:90%;
-        width:220px;
-        height:80px;
+        left: 90%;
+        width: 220px;
+        height: 80px;
         opacity: 1;
         z-index: -1;
     }
@@ -53,11 +53,11 @@
 .header-btns {
     display: flex;
     gap: 15px;
-    margin-right:20px;
+    margin-right: 20px;
     // flex-wrap: wrap; // 공간 부족 시 버튼이 아래로 이동
 
-       // 공통 버튼 스타일
-       button {
+    // 공통 버튼 스타일
+    button {
         height: 100%;
         padding: 0 20px;
         border: none;
@@ -66,7 +66,7 @@
         font-size: 1.2rem;
         font-weight: bold;
         border-radius: 15px;
-        text-shadow: 
+        text-shadow:
             -1px -1px 0 black,
             1px -1px 0 black,
             -1px 1px 0 black,
