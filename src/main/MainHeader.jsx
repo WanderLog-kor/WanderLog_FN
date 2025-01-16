@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 const MainHeader = () => {
+
     return (
         <header className="main-header">
             <p className="main-header__text">

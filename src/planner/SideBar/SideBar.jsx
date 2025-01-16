@@ -467,10 +467,10 @@ const SideBar = (props) => {
                       className="search-card"
                       onClick={()=>{props.ClickSearch(el)}}
                     >
-                      <div className="card-image">
-                              {el && el.image!='No image found' && <img src={el.image} alt="" />}
-                              {el && el.imgae=='No image found' && <img src={NoImage} alt="" />}
-                      </div>
+                    <div className="card-image">
+  <img src={el && el.image !== 'No image found' ? el.image : NoImage} alt="" />
+</div>
+
                       <div className='card-body'>
                         <div className="card-name">{el && el.name}</div>
                         <div className="card-category">{el && el.category}</div>
@@ -491,7 +491,7 @@ const SideBar = (props) => {
                     >
                       <div className="card-image">
                         {el && el.image!='No image found' && <img src={el.image} alt="" />}
-                        {el && el.imgae=="" && <img src={NoImage} alt="" />}
+                        {el && el.image=="" && <img src={NoImage} alt="" />}
                       </div>
                       <div className='card-body'>
                         <div className="card-name">{el && el.name}</div>
