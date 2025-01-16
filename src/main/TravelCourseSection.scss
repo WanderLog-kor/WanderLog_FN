@@ -1,0 +1,286 @@
+// 스와이퍼 첫번째 디자인
+
+// .travelCourse-section {
+//     margin-top: 80px; // 상단 여백을 80px로 설정
+
+//     .travelCourse-top {
+//         display: flex;
+//         justify-content: space-between;
+//         align-items: center;
+//         padding: 0 20px 20px 20px; // 좌우 20px, 아래 20px 패딩 추가
+//         border-bottom: 1px solid #777; // 하단 구분선 추가
+//         margin-bottom: 20px;
+
+//         strong {
+//             font-size: 1.7rem; // 제목 폰트 크기 설정
+//             font-weight: 800;  // 제목 두껍게 설정
+//         }
+
+//         a {
+//             text-decoration: none; // 밑줄 제거
+//             color: black; // 글자 색을 검정색으로 설정
+//             font-size: 32px; // 아이콘 크기 설정
+//         }
+//     }
+
+//     .main__travelCourse {
+//         margin-top: 40px; // 여행 코스 영역의 상단 여백 설정
+//     }
+
+//     .mySwiper {
+//         // swiper 슬라이드의 기본 스타일 적용
+//         .swiper-slide {
+//             position: relative;
+//             width: 100%;
+//             height: 350px; // 슬라이드 높이 설정
+//             background-color: #000;
+//             color: white;
+//             display: flex;
+//             align-items: center;
+//             justify-content: center;
+//             text-align: center;
+//             border-radius: 10px;
+//             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+//             background-size: cover;
+//             background-position: center;
+//             transition: transform 0.3s ease;
+
+//             &:hover {
+//                 transform: scale(1.05); // 호버시 확대 효과
+//             }
+
+//             // 슬라이드 내에 텍스트를 올리기 위한 스타일 추가
+//             .main__travelCourse-list {
+//                 position: relative;
+//                 z-index: 2; // 텍스트가 오버레이 위에 표시되도록 설정
+
+//                 .main__travelCourse-title {
+//                     font-size: 2rem;
+//                     font-weight: bold;
+//                     margin-bottom: 10px;
+//                     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+//                 }
+
+//                 .main__travelCourse-box {
+//                     display: flex;
+//                     justify-content: space-between;
+//                     align-items: center;
+//                     margin-top: 15px;
+
+//                     .main__travelCourse-region,
+//                     .main__travelCourse-hashtag {
+//                         font-size: 1rem;
+//                         color: #ffffff;
+//                         font-weight: bold;
+//                     }
+
+//                     .main__travelCourse-hashtag {
+//                         color: #ffb400; // 해시태그 강조 색상
+//                     }
+//                 }
+//             }
+//         }
+
+//         .swiper-pagination {
+//             position: absolute;
+//             bottom: 10px;
+//             left: 0;
+//             right: 0;
+//             text-align: center;
+//             z-index: 10;
+
+//             .swiper-pagination-bullet {
+//                 background-color: #ffffff;
+//                 opacity: 0.7;
+//                 transition: background-color 0.3s ease;
+//             }
+
+//             .swiper-pagination-bullet-active {
+//                 background-color: #ffb400;
+//             }
+//         }
+
+//         .swiper-button-next,
+//         .swiper-button-prev {
+//             color: #ffffff;
+//             font-size: 2rem;
+//             z-index: 10;
+//         }
+//     }
+// }
+
+// @media (max-width: 768px) {
+//     .main__travelCourse {
+//         .swiper-slide {
+//             height: 250px; // 모바일 화면에서 슬라이드 높이를 줄임
+//         }
+//     }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 스와이퍼 두번째 디자인
+.travelCourse-section {
+    margin-top: 80px; // 상단 여백을 80px로 설정
+
+    .travelCourse-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #777;
+        margin-bottom: 20px;
+
+        strong {
+            font-size: 1.8rem; // 제목 폰트 크기 약간 확대
+            font-weight: 700; // 제목 두껍게 설정
+            color: #333; // 글자 색상 변경
+        }
+
+        a {
+            text-decoration: none; // 밑줄 제거
+            color: #333; // 글자 색을 검정색으로 설정
+            font-size: 32px; // 아이콘 크기 설정
+        }
+    }
+
+    .main__travelCourse {
+        margin-top: 40px; // 여행 코스 영역의 상단 여백 설정
+    }
+
+    .mySwiper {
+        .swiper-slide {
+            position: relative;
+            width: 100%;
+            height: 400px; // 슬라이드 높이 설정
+            // background-color: #000;
+            color: white;
+            display: flex;
+            align-items: flex-end; // 이미지 아래쪽으로 텍스트를 배치
+            justify-content: center;
+            text-align: center;
+            border-radius: 12px; // 부드러운 둥근 모서리
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); // 더 부드럽고 깊은 그림자
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            overflow: hidden; // 이미지가 너무 커지지 않도록 제한
+
+            &:hover {
+                transform: scale(1.05); // 호버시 확대 효과
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); // 호버시 그림자 강하게
+            }
+
+            .main__travelCourse-list {
+                position: absolute;
+                z-index: 2;
+                bottom: 20px; // 텍스트가 슬라이드 하단에 위치하도록 설정
+                left: 20px;
+                right: 20px;
+                color: white; // 텍스트 색상 흰색으로 설정
+                text-align: left;
+                .main__travelCourse-title {
+                    font-size: 2.2rem; // 제목 폰트 크기 확장
+                    font-weight: 700;
+                    margin-bottom: 15px;
+                    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6); // 텍스트 그림자 강화
+                }
+
+                .main__travelCourse-box {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-top: 15px;
+
+                    .main__travelCourse-region,
+                    .main__travelCourse-hashtag {
+                        font-size: 1.1rem; // 폰트 크기 약간 확대
+                        font-weight: bold;
+                    }
+
+                    .main__travelCourse-region {
+                        color: #f8f8f8; // 지역 텍스트 색상 변경
+                    }
+
+                    .main__travelCourse-hashtag {
+                        color: #ffb400; // 해시태그 강조 색상
+                    }
+                }
+            }
+        }
+
+       
+
+        .swiper-pagination {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 10;
+
+            .swiper-pagination-bullet {
+                background-color: #ffffff;
+                opacity: 0.7;
+                transition: background-color 0.3s ease;
+            }
+
+            .swiper-pagination-bullet-active {
+                background-color: #ffb400; // 활성화된 페이지버튼 색상
+            }
+        }
+
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: #ffffff;
+            font-size: 2rem;
+            z-index: 10;
+        }
+    }
+
+    .mySwiper2 {
+        box-sizing: border-box;
+        background-color: #000;
+        padding: 10px 0;
+        border-radius: 20px;
+        .swiper-slide {
+            height: 200px;
+            overflow: hidden;
+
+            .mySwiper2-img {
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .main__travelCourse {
+        .swiper-slide {
+            height: 250px; // 모바일 화면에서 슬라이드 높이를 줄임
+            margin-bottom: 15px; // 슬라이드 사이 간격 추가
+        }
+
+        .mySwiper {
+            .swiper-slide {
+                height: 200px; // 모바일 슬라이드 높이 추가 조정
+            }
+
+            .main__travelCourse-list {
+                bottom: 10px; // 모바일에서 텍스트 위치 조정
+            }
+        }
+    }
+}

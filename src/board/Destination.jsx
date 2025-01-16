@@ -49,50 +49,6 @@ const Destination = () => {
         return url;
     };
 
-    // destination 데이터를 서버에서 가져오는 API 호출
-    useEffect(() => {
-        if (plannerID) {
-            axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
-                .then((response) => {
-                    setUsername(response.data[0].username);
-                    setDestinations(response.data);
-                })
-                .catch((error) => {
-                    console.error("Error fetching destinations:", error);
-                });
-
-            // 쿠키요청
-            axios.post('http://localhost:9000/api/cookie/validate', {}, {
-                withCredentials: true, // 쿠키 포함
-            })
-                .then(response => {
-                    console.log(response)
-                    setLoginStatus(response.data);
-                })
-                .catch(error => {
-                    setLoginStatus(error);
-                    console.log('로그인 정보 없음')
-                })
-        }
-
-        // 좋아요
-
-        if (plannerID) {
-            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}`, {
-                withCredentials: true, // 쿠키 포함
-            })
-                .then((response) => {
-                    setLikeCount(response.data.likeCount);
-                    setIsLiked(response.data.isLiked); // 사용자가 좋아요를 눌렀는지 여부
-                })
-                .catch((error) => {
-                    console.error("Error fetching like status:", error);
-                });
-        }
-
-
-    }, [plannerID]);
-
     useEffect(() => {
 
         const uniqueDays = destinations.reduce((acc, destination) => {
@@ -173,17 +129,75 @@ const Destination = () => {
     }, [destinations]);
 
 
+    // destination 데이터를 서버에서 가져오는 API 호출
+    useEffect(() => {
+        if (plannerID) {
+            axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
+                .then((response) => {
+                    setUsername(response.data[0].username);
+                    setDestinations(response.data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching destinations:", error);
+                });
 
-
-
-
-    const handleLike = (plannerID) => {
-        if (!loginStatus) {
-            alert('로그인이 필요한 서비스입니다');
+            // 쿠키요청
+            axios.post('http://localhost:9000/api/cookie/validate', {}, {
+                withCredentials: true, // 쿠키 포함
+            })
+                .then(response => {
+                    console.log(response)
+                    setLoginStatus(response.data);
+                })
+                .catch(error => {
+                    setLoginStatus('');
+                    console.log('로그인 정보 없음')
+                })
         }
+
+        // 좋아요 상태 확인 (몇개 눌렸는지 내가 눌렀는지)
+        if (plannerID) {
+
+            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}&userId=${loginStatus.userid}`, {
+
+                withCredentials: true, // 쿠키 포함
+            })
+                .then((response) => {
+                    console.log('좋아요 확인 axios 제대로 완료')
+                    setLikeCount(response.data.likeCount);
+                    setIsLiked(response.data.isLiked); // 사용자가 좋아요를 눌렀는지 여부
+                })
+                .catch((error) => {
+                    console.error("Error fetching like status:", error);
+                });
+        }
+
+
+    }, [plannerID]);
+
+ 
+
+
+
+
+    // 좋아요 기능
+    const handleLike = (plannerID) => {
+        console.log('loginstatus : ', loginStatus);
+        if (loginStatus == '') {
+            alert('로그인이 필요한 서비스입니다');
+            return;
+        }
+        console.log('axios"s plannerID : ' , plannerID)
         axios.post('http://localhost:9000/planner/board/toggleLike',
-            { plannerID },
-            { withCredentials: true }) // 쿠키 포함
+            { plannerID: plannerID,
+                userId : loginStatus.userid
+             },
+            {
+                headers: {
+                    'Content-Type': 'application/json', // JSON 포맷으로 전송
+                },
+                withCredentials: true
+            }) // 쿠키 포함
             .then((response) => {
                 console.log('response', response);
                 setLikeCount(response.data.likeCount); // 서버에서 업데이트된 좋아요 개수
@@ -221,22 +235,6 @@ const Destination = () => {
                 window.location.href = "/user/login";
             });
 
-        // axios.post('http://localhost:9000/planner/bringPlanner',
-        //     {
-        //         day: plannerItem.day,
-        //         area: plannerItem.area,
-        //         plannerid: plannerItem.plannerID,
-        //     },
-        //     { 'Content-Type': 'application/json' },
-        // )
-        //     .then((response) => {
-        //         alert(response.data); // 서버에서 보낸 응답 메시지 출력
-                
-        //     })
-        //     .catch((error) => {
-        //         console.error("Error adding to my course:", error);
-        //         alert("내 코스로 저장에 실패했습니다. 다시 시도해주세요.");
-        //     });
     }
 
     const handleDeletePlanner = () => {
@@ -266,28 +264,7 @@ const Destination = () => {
 
     }
 
-    // const handleUpdatePlanner = () => {
-    //     console.log(plannerItem);
-    //     axios.post('http://localhost:9000/planner/updatePlanner',
-    //         {
-    //             plannerid: plannerItem.plannerID,
-    //             title: plannerItem.title,
-    //             areaName: plannerItem.area,
-    //             description: plannerItem.description,
-    //             isPublic: plannerItem.public,
-    //             day: plannerItem.day,
-    //             userid: plannerItem.userId,
-    //             destinations: destinations,
-    //         },
-    //         {'Content-Type': 'application/json'},
-    //     )
-    //     .then(resp=> {
-    //         console.log(resp)
-    //     })
-    //     .catch(err=>{
-    //         console.log(resp)
-    //     })
-    // }
+
 
     const handleUpdatePlanner = () => {
         const updateData = {

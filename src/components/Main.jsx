@@ -5,6 +5,7 @@ import Footer from './Footer.jsx';
 import BoardSection from '../main/BoardSection.jsx';
 import MainHeader from '../main/MainHeader.jsx';
 import TouristSection from '../main/TouristSection.jsx';
+import TravelCourseSection from '../main/TravelCourseSection.jsx';
 
 const Main = () => {
 
@@ -15,7 +16,7 @@ const Main = () => {
             <main className="main-main">
                 <BoardSection />
                 <TouristSection />
-
+                <TravelCourseSection />
 
             </main>
             <Footer />

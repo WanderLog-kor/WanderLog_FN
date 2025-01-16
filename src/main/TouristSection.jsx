@@ -1,101 +1,167 @@
-
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import touristJson from '../tourist/jsonFile/tourist.json';
+import './TouristSection.scss';
 
 const TouristSection = () => {
-
-    const [regionFilter, setRegionFilter] = useState('');
-    const [categoryFilter, setCategoryFilter] = useState('');
-    const [hashtagOptions, setHashtagOptions] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [touristData, setTouristData] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [searchKeyword, setSearchKeyword] = useState('');
-    const [totalCount, setTotalCount] = useState(0);  // totalCount를 숫자형으로 초기화
-    const [arrange, setArrange] = useState('O');
+    const [touristData, setTouristData] = useState([]);  // 관광지 데이터
+    const [loginStatus, setLoginStatus] = useState('');  // 로그인 상태
+    const [likedStatus, setLikedStatus] = useState({});  // 각 관광지별 좋아요 상태 관리
     const navigate = useNavigate();
 
-    const getRegionName = (regionCode) => {
-        return touristJson.regions[regionCode] || '알 수 없음'; // 해당 지역 코드가 없으면 기본값 '알 수 없음'
+    useEffect(() => {
+        // 로그인 상태 확인
+        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+            withCredentials: true,
+        })
+            .then(response => {
+                setLoginStatus(response.data);  // 로그인 상태
+                console.log(response.data);
+            })
+            .catch(error => {
+                setLoginStatus('');  // 로그인되지 않은 상태
+                console.log('로그인 정보 없음');
+            });
+
+        // 관광지 데이터 로드
+        handleSearch();
+    }, []);
+
+    // 여행 코스 클릭시 상세 페이지로 데이터 전달
+    const handleTouristClick = (contentId) => {
+        navigate(`/tourist-info?contentId=${contentId}`);
     };
 
-    // 해시태그를 가져오는 함수 (cat2 값에 따라)
-    const getHashtag = (cat2) => {
-        return touristJson.categorys[cat2] || '기타'; // 해당 category가 없으면 기본값 '기타'
-    };
-
-    // 관광지 검색 함수
+    // 관광지 데이터 가져오는 함수
     const handleSearch = () => {
-        setLoading(true); // 검색 시작 시 로딩 상태 true로 설정
+        const maxPage = Math.ceil(8300 / 10);
+        const randomPage = Math.floor(Math.random() * maxPage) + 1;
 
         const data = {
-            pageNo: currentPage,
-            hashtag: categoryFilter,  // 해시태그 필터가 있다면 설정
-            regionCode: regionFilter,
-            arrange: arrange,  // 원하는 정렬 방식
-            contentTypeId: '12',  // 필요에 맞게 설정
+            keyword: '',
+            // 테스트용으로 1페이지 고정 (randomPage함수로 변경 해야함)
+            pageNo: 1,
+            hashtag: '',
+            regionCode: '',
+            numOfRows: 10,
+            arrange: 'O',
+            contentTypeId: '12',
         };
 
         axios.post('http://localhost:9000/api/getSearch', data, {
-
             headers: {
-                'Content-Type': 'application/json', // Content-Type을 JSON으로 설정
+                'Content-Type': 'application/json',
             },
             withCredentials: true,
         })
             .then((response) => {
-                console.log('response : ', response);
-                setTouristData(response.data.items.item || []); // 빈 배열로 안전하게 설정
-                setTotalCount(Number(response.data.totalCount));  // totalCount를 숫자로 설정
-                setLoading(false); // 로딩 상태 false로 설정
+                setTouristData(response.data.items.item || []);
             })
-
             .catch((error) => {
                 console.error('Error fetching courses:', error);
-                setLoading(false); // 에러가 나도 로딩 상태 false로 설정
             });
     };
 
-    // 여행 코스 클릭시 상세 페이지로 데이터 전달
-    const handleTouristClick = (contentId) => {
-        setLoading(true); // 로딩 시작
-
-        navigate(`/tourist-info?contentId=${contentId}`);
+    // 좋아요 상태 가져오기
+    const getLikeStatus = (touristId) => {
+        if (loginStatus && loginStatus.userid) {  // 로그인 상태가 있을 때만 호출
+            axios.get(`http://localhost:9000/tourist/likeStatus?touristId=${touristId}&userId=${loginStatus.userid}`, {
+                withCredentials: true,
+            })
+                .then(response => {
+                    setLikedStatus(prevState => ({
+                        ...prevState,
+                        [touristId]: response.data, // 응답 데이터 그대로 사용 (boolean 상태일 경우)
+                    }));
+                })
+                .catch(error => {
+                    console.error('Error fetching like status:', error);
+                });
+        }
     };
 
     useEffect(() => {
-        handleSearch();
-    }, [])
+        // 로그인 상태가 변경되면 각 관광지의 좋아요 상태를 가져옵니다
+        if (loginStatus && loginStatus.userid) {
+            touristData.forEach(tourist => {
+                getLikeStatus(tourist.contentid);
+            });
+        }
+    }, [loginStatus, touristData]);  // loginStatus 또는 touristData가 변경될 때마다 호출
+
+    // 좋아요 버튼 누를 시
+    const toggleLike = (e, touristId) => {
+        e.stopPropagation();
+
+        // 로그인 하지 않고 좋아요 버튼 누르면 로그인 해야한다고 알림
+        if (!loginStatus || loginStatus === '') {
+            alert("로그인이 필요합니다!");
+            return;
+        }
+
+        const likeRequest = {
+            touristId: touristId,
+            userId: loginStatus.userid
+        };
+
+        axios.post('http://localhost:9000/tourist/toggleLike', likeRequest, {
+            headers: {
+                'Content-Type': 'application/json', // JSON 포맷으로 전송
+            },
+            withCredentials: true,
+        })
+            .then(response => {
+                setLikedStatus(prevState => ({
+                    ...prevState,
+                    [touristId]: !prevState[touristId], // 좋아요 상태 토글
+                }));
+            })
+            .catch(error => {
+                console.error('Error toggling like:', error);
+            });
+    };
 
     return (
-        <div className="travel-course-list-content">
-            {touristData.map((tourist) => {
-                const regionName = getRegionName(tourist.areacode); // 지역 이름 가져오기
-                const hashtag = getHashtag(tourist.cat3); // 해시태그 가져오기
+        <section className="tourist-section">
+            <div className="tourist-top">
+                <strong>어디로 가볼까?</strong>
+                <a href="/tourist" className="material-symbols-outlined">
+                    add
+                </a>
+            </div>
 
-                return (
-                    <div key={tourist.contentid} className="travel-course-list" onClick={() => handleTouristClick(tourist.contentid)}>
-                        {tourist.firstimage && (
-                            <img
-                                src={tourist.firstimage}
-                                alt={tourist.title}
-                                className="travel-course-list__img"
-                            />
-                        )}
-                        <h4 className="course-title">{tourist.title}</h4>
-                        <div className="course-box">
-                            {/* 지역 */}
-                            <p className="course-region">{regionName}</p>
-                            {/* 코스 태그 */}
-                            <p className="course-hashtag">{hashtag}</p>
+            <div className="main__tourist-info">
+                {touristData.map((tourist) => {
+                    const { contentid, title, firstimage, addr1 } = tourist;
+                    const shortAddress = addr1 ? addr1.split(" ")[0] + " " + addr1.split(" ")[1] : ''; // 주소에서 시까지만
+
+                    return (
+                        <div key={contentid} title={title} className="main__tourist-card" style={{ '--image-url': `url(${firstimage})` }} onClick={() => handleTouristClick(tourist.contentid)}>
+                            {firstimage && (
+                                <img
+                                    src={firstimage}
+                                    alt={title}
+                                    className="main__tourist-img"
+                                />
+                            )}
+                            <h4 className="main__tourist-title">{title}</h4>
+                            <div className="main__tourist-box">
+                                <p className="main__tourist-region">{shortAddress}</p>
+
+                                {/* 좋아요 버튼 */}
+                                <button
+                                    className={`like-button ${likedStatus[contentid] ? 'liked' : 'not-liked'}`}
+                                    onClick={(e) => toggleLike(e, contentid)}
+                                >
+                                    {/* 배경 이미지를 사용하여 좋아요 상태에 따라 변경 */}
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                );
-            })}
-        </div>
-    )
-}
+                    );
+                })}
+            </div>
+        </section>
+    );
+};
 
-export default TouristSection
+export default TouristSection;
