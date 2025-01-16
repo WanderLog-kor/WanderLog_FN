@@ -1,0 +1,145 @@
+.tourist-section {
+    // 전체 섹션에 grid 적용 (여기서만)
+
+    .tourist-top {
+        display: flex; // flex를 그대로 유지
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0 20px;
+        border-bottom: 1px solid #777;
+        margin-bottom: 20px;
+
+        strong {
+            font-size: 1.7rem;
+            font-weight: 800;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+            font-size: 32px;
+        }
+    }
+
+    .main__tourist-info {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr); // 한 줄에 5개 아이템
+        gap: 20px; // 카드 간격
+        padding: 20px;
+
+        @media (max-width: 1200px) {
+            grid-template-columns: repeat(3, 1fr); // 화면이 1200px 이하일 경우 3개씩
+        }
+
+        @media (max-width: 900px) {
+            grid-template-columns: repeat(2, 1fr); // 화면이 900px 이하일 경우 2개씩
+        }
+
+        @media (max-width: 600px) {
+            grid-template-columns: repeat(1, 1fr); // 화면이 600px 이하일 경우 1개씩
+        }
+    }
+
+    .main__tourist-card {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 350px;
+        position: relative;
+        background-image: var(--image-url);
+        /* 배경 이미지 CSS 변수 사용 */
+        background-size: cover;
+        background-position: center;
+        color: white;
+    }
+
+    .main__tourist-card:hover {
+        transform: translateY(-5px); // 호버 시 살짝 위로
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); // 그림자 강조
+    }
+
+    .main__tourist-img {
+        display: none;
+        /* 이미지는 이제 배경으로 설정되므로 불필요 */
+    }
+
+    .main__tourist-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 0 15px 10px 15px;
+        /* 제목 여백 조정 */
+        position: absolute;
+        bottom: 31px;
+        left: 0px;
+        right: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        /* 최대 2줄 */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        /* 넘치는 텍스트 숨김 */
+        text-overflow: ellipsis;
+        /* 넘치는 텍스트는 ...으로 표시 */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+        /* 텍스트에 그림자 추가 */
+    }
+
+    .main__tourist-box {
+        display: flex;
+        justify-content: space-between;
+        /* 텍스트 양쪽 정렬 */
+        padding: 15px;
+    }
+
+    .main__tourist-region {
+        position: absolute;
+        bottom: 15px;
+
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        /* 텍스트 그림자 강하게 */
+    }
+
+    .main__tourist-card:hover {
+        cursor: pointer;
+    }
+}
+
+/* 기본 버튼 스타일 */
+.like-button {
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    width: 31px;
+    height: 31px;
+    border: 0;
+    text-indent: -9999px;
+    background: url(./icon_good.png) no-repeat;
+    font-size: 0;
+}
+
+// .like-button::after {
+//     content: '';
+//     display: block;
+//     position: absolute;
+//     left: 0;
+//     bottom: 0;
+//     width: 100%;
+//     height: 40%;
+//     // background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, .6));
+// }
+
+/* 좋아요가 된 상태 */
+.liked {
+    background-position: 0 -31px;
+}
+
+/* 좋아요가 되지 않은 상태 */
+.not-liked {}

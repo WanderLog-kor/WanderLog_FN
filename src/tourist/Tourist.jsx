@@ -77,7 +77,7 @@ const Tourist = () => {
             });
     };
 
-    // 여행 코스 클릭시 상세 페이지로 데이터 전달
+    // 관광지 클릭시 상세 페이지로 데이터 전달
     const handleTouristClick = (contentId) => {
         setLoading(true); // 로딩 시작
        

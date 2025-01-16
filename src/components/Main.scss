@@ -20,123 +20,6 @@
 .main-main {
     width: 1200px;
     margin: 0 auto;
-    height: 1200px;
-
-
-    .swiper-section {
-        .mySwiper {
-            height: 420px;
-        }
-
-        margin-top: 80px;
-
-        .board-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 0 20px;
-            border-bottom: 1px solid #777;
-            margin-bottom: 20px;
-
-            strong {
-                font-size: 1.7rem;
-                font-weight: 800;
-            }
-
-            a {
-                text-decoration: none;
-                color: black;
-                font-size: 32px;
-            }
-
-
-        }
-
-        // 스와이퍼 디자인
-        .swiper-wrapper {
-            transition-timing-function: linear !important;
-            /* 선형 이동 */
-        }
-        
-        /* .swiper-section 상대적 위치 설정 */
-        .swiper-section {
-            position: relative;
-        }
-        
-        .swiper-slide {
-            margin-right: 10px !important;
-            width: 300px !important;
-        }
-
-        /* 개별 플래너 항목 */
-        .main-planner-item {
-
-            margin: 10px;
-
-            border-radius: 20px;
-            // border: 1px solid #888;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            height: 400px;
-
-
-            /* border와 내부 영역에 그라데이션을 적용 */
-            /* 썸네일 이미지 스타일 */
-            .main-planner-thumbnail img {
-                width: 100%;
-                height: 280px;
-                border-radius: 10px;
-                padding: 5px;
-                margin-right: 20px;
-            }
-
-            .main-planner-info {
-                padding: 10px 15px 15px 15px;
-
-                /* 플래너 제목 스타일 */
-                .main-planner-title {
-                    font-size: 1.5rem;
-                    color: #333;
-                    margin: 0;
-                    font-weight: bold;
-                    margin-bottom: 10px;
-
-                }
-
-                /* 플래너 작성자 정보 스타일 */
-                .main-planner-username {
-                    font-size: 1rem;
-                    color: #777;
-                    margin: 5px 0;
-                }
-
-                /* 플래너 기간 스타일 */
-                .main-planner-duration {
-                    font-size: 1rem;
-                    color: #777;
-                    margin: 5px 0;
-                }
-
-                /* 작성일 스타일 */
-                .main-planner-created-at {
-                    font-size: 0.9rem;
-                    color: #555;
-                }
-
-            }
-        }
-
-        /* 호버시 카드 효과 */
-        .main-planner-item:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-        }
-
-
-
-
-    }
 
 }
 
@@ -144,5 +27,6 @@
 // 메인 페이지 푸터
 .main-footer {
     height: 300px;
-    border: 1px solid;
+    border-top: 1px solid;
+    margin-top: 200px;
 }

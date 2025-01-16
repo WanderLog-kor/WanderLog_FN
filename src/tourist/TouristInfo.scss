@@ -30,16 +30,6 @@
 }
 
 
-// 스와이퍼
-.mySwiper {
-    height: 600px;
-
-    img {
-        height: 100%;
-        margin: 0;
-    }
-
-}
 
 
 // 관광지 자세히 보기 페이지 전체
@@ -92,8 +82,9 @@
 
         .tohomepage-btn {
             display: inline-block;
-            height:30px;
+            height: 30px;
             width: 30px;
+
             // 홈페이지 아이콘
             .homepageIcon {
                 width: 30px;
@@ -107,6 +98,17 @@
 // 이미지가 있는 블럭
 .image-block {
     width: 100%;
+
+    // 스와이퍼
+    .mySwiper {
+        height: 600px;
+
+        img {
+            height: 100%;
+            margin: 0;
+        }
+
+    }
 
     img {
         width: 100%;
