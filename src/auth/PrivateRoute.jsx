@@ -1,25 +1,28 @@
-import axios from "axios";
-import { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom";
-import React from "react";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const PrivateRoute = ({ element, ...rest }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const [cookie, setCookie] = useState(null);
+// Context 생성
+const LoginContext = createContext();
+
+// 로그인 상태를 관리하는 커스텀 Hook
+export const useLoginStatus = () => useContext(LoginContext);
+
+export const LoginProvider = ({ children }) => {
+    const [loginStatus, setLoginStatus] = useState(null);  // 로그인 상태
     const navigate = useNavigate();  // navigate 훅 사용
 
-    useEffect(()=> {
-        const validateCookie = async () =>{
-            try{
+    // 로그인 상태 확인
+    useEffect(() => {
+        const validateCookie = async () => {
+            try {
                 const response = await axios.post(
                     "http://localhost:9000/api/cookie/validate",
                     {},
-                    {withCredentials:true}
+                    { withCredentials: true }
                 );
-                setIsAuthenticated(true);
-                setCookie(response.data); //쿠키정보 저장
-                console.log("쿠키정보 :" ,response.data);
-            }catch (err) {
+                setLoginStatus(response.data);  // 로그인 상태 확인
+            } catch (err) {
                 console.log("엑세스 토큰 갱신 시도");
                 await handleTokenRefresh();
             }
@@ -27,63 +30,74 @@ const PrivateRoute = ({ element, ...rest }) => {
 
         const handleTokenRefresh = async () => {
             const userid = localStorage.getItem("userid");
-            if(!userid) {
+            if (!userid) {
                 console.error("userid가 로컬 스토리지에 없습니다");
-                setIsAuthenticated(false);
+                setLoginStatus(false);
                 navigate("/user/login");
-                return ;
+                return;
             }
 
-            try{
-                const tokens = await refreshAccessToken(userid);
-                console.log("토큰 갱신 성공", tokens);
-
-                //갱신 후 쿠키 유효성 재검사
+            try {
+                await refreshAccessToken(userid);  // 리프레시 토큰 갱신
                 const retryResponse = await axios.post(
                     "http://localhost:9000/api/cookie/validate",
                     {},
-                    {withCredentials : true}
+                    { withCredentials: true }
                 );
-                setIsAuthenticated(true);
-                setCookie(retryResponse.data);
-                console.log("갱신 후 쿠키 정보:", retryResponse.data);
-            } catch( refreshError) {
+                setLoginStatus(true);  // 로그인 상태 확인
+            } catch (refreshError) {
                 console.error("토큰 갱신 실패:", refreshError);
-                setIsAuthenticated(false);
+                setLoginStatus(false);
                 localStorage.removeItem("userid");
                 navigate("/user/login");
             }
         };
 
-        validateCookie();
-       
+        validateCookie();  // 쿠키 유효성 검사
+
     }, [navigate]);
 
-    if(isAuthenticated === null) {
-        return <div>Loading...</div>; //인증 상태 결정 대기
+    return (
+        <LoginContext.Provider value={{ loginStatus }}>
+            {children}
+        </LoginContext.Provider>
+    );
 
-    }
-
-    return isAuthenticated ? React.cloneElement(element, { cookie }) : null;
 };
 
+// 엑세스 토큰 갱신 함수
 const refreshAccessToken = async (userid) => {
-    try{
-        const response = await axios.post('http://localhost:9000/api/cookie/refresh',{userid} ,{
-            withCredentials : true,
-            headers : {
-                userid : userid,
-            },
-        });
-        return response.data; 
-    }catch (error) {
-
-
+    try {
+        const response = await axios.post(
+            'http://localhost:9000/api/cookie/refresh',
+            { userid },
+            { withCredentials: true, headers: { userid } }
+        );
+        return response.data;
+    } catch (error) {
         console.log("엑세스 토큰 재발급 실패", error);
         localStorage.removeItem("userid");
         throw new Error("엑세스 토큰 재발급 실패");
     }
 };
 
+// PrivateRoute 컴포넌트
+const PrivateRoute = ({ element, ...rest }) => {
+    const { loginStatus } = useLoginStatus();  // 로그인 상태 가져오기
+    const navigate = useNavigate();  // navigate 훅 사용
+
+    // 로그인 상태 확인
+    if (loginStatus === null) {
+        return <div>Loading...</div>;  // 로그인 상태를 확인하는 동안 로딩 표시
+    }
+
+    if (loginStatus === false) {
+        navigate("/user/login");  // 로그인되지 않았다면 로그인 페이지로 리디렉션
+        return null;  // 아무것도 렌더링하지 않음
+    }
+
+    // 로그인 상태가 확인되면 페이지 렌더링
+    return React.cloneElement(element, { loginStatus });
+};
 
 export default PrivateRoute;
