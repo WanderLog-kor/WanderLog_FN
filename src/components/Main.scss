@@ -1,7 +1,7 @@
-
 // 메인페이지 전체
 .main-wrapper {
     overflow-x: hidden;
+
 }
 
 // 메인페이지 헤더 영역
@@ -20,21 +20,10 @@
     }
 }
 
-
-
-
 // 메인페이지 컨탠트
 .main-content {
     position: relative;
-    display: grid
-;
-    grid-template-columns: 1fr 0px;
-    /* justify-items: left; */
-    /* gap: 81px; */
-    justify-content: center;
-    margin: 0 auto;
 
-    // 메인페이지 메인 부분
     .main-content-area {
         // max-width: 1200px;
         margin: 0 auto;
@@ -51,5 +40,5 @@
 .main-footer {
     height: 300px;
     border-top: 1px solid;
-    
+
 }

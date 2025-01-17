@@ -31,14 +31,16 @@ const Sidebar = () => {
 
     return (
 
-        <aside className="main-sidebar">
+        <div className="main-sidebar">
             <ul>
-
                 {/* 새로고침 아이콘 */}
                 <li>
                     <span className="material-symbols-outlined sidebar-refresh" onClick={handleRefreshClick}>
                         refresh
                     </span>
+                    <div className="hover-text">
+                        <span>새로고침</span>
+                    </div>
                 </li>
 
                 {/* 로그인 돼 있으면 마이페이지, 로그아웃 표시 */}
@@ -50,6 +52,9 @@ const Sidebar = () => {
                                     person
                                 </span>
                             </Link>
+                            <div className="hover-text">
+                                <span>마이페이지</span>
+                            </div>
                         </li>
                         <li>
                             <Link to="/user/logout">
@@ -57,6 +62,9 @@ const Sidebar = () => {
                                     logout
                                 </span>
                             </Link>
+                            <div className="hover-text">
+                                <span>로그아웃</span>
+                            </div>
                         </li>
                     </>
                 ) : (
@@ -67,6 +75,9 @@ const Sidebar = () => {
                                 login
                             </span>
                         </Link>
+                        <div className="hover-text">
+                            <span>로그인</span>
+                        </div>
                     </li>
                 )}
 
@@ -75,6 +86,9 @@ const Sidebar = () => {
                     <span className="material-symbols-outlined sidebar-up-arrow" onClick={handleToTop}>
                         stat_1
                     </span>
+                    <div className="hover-text">
+                        <span>위로</span>
+                    </div>
                 </li>
 
                 {/* 아래로 아이콘 */}
@@ -82,9 +96,12 @@ const Sidebar = () => {
                     <span className="material-symbols-outlined sidebar-down-arrow" onClick={handleToBottom}>
                         stat_minus_1
                     </span>
+                    <div className="hover-text">
+                        <span>아래로</span>
+                    </div>
                 </li>
             </ul>
-        </aside >
+        </div >
     )
 }
 

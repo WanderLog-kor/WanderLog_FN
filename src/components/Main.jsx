@@ -1,8 +1,5 @@
-
-
 import './Main.scss';
 import Footer from './Footer.jsx';
-
 import BoardSection from '../main/BoardSection.jsx';
 import TouristSection from '../main/TouristSection.jsx';
 import MainSection from '../main/MainSection.jsx';
@@ -11,7 +8,7 @@ import Sidebar from './Sidebar.jsx';
 
 
 const Main = () => {
-   
+
     return (
         <div className="main-wrapper">
 
