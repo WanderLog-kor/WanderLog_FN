@@ -33,7 +33,6 @@ export const LoginProvider = ({ children }) => {
             if (!userid) {
                 console.error("userid가 로컬 스토리지에 없습니다");
                 setLoginStatus(false);
-                navigate("/user/login");
                 return;
             }
 
@@ -49,7 +48,6 @@ export const LoginProvider = ({ children }) => {
                 console.error("토큰 갱신 실패:", refreshError);
                 setLoginStatus(false);
                 localStorage.removeItem("userid");
-                navigate("/user/login");
             }
         };
 

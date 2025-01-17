@@ -50,7 +50,7 @@ const Body = () => {
             <Route path="/makePlanner" element={<MakePlanner />}></Route> {/*로그인 체킹은 마지막에 하도록 */}
 
             {/* 마이 페이지 */}
-            <Route path="user/mypage" element={<Mypage />}></Route>
+            <Route path="user/mypage" element={<PrivateRoute element={<Mypage />} />}></Route>
 
             {/* 플래너 생성 */}
             <Route path="/makePlanner" element={< MakePlanner />}></Route>
