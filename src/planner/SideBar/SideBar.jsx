@@ -7,6 +7,10 @@ import Logo from '../../images/logoImage.png';
 import NoImage from '../../images/noImage.png';
 
 const SideBar = (props) => {
+
+  console.log("선택된 도시",props.selectedCity); 
+  //주석 처리한 부분은 삭제 예정 코드.
+
   const location = useLocation();
   const navigate = useNavigate();
   const isMounted = useRef(false);
@@ -15,15 +19,15 @@ const SideBar = (props) => {
   const bringData = { ...location.state };
   const [plannerID,setPlannerID] = useState(0);
 
-  const [titleState, setTitleState] = useState(true);
+  // const [titleState, setTitleState] = useState(true);
   const [dateState, setDateState] = useState(false);
   const [listState, setListState] = useState(false);
 
   const [day, setDay] = useState(0);
   const [area, setArea] = useState();
   const [selectedDay, setSelectedDay] = useState(1);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  // const [title, setTitle] = useState('');
+  // const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(true);
 
   const [word, setWord] = useState('');
@@ -37,6 +41,7 @@ const SideBar = (props) => {
   const [pagesToShow] = useState(5); // 한 번에 표시할 페이지 번호 개수
 
   const [images, setImages] = useState([]);
+
 
   
   // 지역정보 저장
@@ -532,7 +537,7 @@ const SideBar = (props) => {
           </div>
         )}
         <div className="content">
-          {titleState && (
+          {/* {titleState && (
             <div className="title">
               <label htmlFor="">플래너 제목</label>
               <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} />
@@ -552,7 +557,7 @@ const SideBar = (props) => {
                 <button onClick={handleStateDate}>다음</button>
               </div>
             </div>
-          )}
+          )} */}
           {dateState && (
             <div className="date">
               <PlannerDate AreaData={handleArea} DayData={handleDate} AreaNameData={handleAreaName} State={()=>{handleStatePlanner()}}/>

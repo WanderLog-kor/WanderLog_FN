@@ -1,6 +1,6 @@
 import {useState, useEffect, React} from 'react';
 import '../../public/reset.css'
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
@@ -9,6 +9,12 @@ import axios from 'axios';
 const MakePlanner = ({cookie}) => {
     const navigate = useNavigate();
 
+    //박대해 수정 중인 코드
+    const location = useLocation();
+    const selectedCity = location.state?.city || null;
+
+    // ------------------------------------------------
+
 
     // const [optionState, setOptionState] = useState();
     const [areaState, setAreaState] = useState([]);
@@ -16,6 +22,8 @@ const MakePlanner = ({cookie}) => {
     const [selectedDay, setSelectedDay] = useState(1);
     const [destination, setDestination] = useState();
     const [searchDestination, setSearchDestination] = useState();
+
+    
 
     // const handleOption = (data) => { setOptionState(data); }
 
@@ -72,6 +80,8 @@ const MakePlanner = ({cookie}) => {
         <div className='planner' >
             <div className='plannerSide' >
                 <SideBar
+                    selectedCity={selectedCity} //도시명 SideBar 로 전달
+
                     AreaCoordinate={handleArea}
                     DayState={handleDay}
                     DestinationData={plannerData}

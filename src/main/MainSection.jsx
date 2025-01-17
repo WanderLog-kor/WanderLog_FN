@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import closeButtonImage from "../images/closeButton.png"
 import "./MainSection.scss";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -26,7 +27,9 @@ const travelDestinations = [
 
 const MainSection = ()=>{
     const [isMainModalOpen,setIsMainModalOpen] = useState(false);
+    // const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedDestination , setSelectedDestination] = useState(travelDestinations[0]);
+    const navigate = useNavigate();
 
     const openMainModal = () => setIsMainModalOpen(true);
     const closeMainModal = ()=> setIsMainModalOpen(false);
@@ -97,7 +100,8 @@ const MainSection = ()=>{
                                    className="modal-next"
                                   onClick={()=>{
                                        closeMainModal();
-                                     window.location.href="/makePlanner";
+                                       navigate("/makePlanner", {state: {city : selectedDestination.name}});
+                                    //  window.location.href="/makePlanner";
                                    }}
                                    >
                                      일정 만들기

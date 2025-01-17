@@ -64,7 +64,6 @@ const PrivateRoute = ({ element, ...rest }) => {
 
     }
 
-
     return isAuthenticated ? React.cloneElement(element, { cookie }) : null;
 };
 
