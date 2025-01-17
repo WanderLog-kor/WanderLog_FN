@@ -112,7 +112,7 @@
     }
 }
 
-/* 기본 버튼 스타일 */
+// 좋아요 버튼
 .like-button {
     position: absolute;
     right: 6px;
@@ -121,25 +121,11 @@
     height: 31px;
     border: 0;
     text-indent: -9999px;
-    background: url(./icon_good.png) no-repeat;
+    background: url(./images/icon_good.png) no-repeat;
     font-size: 0;
 }
 
-// .like-button::after {
-//     content: '';
-//     display: block;
-//     position: absolute;
-//     left: 0;
-//     bottom: 0;
-//     width: 100%;
-//     height: 40%;
-//     // background-image: linear-gradient(to bottom, transparent, rgba(0, 0, 0, .6));
-// }
-
-/* 좋아요가 된 상태 */
+// 좋아요가 된 상태 
 .liked {
     background-position: 0 -31px;
 }
-
-/* 좋아요가 되지 않은 상태 */
-.not-liked {}

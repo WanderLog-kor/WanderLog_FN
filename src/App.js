@@ -4,16 +4,16 @@ import Header from './components/Header';
 import Body from './components/Body';
 import '../src/public/public.css';
 import '../src/public/reset.css';
+import PrivateRoute, { LoginProvider } from './auth/PrivateRoute';
 
 const App = () => {
 
   return (
     <Router>
-
-      <Header />
-      <Body />
-
-
+      <LoginProvider>
+        <Header />
+        <Body />
+      </LoginProvider>
     </Router>
   );
 }
