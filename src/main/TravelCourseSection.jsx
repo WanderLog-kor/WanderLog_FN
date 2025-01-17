@@ -157,31 +157,32 @@ const TravelCourseSection = () => {
 
     return (
         <section className="travelCourse-section">
-            <div className="travelCourse-top">
-                <strong>떠나기 좋은 여행 테마 추천!</strong>
-                <a href="/tourist" className="material-symbols-outlined">
-                    add
-                </a>
-            </div>
+            <div className="travelCourse-content">
+                <div className="travelCourse-top">
+                    <strong>떠나기 좋은 여행 테마 추천!</strong>
+                    <a href="/tourist" className="material-symbols-outlined">
+                        add
+                    </a>
+                </div>
 
-            <div className="main__travelCourse">
-                {/* Swiper 컴포넌트로 슬라이드 적용 */}
-                <Swiper
-                    slidesPerView={3}
-                    spaceBetween={20}
-                    speed={600}
-                    navigation={{
-                        prevEl: '.swiper-button-prev',
-                        nextEl: '.swiper-button-next',
-                    }}
-                    pagination={{
-                        el: '.custom-pagination',
-                        type: 'custom',
-                        renderCustom: (swiperInstance, current, total) => {
+                <div className="main__travelCourse">
+                    {/* Swiper 컴포넌트로 슬라이드 적용 */}
+                    <Swiper
+                        slidesPerView={3}
+                        spaceBetween={20}
+                        speed={600}
+                        navigation={{
+                            prevEl: '.swiper-button-prev',
+                            nextEl: '.swiper-button-next',
+                        }}
+                        pagination={{
+                            el: '.custom-pagination',
+                            type: 'custom',
+                            renderCustom: (swiperInstance, current, total) => {
 
-                            const progress = (current / total) * 100;
+                                const progress = (current / total) * 100;
 
-                            return `
+                                return `
                                 <div class="swiper-progressbar">
                                     <div class="swiper-scrollbar-drag" style="width: ${progress}%;"></div>
                                 </div>
@@ -191,48 +192,49 @@ const TravelCourseSection = () => {
                                     <strong class="swiper-pagination-total">${total}</strong>
                                 </div>
                             `;
-                        }
-                    }}
-                    modules={[Navigation, Pagination]}
-                    className="mySwiper"
-                >
-                    {courseData.map((course) => {
-                        const regionName = regionMap[course.areacode] || '알 수 없음';
-                        const hashtag = getHashtag(course.cat2);
+                            }
+                        }}
+                        modules={[Navigation, Pagination]}
+                        className="mySwiper"
+                    >
+                        {courseData.map((course) => {
+                            const regionName = regionMap[course.areacode] || '알 수 없음';
+                            const hashtag = getHashtag(course.cat2);
 
-                        return (
-                            <SwiperSlide key={course.contentid}>
-                                <div
-                                    className="main__travelCourse-list"
-                                    onClick={() => handleCourseClick(course.contentid, hashtag)}
-                                >
-                                    <button
-                                        className={`like-button ${likedStatus[course.contentid] ? 'liked' : 'not-liked'}`}
-                                        onClick={(e) => toggleLike(e, course.contentid)}
+                            return (
+                                <SwiperSlide key={course.contentid}>
+                                    <div
+                                        className="main__travelCourse-list"
+                                        onClick={() => handleCourseClick(course.contentid, hashtag)}
                                     >
-                                    </button>
-                                    <img className="main__travelCourse-img" src={course.firstimage} alt={course.title} />
-                                    <h4 className="main__travelCourse-title" data-swiper-parallax="-300">
-                                        {course.title}
-                                    </h4>
-                                    <div className="main__travelCourse-tagbox">
-                                        <p className="main__travelCourse-region" data-swiper-parallax="-200">
-                                            #{regionName}
-                                        </p>
-                                        <p className="main__travelCourse-hashtag" data-swiper-parallax="-100">
-                                            {hashtag}
-                                        </p>
+                                        <button
+                                            className={`like-button ${likedStatus[course.contentid] ? 'liked' : 'not-liked'}`}
+                                            onClick={(e) => toggleLike(e, course.contentid)}
+                                        >
+                                        </button>
+                                        <img className="main__travelCourse-img" src={course.firstimage} alt={course.title} />
+                                        <h4 className="main__travelCourse-title" data-swiper-parallax="-300">
+                                            {course.title}
+                                        </h4>
+                                        <div className="main__travelCourse-tagbox">
+                                            <p className="main__travelCourse-region" data-swiper-parallax="-200">
+                                                #{regionName}
+                                            </p>
+                                            <p className="main__travelCourse-hashtag" data-swiper-parallax="-100">
+                                                {hashtag}
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                            </SwiperSlide>
-                        );
-                    })}
-                    {/* 네비게이션 화살표 */}
-                    <div className="swiper-button-prev"></div>
-                    <div className="swiper-button-next"></div>
-                    {/* 커스텀 페이지네이션 */}
-                    <div className="custom-pagination"></div>
-                </Swiper>
+                                </SwiperSlide>
+                            );
+                        })}
+                        {/* 네비게이션 화살표 */}
+                        <div className="swiper-button-prev"></div>
+                        <div className="swiper-button-next"></div>
+                        {/* 커스텀 페이지네이션 */}
+                        <div className="custom-pagination"></div>
+                    </Swiper>
+                </div>
             </div>
         </section>
     );

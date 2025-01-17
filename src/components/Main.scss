@@ -1,3 +1,9 @@
+
+// 메인페이지 전체
+.main-wrapper {
+    overflow-x: hidden;
+}
+
 // 메인페이지 헤더 영역
 .main-header {
     background-image: url('/images/trip2.png');
@@ -20,80 +26,20 @@
 // 메인페이지 컨탠트
 .main-content {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    justify-items: center;
-    gap: 70px;
+    display: grid
+;
+    grid-template-columns: 1fr 0px;
+    /* justify-items: left; */
+    /* gap: 81px; */
+    justify-content: center;
     margin: 0 auto;
-    max-width: 1200px;
 
     // 메인페이지 메인 부분
     .main-content-area {
-        max-width: 1200px;
+        // max-width: 1200px;
         margin: 0 auto;
 
 
-    }
-
-    // 메인페이지 사이드바
-    .main-sidebar {
-        position: sticky;
-        top: 30%;
-        height: fit-content;
-        // border: 1px solid;
-        background-color: lightgray;
-        border-radius: 20px;
-        padding: 15px;
-        margin-top: 100px;
-        transition: top 0.3s ease;
-
-        ul {
-
-            // 새로고침 버튼
-            .sidebar-refresh {
-                display: flex;
-                justify-content: center;
-                margin-bottom: 20px;
-
-                font-size: 30px;
-            }
-
-            // 마이페이지 버튼
-            .sidebar-mypage {
-                display: flex;
-                justify-content: center;
-                margin-bottom: 20px;
-
-                font-size: 30px;
-            }
-
-            // 위로 버튼
-            .sidebar-up-arrow {
-                display: flex;
-                justify-content: center;
-                margin-bottom: 20px;
-                font-size: 35px;
-
-            }
-
-            // 아래로 버튼
-            .sidebar-down-arrow {
-                display: flex;
-                justify-content: center;
-
-                font-size: 35px;
-
-            }
-
-            .sidebar-refresh:hover,
-            .sidebar-mypage:hover, 
-            .sidebar-up-arrow:hover, 
-            .sidebar-down-arrow:hover {
-                cursor: pointer;
-                color: white;
-            }
-
-        }
     }
 
 
@@ -105,5 +51,5 @@
 .main-footer {
     height: 300px;
     border-top: 1px solid;
-    margin-top: 100px;
+    
 }

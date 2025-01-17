@@ -123,42 +123,44 @@ const TouristSection = () => {
 
     return (
         <section className="tourist-section">
-            <div className="tourist-top">
-                <strong>어디로 가볼까?</strong>
-                <a href="/tourist" className="material-symbols-outlined">
-                    add
-                </a>
-            </div>
+            <div className="tourist-content">
+                <div className="tourist-top">
+                    <strong>어디로 가볼까?</strong>
+                    <a href="/tourist" className="material-symbols-outlined">
+                        add
+                    </a>
+                </div>
 
-            <div className="main__tourist-info">
-                {touristData.map((tourist) => {
-                    const { contentid, title, firstimage, addr1 } = tourist;
-                    const shortAddress = addr1 ? addr1.split(" ")[0] + " " + addr1.split(" ")[1] : ''; // 주소에서 시까지만
+                <div className="main__tourist-info">
+                    {touristData.map((tourist) => {
+                        const { contentid, title, firstimage, addr1 } = tourist;
+                        const shortAddress = addr1 ? addr1.split(" ")[0] + " " + addr1.split(" ")[1] : ''; // 주소에서 시까지만
 
-                    return (
-                        <div key={contentid} title={title} className="main__tourist-card" style={{ '--image-url': `url(${firstimage})` }} onClick={() => handleTouristClick(tourist.contentid)}>
-                            {firstimage && (
-                                <img
-                                    src={firstimage}
-                                    alt={title}
-                                    className="main__tourist-img"
-                                />
-                            )}
-                            <h4 className="main__tourist-title">{title}</h4>
-                            <div className="main__tourist-box">
-                                <p className="main__tourist-region">{shortAddress}</p>
+                        return (
+                            <div key={contentid} title={title} className="main__tourist-card" style={{ '--image-url': `url(${firstimage})` }} onClick={() => handleTouristClick(tourist.contentid)}>
+                                {firstimage && (
+                                    <img
+                                        src={firstimage}
+                                        alt={title}
+                                        className="main__tourist-img"
+                                    />
+                                )}
+                                <h4 className="main__tourist-title">{title}</h4>
+                                <div className="main__tourist-box">
+                                    <p className="main__tourist-region">{shortAddress}</p>
 
-                                {/* 좋아요 버튼 */}
-                                <button
-                                    className={`like-button ${likedStatus[contentid] ? 'liked' : 'not-liked'}`}
-                                    onClick={(e) => toggleLike(e, contentid)}
-                                >
-                                    {/* 배경 이미지를 사용하여 좋아요 상태에 따라 변경 */}
-                                </button>
+                                    {/* 좋아요 버튼 */}
+                                    <button
+                                        className={`like-button ${likedStatus[contentid] ? 'liked' : 'not-liked'}`}
+                                        onClick={(e) => toggleLike(e, contentid)}
+                                    >
+                                        {/* 배경 이미지를 사용하여 좋아요 상태에 따라 변경 */}
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );
