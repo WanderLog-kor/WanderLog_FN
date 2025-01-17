@@ -1,29 +1,10 @@
-// 메인페이지 헤더 영역
-.main-header {
-    background-image: url('/images/trip2.png');
-    flex: 1;
-    height: 400px;
-    position: relative;
-
-    .main-header__text {
-        position: absolute;
-        left: 39%;
-        top: 45%;
-        font-size: 1.6rem;
-        color: white;
-    }
-}
-
-
-
-
 // 메인페이지 컨탠트
 .main-content {
     position: relative;
     display: grid;
     grid-template-columns: 1fr 280px;
     justify-items: center;
-    gap: 70px;
+    // gap: 70px;
     margin: 0 auto;
     max-width: 1200px;
 

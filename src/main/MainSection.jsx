@@ -27,17 +27,60 @@ const travelDestinations = [
 
 const MainSection = ()=>{
     const [isMainModalOpen,setIsMainModalOpen] = useState(false);
-    // const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedDestination , setSelectedDestination] = useState(travelDestinations[0]);
     const navigate = useNavigate();
+    const [step , setStep] = useState(1); // 단계 설정.
+    const [dateRange , setDateRange] = useState([
+        {
+            startDate: new Date(),
+            endDate: new Date(),
+            key: "selection",
+        },
+    ]);
 
-    const openMainModal = () => setIsMainModalOpen(true);
-    const closeMainModal = ()=> setIsMainModalOpen(false);
+    const openMainModal = () => {
+        setIsMainModalOpen(true);
+        setStep(1); //초기 1단계로 설정
+    };
+    const closeMainModal = ()=> {
+        setIsMainModalOpen(false);
+        setStep(1); //단계 처음으로 초기화
+    }
 
     const handleDestinationSelect = (destination) => {
         setSelectedDestination(destination);
+        setStep(2); //2단계로 이동(날짜 선택)
     };
 
+    const handleDateChange = (ranges) =>{
+        setDateRange([ranges.selection]);
+    }
+
+    const handleNext = () =>{
+        const selectedCity = selectedDestination?.name;
+        const {startDate,endDate} = dateRange[0];
+
+        if(!selectedCity) { //도시를 선택하지 않을 시
+            alert("도시를 선택해주세요 !");
+            return ;
+        }
+
+        if(!startDate) {    //날짜를 선택하지 않을 시
+            alert("날짜를 선택해주세요 !");
+            return ;
+        }
+
+        navigate("/makePlanner", {
+            state: {
+                city : selectedCity,
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString,
+            },
+        });
+        closeMainModal();
+    };
+
+    //ESC 누를 시에 모달 창이 꺼지도록 하는 이벤트 리스너
     useEffect(()=>{
         const handleKeyDown = (event) =>{
             if (event.key === "Escape" && isMainModalOpen) {
@@ -70,6 +113,12 @@ const MainSection = ()=>{
                             />
                         </div>
                         <div className="modal-body">
+                            {step === 1 && (
+                                <>
+                                    
+                                </>
+                            )}
+
                             {/* 왼쪽 리스트 부분 */}
                             <div className="modal-list">
                                 {travelDestinations.map((destination)=>(

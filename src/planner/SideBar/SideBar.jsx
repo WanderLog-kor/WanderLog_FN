@@ -19,15 +19,12 @@ const SideBar = (props) => {
   const bringData = { ...location.state };
   const [plannerID,setPlannerID] = useState(0);
 
-  // const [titleState, setTitleState] = useState(true);
   const [dateState, setDateState] = useState(false);
   const [listState, setListState] = useState(false);
 
   const [day, setDay] = useState(0);
   const [area, setArea] = useState();
   const [selectedDay, setSelectedDay] = useState(1);
-  // const [title, setTitle] = useState('');
-  // const [description, setDescription] = useState('');
   const [isPublic, setIsPublic] = useState(true);
 
   const [word, setWord] = useState('');
@@ -55,27 +52,18 @@ const SideBar = (props) => {
   };
 
   const handleStateTitle = () => {
-    // setTitleState(true);
     setDateState(false);
     setListState(false);
   };
 
   // 달력 및 지역 선택 활성화
   const handleStateDate = () => {
-    // if (!title) {
-    //   setTitle('My Planner');
-    // }
-    // if (!description) {
-    //   setDescription("My Planner's Description");
-    // }
-    // setTitleState(false);
     setDateState(true);
     setListState(false);
   };
 
   // 플래너 리스트 활성화
   const handleStatePlanner = () => {
-    // setTitleState(false);
     setDateState(false);
     setListState(true);
   };
@@ -193,9 +181,7 @@ const SideBar = (props) => {
         if(plannerID==0) {
           await axios.post('http://localhost:9000/planner/addPlanner',
               {
-                // title: title,
                 areaName: areaName,
-                // description: description,
                 isPublic: isPublic,
                 destination: props.DestinationData,
                 day: day,
@@ -214,9 +200,7 @@ const SideBar = (props) => {
         } else {
           await axios.post('http://localhost:9000/planner/updatePlanner',
             {
-              // title: title,
               areaName: areaName,
-              // description: description,
               isPublic: isPublic,
               destination: props.DestinationData,
               day: day,
@@ -353,8 +337,6 @@ const SideBar = (props) => {
 
   useEffect(()=>{
       if(Object.keys(updateData).length > 0 && Object.keys(updateData)[0]=='updateData'){
-        // setTitle(updateData.updateData.title);
-        // setDescription(updateData.updateData.description)
         setIsPublic(updateData.updateData.isPublic)
         setDay(updateData.updateData.day)
         setAreaName(updateData.updateData.areaName)
@@ -378,9 +360,6 @@ const SideBar = (props) => {
       props.UpdatePlanner(transformData(updateData.updateData.destinations));
     }
     if(Object.keys(bringData).length > 0 && Object.keys(bringData)[0]=='bringData'){
-
-      // setTitle(bringData.bringData.title);
-      // setDescription(bringData.bringData.description)
       setIsPublic(bringData.bringData.isPublic)
       setDay(bringData.bringData.day)
       setAreaName(bringData.bringData.areaName)
@@ -537,27 +516,6 @@ const SideBar = (props) => {
           </div>
         )}
         <div className="content">
-          {/* {titleState && (
-            <div className="title">
-              <label htmlFor="">플래너 제목</label>
-              <input type="text" onChange={(e) => setTitle(e.target.value)} value={title} />
-              <label htmlFor="">설명</label>
-              <input type="text" onChange={(e) => setDescription(e.target.value)} value={description} />
-              <div className='share-check'>
-                <label htmlFor="">다른 사람에게 Planner를 공유하시겠습니까?</label>
-                <input
-                  id="title-checkbox"
-                  type="checkbox"
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                  checked={isPublic}
-                />
-                <label className='check-label' htmlFor="title-checkbox"></label>
-              </div>
-              <div className='btn-div'>
-                <button onClick={handleStateDate}>다음</button>
-              </div>
-            </div>
-          )} */}
           {dateState && (
             <div className="date">
               <PlannerDate AreaData={handleArea} DayData={handleDate} AreaNameData={handleAreaName} State={()=>{handleStatePlanner()}}/>
