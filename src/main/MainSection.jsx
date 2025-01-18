@@ -124,7 +124,7 @@ const MainSection = ()=>{
                                 {travelDestinations.map((destination)=>(
                                     <div
                                     key={destination.id}
-                                    className={`list-item ${selectedDestination.id===destination.id ? "active" : ""}`}
+                                    className={`list-item ${selectedDestination.id===destination.id ? "active" :  ""}`}
                                     onClick={()=> handleDestinationSelect(destination)}
                                     >
                                         {destination.name}
