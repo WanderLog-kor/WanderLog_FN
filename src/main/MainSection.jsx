@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import closeButtonImage from "../images/closeButton.png"
 import "./MainSection.scss";
 import { useNavigate } from "react-router-dom";
+import { DateRangePicker } from "react-date-range";
 
 
 
@@ -26,9 +27,9 @@ const travelDestinations = [
 ];
 
 const MainSection = ()=>{
+    const navigate = useNavigate();
     const [isMainModalOpen,setIsMainModalOpen] = useState(false);
     const [selectedDestination , setSelectedDestination] = useState(travelDestinations[0]);
-    const navigate = useNavigate();
     const [step , setStep] = useState(1); // 단계 설정.
     const [dateRange , setDateRange] = useState([
         {
@@ -56,28 +57,33 @@ const MainSection = ()=>{
         setDateRange([ranges.selection]);
     }
 
-    const handleNext = () =>{
-        const selectedCity = selectedDestination?.name;
+    const handleNextFromDate = () =>{
         const {startDate,endDate} = dateRange[0];
-
-        if(!selectedCity) { //도시를 선택하지 않을 시
-            alert("도시를 선택해주세요 !");
-            return ;
-        }
 
         if(!startDate) {    //날짜를 선택하지 않을 시
             alert("날짜를 선택해주세요 !");
             return ;
         }
+        setStep(2);
+    };
 
-        navigate("/makePlanner", {
+    const handleNextFromCity = ()=> {
+        const selectedCity = selectedDestination?.name;
+        const {startDate,endDate } = dateRange[0];
+
+        if(!selectedCity) {
+            alert("도시를 선택해주세요 !"); //도시를 선택하지 않을 시 알람
+            return ;
+        }
+
+        navigate("/makePlanner",{
             state: {
-                city : selectedCity,
+                city: selectedCity,
                 startDate: startDate.toISOString(),
-                endDate: endDate.toISOString,
+                endDate: endDate.toISOString(),
             },
         });
-        closeMainModal();
+        closeMainModal(); //도시 선택 후에는 모달 창이 종료되도록 설정
     };
 
     //ESC 누를 시에 모달 창이 꺼지도록 하는 이벤트 리스너
@@ -115,11 +121,25 @@ const MainSection = ()=>{
                         <div className="modal-body">
                             {step === 1 && (
                                 <>
-                                    
+                                    <h2>날짜 선택</h2>
+                                    <div className="data-picker">
+                                        <DateRangePicker
+                                            ranges={dateRange}
+                                            onChange={handleDateChange}
+                                            editableDateInputs={true}
+                                            moveRangeOnFirstSelection={false}
+                                            rangeColors={["red"]}
+                                            minDate={new Date()} // 오늘 이전 날짜 선택 불가
+                                        />
+                                    </div>
+                                    <button className="modal-next" onClick={handleNextFromDate}>다음</button>
                                 </>
                             )}
 
-                            {/* 왼쪽 리스트 부분 */}
+                            {step === 2 && (
+                                <>
+                                    <h2>도시 선택</h2>
+                                           {/* 왼쪽 리스트 부분 */}
                             <div className="modal-list">
                                 {travelDestinations.map((destination)=>(
                                     <div
@@ -156,7 +176,9 @@ const MainSection = ()=>{
                                      일정 만들기
                                    </button>
                                 </div>
-                            </div>
+                            </div>     
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
