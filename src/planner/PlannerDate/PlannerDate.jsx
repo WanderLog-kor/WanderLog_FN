@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DateRangePicker } from "react-date-range";
-import "react-date-range/dist/styles.css"; // 기본 스타일
-import "react-date-range/dist/theme/default.css"; // 테마 스타일
+// import "react-date-range/dist/styles.css"; // 기본 스타일
+// import "react-date-range/dist/theme/default.css"; // 테마 스타일
 import "./PlannerDate.scss";
 
 const PlannerDate = (props) => {
@@ -29,6 +29,7 @@ const PlannerDate = (props) => {
     { value: [127.3845475, 36.3504119], name: "대전" },
     { value: [126.8526012, 35.1595454], name: "광주" },
     { value: [129.3113596, 35.5383773], name: "울산" },
+    { value: [127.2494855, 36.5040736], name: "세종" },
     { value: [127.5183, 37.4138], name: "경기도" },
     { value: [128.18161, 37.142803], name: "충청북도" },
     { value: [127.1516, 36.8075], name: "충청남도" },

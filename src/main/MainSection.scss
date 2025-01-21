@@ -234,6 +234,7 @@
                         font-weight: bold;
                         margin-bottom: 10px;
                         text-align: center;
+                        color:black;
                     }
                 }
                 .rdrWeekDays {
@@ -247,6 +248,7 @@
                     .rdrWeekDay{
                         width:35px;
                         height: 35px;
+                        color:black;
                     }
                 }
                 .rdrDays {
@@ -274,12 +276,27 @@
                             border-style: none;
                         }
                     }
+                    .rdrDayToday{   //오늘 날짜 디자인
+                        span::after{
+                            background:black;
+                        }
+                    }
+                    .rdrDayStartOfWeek{ //일요일
+                        span{
+                            color:red;
+                        }
+                    }
+                    .rdrDayEndOfWeek{   //토요일
+                        span{
+                            color:blue;
+                        }
+                    }
 
                     .rdrStartEdge,.rdrInRange,.rdrEndEdge{
                         width:35px;
                         height: 35px;
                         border-radius: 5px;
-                        background-color:black;
+                        background-color:#adb5bd;
                         position: absolute;
                         top:0px;
                         left:0px;
