@@ -11,7 +11,6 @@ const Header = () => {
     const location = useLocation();
 
     const [isLogin, setIsLogin] = useState(false);
-
     // 쿠키를 통한 로그인 상태 확인
     useEffect(() => {
         // 쿠키를 포함한 요청을 통해 로그인 상태 확인

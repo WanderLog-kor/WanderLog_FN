@@ -28,7 +28,7 @@ const BoardSection = () => {
     };
 
     const fetchPlanners = (page) => {
-        axios.get(`http://localhost:9000/planner/board?page=${-1}&size=${pageSize}`)
+        axios.get(`http://localhost:9000/planner/list?page=${-1}&size=${pageSize}`)
             .then((response) => {
                 setPlanners(response.data.content); // 데이터 리스트
             })
