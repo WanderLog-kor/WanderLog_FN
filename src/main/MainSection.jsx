@@ -31,45 +31,67 @@ const MainSection = ()=>{
     const [isMainModalOpen,setIsMainModalOpen] = useState(false);
     const [selectedDestination , setSelectedDestination] = useState(travelDestinations[0]);
     const [step , setStep] = useState(1); // 단계 설정.
-    const [dateRange , setDateRange] = useState([
+    const [dateRange,setDateRange] = useState([
         {
             startDate: new Date(),
             endDate: new Date(),
-            key: "selection",
+            key : "selection",
         },
     ]);
+    const [maxDate, setMaxDate] = useState(null);
 
     const openMainModal = () => {
         setIsMainModalOpen(true);
         setStep(1); //초기 1단계로 설정
     };
-    const closeMainModal = ()=> {
+
+    const closeMainModal = () => {
         setIsMainModalOpen(false);
-        setStep(1); //단계 처음으로 초기화
-    }
-
-    const handleDestinationSelect = (destination) => {
-        setSelectedDestination(destination);
-        setStep(2); //2단계로 이동(날짜 선택)
+        setStep(1);
+        setSelectedDestination(travelDestinations[0]);
+        setDateRange([
+            {
+                startDate: new Date(),
+                endDate: new Date(),
+                key: "selection",
+            },
+        ]);
+        setMaxDate(null); // 종료일 제한 초기화
     };
-
-    const handleDateChange = (ranges) =>{
-        setDateRange([ranges.selection]);
-    }
 
     const handleNextFromDate = () =>{
         const {startDate,endDate} = dateRange[0];
-
-        if(!startDate) {    //날짜를 선택하지 않을 시
+        if(!startDate || !endDate) {    //날짜를 선택하지 않을 시
             alert("날짜를 선택해주세요 !");
             return ;
         }
+
+        const diffDate = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+
+        if(diffDate > 10)  {
+            alert("출발일 기준 최대 10일까지만 선택가능합니다 !");
+            return ;
+        }
+
         setStep(2);
+    };
+
+    const handleDateChange = (ranges) => {
+        const {startDate,endDate} = ranges.selection;
+        console.log("StartDate : , EndDate : ",startDate,endDate);
+
+        setDateRange([
+            {
+                startDate: startDate,
+                endDate: endDate,
+                key: "selection",
+            },
+        ]);
     };
 
     const handleNextFromCity = ()=> {
         const selectedCity = selectedDestination?.name;
-        const {startDate,endDate } = dateRange[0];
+        const { startDate, endDate } = dateRange[0];
 
         if(!selectedCity) {
             alert("도시를 선택해주세요 !"); //도시를 선택하지 않을 시 알람
@@ -121,31 +143,38 @@ const MainSection = ()=>{
                         <div className="modal-body">
                             {step === 1 && (
                                 <>
-                                    <h2>날짜 선택</h2>
-                                    <div className="data-picker">
-                                        <DateRangePicker
-                                            ranges={dateRange}
-                                            onChange={handleDateChange}
-                                            editableDateInputs={true}
-                                            moveRangeOnFirstSelection={false}
-                                            rangeColors={["red"]}
-                                            minDate={new Date()} // 오늘 이전 날짜 선택 불가
-                                        />
+                                    <div className="modal-date-picker">
+                                        <h2>여행 기간이 어떻게 되시나요?</h2>
+                                        <p>출발일과 도착일을 선택해주세요 !<br />
+                                         최대 10일까지 선택할 수 있습니다. (출발일 기준)
+                                        </p>
+                                         <div className="modal-calendar">
+                                                <DateRangePicker
+                                                    ranges={dateRange}
+                                                    onChange={handleDateChange}
+                                                    editableDateInputs={true}
+                                                    moveRangeOnFirstSelection={false}
+                                                    rangeColors={["#adb5bd"]}
+                                                    minDate={new Date()}
+                                                    // maxDate={maxDate || new Date(new Date().getTime() + 10 * 24 * 60 * 60 * 1000)} // 기본적으로 10일 후까지 설정
+                                                    months={2}
+                                                    direction="horizontal"
+                                                ></DateRangePicker>
+                                                <button className="modal-next-city" onClick={handleNextFromDate}>다음</button>
+                                         </div>
                                     </div>
-                                    <button className="modal-next" onClick={handleNextFromDate}>다음</button>
                                 </>
                             )}
 
                             {step === 2 && (
                                 <>
-                                    <h2>도시 선택</h2>
-                                           {/* 왼쪽 리스트 부분 */}
+                            {/* 왼쪽 리스트 부분 */}
                             <div className="modal-list">
                                 {travelDestinations.map((destination)=>(
                                     <div
                                     key={destination.id}
-                                    className={`list-item ${selectedDestination.id===destination.id ? "active" :  ""}`}
-                                    onClick={()=> handleDestinationSelect(destination)}
+                                    className={`list-item ${selectedDestination?.id===destination.id ? "active" :  ""}`}
+                                    onClick={()=> setSelectedDestination(destination)}
                                     >
                                         {destination.name}
                                     </div>
@@ -170,7 +199,6 @@ const MainSection = ()=>{
                                   onClick={()=>{
                                        closeMainModal();
                                        navigate("/makePlanner", {state: {city : selectedDestination.name}});
-                                    //  window.location.href="/makePlanner";
                                    }}
                                    >
                                      일정 만들기
