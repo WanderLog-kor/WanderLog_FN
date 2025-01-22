@@ -53,19 +53,23 @@ const MakePlanner = ({}) => {
     const handleData = (data) => {
         setPlannerData((plannerData)=> [...plannerData, data]);
     }
+
+    const handleDay = (data) => { setSelectedDay(data); } //N일차 저장 함수
+
     const handleRemove = (data) => {
         setPlannerData((prevPlannerData) => prevPlannerData.filter((item) => item.data.id !== data.id));
     };
 
-    const handleDeleteDest = (event,day, index) => {
-        event.stopPropagation();
-        setPlannerData(prevPlannerData =>
+    const handleDeleteDest = ({day,data}) => {
+        const uniqueId = data.uniqueId;
+
+        setPlannerData((prevPlannerData) =>
             prevPlannerData
                 .filter(el => el.day !== day) // 해당 day와 일치하지 않는 항목만 남기기
                 .concat(
                     prevPlannerData
                         .filter(el => el.day === day) // 해당 day와 일치하는 항목만 남기기
-                        .filter((e, i) => i !== index) // 그 중 index에 해당하는 항목을 제외
+                        .filter((el) => el.data.uniqueId !== uniqueId) // uniqueId가 다른 항목만 유지
                 )
         );
     };
@@ -86,7 +90,7 @@ const MakePlanner = ({}) => {
                     areaCode={areaCode}
                     userid={userid}
                     // AreaCoordinate={handleArea}
-                    // DayState={handleDay}
+                    DayState={handleDay}
                     DestinationData={plannerData}
                     DeleteDestination={handleDeleteDest}
                     DeleteAllDestination={handleAllDelete}

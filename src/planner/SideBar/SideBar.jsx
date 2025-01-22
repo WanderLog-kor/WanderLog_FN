@@ -8,13 +8,14 @@ import NoImage from "../../images/noImage.png";
 
 const SideBar = (props) => {
 
-  console.log("sibebarSelectedCity",props);
+  // console.log("sibebarSelectedCity",props);
   //주석 처리한 부분은 삭제 예정 코드.
 
   const [isModalOpen,setIsModalOpen] = useState(false);
   const [plannerTitle, setPlannerTitle] = useState('');
   const [plannerDescription, setPlannerDescription] = useState('');
-  const [addedItems, setAddedItems] = useState(new Set());
+  const [addedItems, setAddedItems] = useState([]);
+  const [addedItemsByDay , setAddedItemsByDay] = useState({});
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -50,13 +51,6 @@ const SideBar = (props) => {
   const [resultsPerPage] = useState(10); // 한 페이지에 표시할 결과 수
   const [pagesToShow] = useState(5); // 한 번에 표시할 페이지 번호 개수
 
-  // const [images, setImages] = useState([]);
-
-  // // 지역정보 저장
-  // const handleArea = (data) => {
-  //   setArea(data);
-  // };
-
   // 몇박인지 저장
   const handleDate = (start,end) => {
     const startDay = new Date(start);
@@ -69,16 +63,7 @@ const SideBar = (props) => {
     setDay(calculatedDay);
   });
 
-  // const handleStateTitle = () => {
-  //   setDateState(false);
-  //   setListState(false);
-  // };
 
-  // // 달력 및 지역 선택 활성화
-  // const handleStateDate = () => {
-  //   setDateState(true);
-  //   setListState(false);
-  // };
 
   // 플래너 리스트 활성화
   const handleStatePlanner = () => {
@@ -183,30 +168,28 @@ const SideBar = (props) => {
   };
 
   // 검색한 장소 플래너에 추가
-  const handleSearchAdd = (event, data) => {
-    event.stopPropagation();
+  const handleSearchAdd = (day, data) => {
+    const uniqueId = data.uniqueId;
+    // event.stopPropagation();
     props.AddDestination({ day: selectedDay, data: data });
-
-    setAddedItems((prev) => {
-      const updatedSet = new Set(prev);
-      updatedSet.add(data.id);
-      return updatedSet;
-  });
+    setAddedItemsByDay((prev) => ({
+      ...prev,
+      [day]: prev[day] ? [...prev[day], uniqueId] : [uniqueId],
+    }));
 };
 
-  //플래너 추가된 장소 다시 제거함수
-  const handleSearchRemove = (event,data) => {
-    event.stopPropagation();
-    props.RemoveDestination({day: selectedDay, data:data});
-
-    setAddedItems((prev)=> {
-      const updateSet = new Set(prev);
-      updateSet.delete(data.id);
-      return updateSet;
-    });
-  };
-
-  const isItemAdded = (id) => addedItems.has(id);
+const handleSearchRemove = (day, data) => {
+  const uniqueId = data.uniqueId;
+  props.DeleteDestination({ day, data }); // 부모 컴포넌트 업데이트
+  setAddedItemsByDay((prev) => {
+    const updatedDayItems = prev[day]?.filter((id) => id !== uniqueId) || [];
+    console.log('Removed Items:', updatedDayItems);
+    return {
+      ...prev,
+      [day]: updatedDayItems,
+    };
+  });
+};
 
   // DB에 플래너 추가
   const addPlanner = async () => {
@@ -513,8 +496,12 @@ const SideBar = (props) => {
                 {search &&  //타입이 관광지인 경우
                   search.length > 0 &&
                   typeState == "관광지" &&
-                  currentResults.map((el, index) => {
-                    // console.log("image안나오는거보기", el);
+                  currentResults && currentResults.length>0 && currentResults.map((el, index) => {
+                    if(!el) return null; //el 이 null 또는 undefined 인 경우 무시
+                    const uniqueId = `${el.name}-${el.x}-${el.y}`;
+                    el.uniqueId = uniqueId;
+                    
+                    const isAdded = addedItemsByDay[selectedDay]?.includes(el.uniqueId);
                     return (
                       <li
                         key={index}
@@ -545,27 +532,18 @@ const SideBar = (props) => {
                           </div>
                         </div>
                         <div>
-                          {isItemAdded(el.id) ? (
-                            <button 
-                              onClick={(event) => {
-                                handleSearchRemove(event,el);
-                                console.log("Element ID:", el.id);
-
-                              }}
-                            >
-                              -
-                            </button>
-                          ) : (
-                            <button
-                            onClick={(event) => {
-                              handleSearchAdd(event, el);
-                              console.log("Element ID:", el.id);
-
-                            }}
-                          >
-                            +
-                          </button>
-                          )}
+                        <button
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            if(isAdded) {
+                              handleSearchRemove(selectedDay,el);
+                            }else{
+                              handleSearchAdd(selectedDay,el);
+                            }
+                          }}
+                        >
+                          {isAdded ? '-' : '+'}
+                        </button>
                         </div>
                       </li>
                     );
@@ -728,13 +706,10 @@ const SideBar = (props) => {
                                     </div>
                                     <div className="card-button">
                                       <button
-                                        onClick={(event) =>
-                                          props.DeleteDestination(
-                                            event,
-                                            selectedDay,
-                                            index
-                                          )
-                                        }
+                                        onClick={(event) => {
+                                          event.stopPropagation();
+                                          handleSearchRemove(selectedDay,destination.data);
+                                        }}
                                       >
                                         제거
                                       </button>
