@@ -102,38 +102,39 @@
         justify-content: space-between;
         /* 텍스트 양쪽 정렬 */
         padding: 15px;
+
+        .main__tourist-region {
+            position: absolute;
+            bottom: 15px;
+    
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            /* 텍스트 그림자 강하게 */
+        }
+
+        // 좋아요 버튼
+        .like-button {
+            position: absolute;
+            right: 6px;
+            top: 6px;
+            width: 31px;
+            height: 31px;
+            border: 0;
+            text-indent: -9999px;
+            background: url(./images/icon_good.png) no-repeat;
+            font-size: 0;
+        }
+
+        // 좋아요가 된 상태 
+        .liked {
+            background-position: 0 -31px;
+        }
     }
 
-    .main__tourist-region {
-        position: absolute;
-        bottom: 15px;
-
-        font-size: 0.9rem;
-        font-weight: bold;
-        color: white;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-        /* 텍스트 그림자 강하게 */
-    }
 
     .main__tourist-card:hover {
         cursor: pointer;
     }
-}
-
-// 좋아요 버튼
-.like-button {
-    position: absolute;
-    right: 6px;
-    top: 6px;
-    width: 31px;
-    height: 31px;
-    border: 0;
-    text-indent: -9999px;
-    background: url(./images/icon_good.png) no-repeat;
-    font-size: 0;
-}
-
-// 좋아요가 된 상태 
-.liked {
-    background-position: 0 -31px;
 }

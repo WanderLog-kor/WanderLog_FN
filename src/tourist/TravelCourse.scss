@@ -14,10 +14,10 @@
 
 /* 제목 스타일 */
 .tourist-title {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 20px;
-    color: #333;
+    // text-align: center;
+    // font-size: 2rem;
+    // margin-bottom: 20px;
+    // color: #333;
 }
 
 // 검색에 대한 내용
@@ -92,30 +92,24 @@
 .travel-course-list-content {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    /* 5개의 열로 구성 */
-    gap: 10px;
-    /* 그리드 간의 간격 */
 }
 
 /* 여행 코스 리스트 스타일 */
 .travel-course-list {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    background-color: #fff;
-    padding: 15px;
-    margin: 10px;
-    border-radius: 8px;
-    // box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    height: 313px;
-    max-width: 250px;
-    /* 각 아이템의 최대 너비 */
-    text-align: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; // 애니메이션 (hover시 연계)
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 350px;
     position: relative;
-    flex-shrink: 0;
-    /* 이미지가 넘칠 때 숨기기 */
+    background-image: var(--image-url);
+    background-size: cover;
+    background-position: center;
+    color: white;
 }
 
 
@@ -164,7 +158,7 @@
     flex-direction: column;
     justify-content: end;
     align-items: start;
-    height: 100%;
+    // height: 100%;
     width: 100%;
 
     // 지역 p 태그 스타일
@@ -187,13 +181,13 @@
 .tourist-pagination {
     display: flex;
     justify-content: center;
-    
+
 }
 
 .tourist-pagination button {
     padding: 10px 15px;
     margin: 0 5px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     border: 1px solid #ddd;
     border-radius: 5px;
     background-color: #f8f8f8;

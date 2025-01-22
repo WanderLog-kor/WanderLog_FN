@@ -3,85 +3,64 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Tourist.scss';
 import touristJson from './jsonFile/tourist.json';
+import { useLoginStatus } from '../auth/PrivateRoute';
+import Footer from '../components/Footer';
+import MainSection from '../main/MainSection';
 
 const Tourist = () => {
     const [regionFilter, setRegionFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('');
-    const [hashtagOptions, setHashtagOptions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [touristData, setTouristData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [searchKeyword, setSearchKeyword] = useState('');
-    const [totalCount, setTotalCount] = useState(0);  // totalCount를 숫자형으로 초기화
+    const [totalCount, setTotalCount] = useState(0);
     const [arrange, setArrange] = useState('O');
+    const [showCategory, setShowCategory] = useState(false); // 카테고리 드롭다운 상태
+    const [showRegion, setShowRegion] = useState(true); // 지역 드롭다운 상태
+    const [showAllCategories, setShowAllCategories] = useState(false); // 카테고리 더보기
+    const [showAllRegions, setShowAllRegions] = useState(false); // 지역 더보기
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [likedStatus, setLikedStatus] = useState({});  // 각 관광지별 좋아요 상태 관리
+    const { loginStatus } = useLoginStatus();
+
     const navigate = useNavigate();
 
-    // regions 객체를 사용하여 옵션을 생성
+    // 지역
     const regionOptions = Object.entries(touristJson.regions).map(([code, label]) => ({
         value: code,
         label: label,
     }));
 
-    // categorys 객체를 사용하여 옵션을 생성
+    // 카테고리
     const categoryOptions = Object.entries(touristJson.categorys).map(([code, label]) => ({
         value: code,
         label: label,
     }));
 
-    // 지역 이름을 가져오는 함수
-    const getRegionName = (regionCode) => {
-        return touristJson.regions[regionCode] || '알 수 없음'; // 해당 지역 코드가 없으면 기본값 '알 수 없음'
-    };
 
-    // 해시태그를 가져오는 함수 (cat2 값에 따라)
-    const getHashtag = (cat2) => {
-        return touristJson.categorys[cat2] || '기타'; // 해당 category가 없으면 기본값 '기타'
-    };
-
-    // 검색어를 URL 인코딩하는 함수
-    const encodeUTF8 = () => {
-        return encodeURIComponent(searchKeyword.trim());
-    };
-
-    // 관광지 검색 함수
+    // API요청
     const handleSearch = () => {
-        setLoading(true); // 검색 시작 시 로딩 상태 true로 설정
-
-        const currentEncodedData = encodeUTF8();
+        setLoading(true);
         const data = {
-            keyword: currentEncodedData, 
+            keyword: encodeURIComponent(searchKeyword.trim()),
             pageNo: currentPage,
-            hashtag: categoryFilter,  // 해시태그 필터가 있다면 설정
+            hashtag: categoryFilter,
             regionCode: regionFilter,
-            arrange: arrange,  // 원하는 정렬 방식
-            contentTypeId: '12',  // 필요에 맞게 설정
+            arrange,
+            contentTypeId: '12',
         };
 
         axios.post('http://localhost:9000/api/getSearch', data, {
-
-            headers: {
-                'Content-Type': 'application/json', // Content-Type을 JSON으로 설정
-            },
+            headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
         })
             .then((response) => {
-                console.log('response : ', response);
-                setTouristData(response.data.items.item || []); // 빈 배열로 안전하게 설정
-                setTotalCount(Number(response.data.totalCount));  // totalCount를 숫자로 설정
-                setLoading(false); // 로딩 상태 false로 설정
+                setTouristData(response.data.items.item || []);
+                setTotalCount(Number(response.data.totalCount));
+                setLoading(false);
             })
-
-            .catch((error) => {
-                console.error('Error fetching courses:', error);
-                setLoading(false); // 에러가 나도 로딩 상태 false로 설정
-            });
-    };
-
-    // 관광지 클릭시 상세 페이지로 데이터 전달
-    const handleTouristClick = (contentId) => {
-        setLoading(true); // 로딩 시작
-       
-        navigate(`/tourist-info?contentId=${contentId}`);
+            .catch(() => setLoading(false));
     };
 
     // 페이지네이션 버튼 생성 함수
@@ -136,123 +115,298 @@ const Tourist = () => {
 
         return buttons;
     };
+    // 여행 코스 클릭시 상세 페이지로 데이터 전달
+    const handleTouristClick = (contentId) => {
+        navigate(`/tourist-info?contentId=${contentId}`);
+    };
 
     // 페이지 변경 함수
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
+    // 필터 클릭
+    const handleFilterClick = (filterType, value) => {
+        if (filterType === 'region') {
+            setRegionFilter(value); // 지역 필터 상태 변경
+            setCurrentPage(1); // 페이지를 초기화
+        }
+        if (filterType === 'category') {
+            setCategoryFilter(value); // 카테고리 필터 상태 변경
+            setCurrentPage(1); // 페이지를 초기화
+        }
+    };
+
+    // 정렬 클릭
+    const handleArrangeClick = (value) => {
+        setArrange(value);
+    };
+
+    // 정렬 드롭다운 
+    const handleDropdownToggle = () => {
+        setDropdownOpen((prev) => !prev);
+    };
+
+    // 버튼의 텍스트는 arrange 상태에 따라 동적으로 변경
+    const getButtonText = () => {
+        switch (arrange) {
+            case 'O':
+                return '제목순';
+            case 'Q':
+                return '수정일순';
+            case 'R':
+                return '생성일순';
+            default:
+                return '정렬';
+        }
+    };
+
+
+    // 한 페이지에 10개씩 표시
+    const totalPages = totalCount ? Math.ceil(totalCount / 20) : 0;
+    // 좋아요 버튼 누를 시
+    const toggleLike = (e, touristId) => {
+        e.stopPropagation();
+
+        // 로그인 하지 않고 좋아요 버튼 누르면 로그인 해야한다고 알림
+        if (!loginStatus || loginStatus === '') {
+            alert("로그인이 필요합니다!");
+            return;
+        }
+
+        const likeRequest = {
+            touristId: touristId,
+            userId: loginStatus.userid
+        };
+
+        axios.post('http://localhost:9000/tourist/toggleLike', likeRequest, {
+            headers: {
+                'Content-Type': 'application/json', // JSON 포맷으로 전송
+            },
+            withCredentials: true,
+        })
+            .then(response => {
+                setLikedStatus(prevState => ({
+                    ...prevState,
+                    [touristId]: !prevState[touristId], // 좋아요 상태 토글
+                }));
+            })
+
+    };
+
+    // 좋아요 상태 가져오기
+    const getLikeStatus = (touristId) => {
+        if (loginStatus && loginStatus.userid) {  // 로그인 상태가 있을 때만 호출
+            axios.get(`http://localhost:9000/tourist/likeStatus?touristId=${touristId}&userId=${loginStatus.userid}`, {
+                withCredentials: true,
+            })
+                .then(response => {
+                    setLikedStatus(prevState => ({
+                        ...prevState,
+                        [touristId]: response.data, // 응답 데이터 그대로 사용 (boolean 상태일 경우)
+                    }));
+                })
+        }
+    };
     useEffect(() => {
-        handleSearch(); // 페이지가 변경되면 다시 검색
-    }, [currentPage, arrange]); // c
-    // urrentPage, arrange가 변경될 때마다 호출
+        handleSearch();
+    }, [currentPage, arrange, regionFilter, categoryFilter, loginStatus]);
 
-    const totalPages = totalCount ? Math.ceil(totalCount / 10) : 0; // 한 페이지에 10개씩 표시
-
+    useEffect(() => {
+        if (loginStatus && loginStatus.userid && touristData.length > 0) {
+            touristData.forEach((tourist) => {
+                getLikeStatus(tourist.contentid);
+            });
+        }
+    }, [touristData, loginStatus]);
     return (
-        <div className="tourist-wrapper">
-            <div className="tourist-content">
-                <h1 className="tourist-title">관광지 정보</h1>
-                <div className="tourist-header">
-                    {/* 카테고리 필터 */}
-                    <select
-                        value={categoryFilter}
-                        onChange={(e) => setCategoryFilter(e.target.value)}
-                        className="filter-select"
-                    >
-                        <option value="">카테고리 선택</option>
-                        {categoryOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
+        <>
+            <div className="tourist-subheader">
+                <MainSection />
+            </div>
+
+            <div className="tourist-wrapper">
+
+                <div className="tourist-category">
+
 
                     {/* 지역 필터 */}
-                    <select
-                        value={regionFilter}
-                        onChange={(e) => setRegionFilter(e.target.value)}
-                        className="filter-select"
-                    >
-                        <option value="">지역 선택</option>
-                        {regionOptions.map((option) => (
-                            <option key={option.value} value={option.value}>
-                                {option.label}
-                            </option>
-                        ))}
-                    </select>
-
-
-                    {/* 검색어 입력 */}
-                    <input
-                        type="text"
-                        placeholder="검색어를 입력하세요"
-                        value={searchKeyword}
-                        onChange={(e) => setSearchKeyword(e.target.value)}
-                        className="search-input"
-                    />
-
-                    <button onClick={handleSearch} className="search-button">검색</button>
-                </div>
-                <div className="total-check">
-                    <p className="total-count">총 {totalCount}개 코스</p>
-
-                    {/* 현재 페이지 / 총 페이지 표시 */}
-                    {totalPages > 0 && (
-                        <p className="page-info">
-                            {currentPage} / {totalPages} 페이지
+                    <div className="region-filter">
+                        <p onClick={() => setShowRegion((prev) => !prev)}>
+                            지역
+                            <span className={`dropdown-arrow ${showRegion ? 'open-arrow' : ''}`}></span>
                         </p>
-                    )}
-                    {/* 정렬 방식 */}
-                    <select
-                        className="sort-select"
-                        value={arrange}
-                        onChange={(e) => setArrange(e.target.value)} // 상태만 업데이트
-                    >
-                        <option value="O">제목순</option>
-                        <option value="Q">수정일순</option>
-                        <option value="R">생성일순</option>
-                    </select>
+                        {showRegion && (
+                            <ul className="filter-list">
+                                <li
+                                    className={`filter-item ${regionFilter === '' ? 'active' : ''}`}
+                                    onClick={() => handleFilterClick('region', '')} >
+                                    전체
+                                </li>
+                                {(showAllRegions ? regionOptions : regionOptions.slice(0, 10)).map((option) => (
+                                    <li
+                                        key={option.value}
+                                        className={`filter-item ${regionFilter === option.value ? 'active' : ''}`}
+                                        onClick={() => handleFilterClick('region', option.value)}>
+                                        {option.label}
+                                    </li>
+                                ))}
+                                {regionOptions.length > 10 && (
+                                    <button
+                                        className="more-button"
+                                        onClick={() => setShowAllRegions((prev) => !prev)}>
+                                        {showAllRegions ? '접기' : '더보기'}
+
+                                        <span className={`dropdown-arrow ${showAllRegions ? 'open-arrow' : ''}`}></span>
+                                    </button>
+                                )}
+                            </ul>
+                        )}
+                    </div>
+
+                    <div className="category-filter">
+                        {/* 카테고리 필터 */}
+                        <p onClick={() => setShowCategory((prev) => !prev)}>
+                            카테고리
+                            <span className={`dropdown-arrow ${showCategory ? 'open-arrow' : ''}`}></span>
+                        </p>
+                        {showCategory && (
+                            <ul className="filter-list">
+                                <li
+                                    className={`filter-item ${categoryFilter === '' ? 'active' : ''}`}
+                                    onClick={() => handleFilterClick('category', '')}
+                                >
+                                    전체
+                                </li>
+                                {(showAllCategories ? categoryOptions : categoryOptions.slice(0, 10)).map((option) => (
+                                    <li
+                                        key={option.value}
+                                        className={`filter-item ${categoryFilter === option.value ? 'active' : ''}`}
+                                        onClick={() => handleFilterClick('category', option.value)}
+                                    >
+                                        {option.label}
+                                    </li>
+                                ))}
+                                {categoryOptions.length > 10 && (
+                                    <button
+                                        className="more-button"
+                                        onClick={() => setShowAllCategories((prev) => !prev)}>
+                                        {showAllCategories ? '접기' : '더보기'}
+                                        <span className={`dropdown-arrow ${showAllCategories ? 'open-arrow' : ''}`}></span>
+                                    </button>
+                                )}
+                            </ul>
+                        )}
+                    </div>
                 </div>
 
-                <div>
-                    {loading ? (
-                        <div className="loading-message">로딩 중...</div>
-                    ) : (
-                        <div className="travel-course-list-content">
-                            {touristData.map((tourist) => {
-                                const regionName = getRegionName(tourist.areacode); // 지역 이름 가져오기
-                                const hashtag = getHashtag(tourist.cat3); // 해시태그 가져오기
 
-                                return (
-                                    <div key={tourist.contentid} className="travel-course-list" onClick={() => handleTouristClick(tourist.contentid)}>
-                                        {tourist.firstimage && (
-                                            <img
-                                                src={tourist.firstimage}
-                                                alt={tourist.title}
-                                                className="travel-course-list__img"
-                                            />
-                                        )}
-                                        <h4 className="course-title">{tourist.title}</h4>
-                                        <div className="course-box">
-                                            {/* 지역 */}
-                                            <p className="course-region">{regionName}</p>
-                                            {/* 코스 태그 */}
-                                            <p className="course-hashtag">{hashtag}</p>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                <div className="tourist-content">
+                    <div className="tourist-header">
+                        {/* 검색어 입력 */}
+                        <div className="tourist-search">
+                            <input
+                                type="text"
+                                placeholder="관광지 검색"
+                                value={searchKeyword}
+                                onChange={(e) => setSearchKeyword(e.target.value)}
+                                className="tourist-search-input" />
+                            <button onClick={handleSearch} className="tourist-search-button"></button>
                         </div>
-                    )}
+
+                        <div className="sort-dropdown">
+                            <button
+                                className={`dropdown-button ${dropdownOpen ? 'open' : ''}`}
+                                onClick={handleDropdownToggle}>
+                                {getButtonText()}
+                                <span className="dropdown-arrow"></span>
+                            </button>
+                            <ul className={`dropdown-menu ${dropdownOpen ? 'open' : ''}`}>
+                                <li
+                                    className={`dropdown-item ${arrange === 'O' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        handleArrangeClick('O');
+                                        setDropdownOpen(false);
+                                    }}>
+                                    제목순
+                                </li>
+                                <li
+                                    className={`dropdown-item ${arrange === 'Q' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        handleArrangeClick('Q');
+                                        setDropdownOpen(false);
+                                    }}>
+                                    수정일순
+                                </li>
+                                <li
+                                    className={`dropdown-item ${arrange === 'R' ? 'active' : ''}`}
+                                    onClick={() => {
+                                        handleArrangeClick('R');
+                                        setDropdownOpen(false);
+                                    }}>
+                                    생성일순
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <div>
+                        {loading ? (
+                            <div className="loading-message">로딩 중...</div>
+                        ) : (
+
+                            <div className="tourist-info">
+                                {touristData.map((tourist) => {
+                                    const { contentid, title, firstimage, addr1 } = tourist;
+                                    const shortAddress = addr1 ? addr1.split(" ")[0] + " " + addr1.split(" ")[1] : ''; // 주소에서 시까지만
+
+                                    return (
+                                        <div key={contentid} title={title} className="tourist-card" style={{ '--image-url': `url(${firstimage})` }} onClick={() => handleTouristClick(tourist.contentid)}>
+                                            {firstimage && (
+                                                <img
+                                                    src={firstimage}
+                                                    alt={title}
+                                                    className="tourist-img"
+                                                />
+                                            )}
+                                            <h4 className="tourist-title">{title}</h4>
+                                            <div className="tourist-box">
+                                                <p className="tourist-region">{shortAddress}</p>
+
+                                                {/* 좋아요 버튼 */}
+                                                <button
+                                                    className={`like-button ${likedStatus[contentid] ? 'liked' : 'not-liked'}`}
+                                                    onClick={(e) => toggleLike(e, contentid)}
+                                                >
+                                                    {/* 배경 이미지를 사용하여 좋아요 상태에 따라 변경 */}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+
+
+                    <div className="tourist-footer">
+                        <p className="total-count">총 {totalCount}개 코스</p>
+
+                        <div className="tourist-pagination">
+
+                            {totalPages > 0 && createPageButtons(totalPages)}
+                        </div>
+
+                        {totalPages > 0 && (
+                            <p className="page-info">{currentPage} / {totalPages} 페이지</p>
+                        )}
+                    </div>
                 </div>
-            </div>
-            {/* 페이지네이션 버튼들 */}
-            <div className="tourist-pagination">
-                {/* 페이지네이션 */}
-                {totalPages > 0 && createPageButtons(totalPages)}
-            </div>
-        </div>
+
+            </div >
+            <Footer />
+        </>
     );
 };
 
