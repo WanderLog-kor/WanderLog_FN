@@ -4,15 +4,16 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import Map from '../Map/Map';
 import SideBar from '../SideBar/SideBar';
 import './MakePlanner.scss'
-import axios from 'axios';
+import { useLoginStatus } from '../../auth/PrivateRoute';
 
-const MakePlanner = ({cookie}) => {
-    const navigate = useNavigate();
-
-    //박대해 수정 중인 코드
+const MakePlanner = ({}) => {
+    const {userid,loginStatus} = useLoginStatus();
     const location = useLocation();
-    const selectedCity = location.state?.city || null;
+    const { startDate, endDate, areaName, areaCode,coordinates } = location.state || {};
 
+    useEffect(() => {
+        // 전달받은 데이터를 확인하는 로그
+    }, [areaName, startDate, endDate]); // 의존성 배열에 데이터 추가
     // ------------------------------------------------
 
 
@@ -27,7 +28,9 @@ const MakePlanner = ({cookie}) => {
 
     // const handleOption = (data) => { setOptionState(data); }
 
-    const handleArea = (data) => {setAreaState(data)}
+    // const handleArea = (data) => {setAreaState(data);
+    //     console.log("Received areaCode:", data);
+    // }
 
     // const handleData = async (data) => {
     //     await axios.post('http://localhost:9000/planner/getImages',
@@ -50,8 +53,9 @@ const MakePlanner = ({cookie}) => {
     const handleData = (data) => {
         setPlannerData((plannerData)=> [...plannerData, data]);
     }
-
-    const handleDay = (data) => { setSelectedDay(data); }
+    const handleRemove = (data) => {
+        setPlannerData((prevPlannerData) => prevPlannerData.filter((item) => item.data.id !== data.id));
+    };
 
     const handleDeleteDest = (event,day, index) => {
         event.stopPropagation();
@@ -72,23 +76,22 @@ const MakePlanner = ({cookie}) => {
     const handleClickPlanner = (data) => {setDestination(data);}
     const handleClickSearch = (data) => {setSearchDestination(data);}
 
-    // useEffect(()=>{
-    //     console.log('plannerData : ', plannerData)
-    // },[plannerData])
-
     return (
         <div className='planner' >
             <div className='plannerSide' >
                 <SideBar
-                    selectedCity={selectedCity} //도시명 SideBar 로 전달
-
-                    AreaCoordinate={handleArea}
-                    DayState={handleDay}
+                    areaName={areaName} //도시명 SideBar 로 전달
+                    startDate={startDate}
+                    endDate={endDate}
+                    areaCode={areaCode}
+                    userid={userid}
+                    // AreaCoordinate={handleArea}
+                    // DayState={handleDay}
                     DestinationData={plannerData}
                     DeleteDestination={handleDeleteDest}
                     DeleteAllDestination={handleAllDelete}
                     AddDestination={handleData}
-                    CookieData={cookie}
+                    RemoveDestination={handleRemove}
                     UpdatePlanner={handleUpdateDest}
                     ClickPlanner={handleClickPlanner}
                     ClickSearch={handleClickSearch}
@@ -98,6 +101,7 @@ const MakePlanner = ({cookie}) => {
                 {/* <Option OptionData={handleOption}/> */}
                 <Map 
                     // OptionData={optionState}
+                    coordinates={coordinates}
                     AreaData={areaState}
                     DayData={selectedDay}
                     AddDestination={handleData}

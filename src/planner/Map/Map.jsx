@@ -9,7 +9,8 @@ const Map = (props) => {
 
     // map을 상태로 설정
     const [map, setMap] = useState(null);
-    const [center , setCenter] = useState({ lat: 35.1795543, lng: 129.0756416 })
+    const [center , setCenter] = useState({ lat: 35.1795543, lng: 129.0756416 });
+    const initialCenter = props.coordinates || [center.lat, center.lng]; // 초기 좌표 설정
     const [layerGroup, setLayerGroup] = useState(L.layerGroup());
     const [destinationGroup, setDestinationGroup] = useState(L.layerGroup());
 
@@ -182,7 +183,6 @@ const Map = (props) => {
         if(map && props.AreaData) {
             var lat = Number(props.AreaData[1])
             var lng = Number(props.AreaData[0])
-
             map.setView([lat,lng], 7);
         }
     },[props.AreaData])
@@ -227,11 +227,11 @@ const Map = (props) => {
         
         // map 설정
         const mapInstance = L.map('map', {
-            center: [center.lat, center.lng],
+            center: initialCenter,
             crs: EPSG5181,
             zoom:9,
         });
-
+        console.log(map);
         // map의 베이스
         const tileLayer =L.tileLayer('http://map{s}.daumcdn.net/map_2d/1807hsm/L{z}/{y}/{x}.png', {
             minZoom:7,
