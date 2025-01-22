@@ -46,302 +46,335 @@
         background-color: white;
         border-style: none;
         font-weight: bold;
-        font-size:1rem;
+        font-size: 1rem;
         cursor: pointer;
 
         &:hover {
             background-color: #f0f0f0;
         }
     }
-}
 
-/* Modal Styles */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
 
-    .modal-content {
-        width: 1300px;
-        height: 600px;
-        background-color: white;
-        padding: 10px 0;
+    /* Modal Styles */
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
         display: flex;
-        text-align: center;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
 
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            z-index: 900;
-    
-            .modal-close-btn {
-                width: 45px;
-                height: 45px;
-                color: black;
-            }
-        }
-
-        .modal-body {
-            width:100%;
-            height:100%;
+        .modal-content {
+            width: 1300px;
+            height: 600px;
+            background-color: white;
+            padding: 10px 0;
             display: flex;
-            //2번 째 모달창 커스텀 디자인
-            .modal-list {
-                width: 150px;
-                border-right: 1.5px solid #ddd;
-                padding-right: 10px;
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-                overflow-y: auto;
-    
-                .list-item {
-                    padding: 25px;
-                    cursor: pointer;
-                    text-align: center;
-                    font-weight: bold;
-                    font-size: 1.2rem;
-                    transition: background-color 0.3s ease, transform 0.3s ease;
-    
-                    &.active {
-                        background-color: #f0f0f0;
-                        font-weight: bold;
-                    }
-    
-                    &:hover {
-                        background-color: #f9f9f9;
-                        transform: translateY(-3px);
-                    }
+            text-align: center;
+
+            .modal-close {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+                z-index: 900;
+
+                .modal-close-btn {
+                    width: 45px;
+                    height: 45px;
+                    color: black;
                 }
             }
-            
-            .modal-details {
-                display: flex;
-    
-                .details-image-container{
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    width:600px;
 
-                    .details-image {
-                        width:600px;
-                        height:400px;
-                        object-fit: cover;
-                        // margin-bottom:30px;
-                        padding:0 20px;
-                    }
-                }
-    
-                .details-content {
-                    position: relative;
-                    width:500px;
+            .modal-body {
+                width: 100%;
+                height: 100%;
+                display: flex;
+
+                //2번 째 모달창 커스텀 디자인
+                .modal-list {
+                    width: 150px;
+                    border-right: 1.5px solid #ddd;
+                    padding-right: 10px;
                     display: flex;
                     flex-direction: column;
-                    justify-content:center;
-                    align-items: center;
-    
-                    .details-title {
-                        position: absolute;
-                        top:90px;
-                        font-size: 2rem;
-                        font-weight: bold;
-                        color:black;
-                        // border-bottom:1px solid;
-                    }
-    
-                    .details-description {
-                        margin-top:30px;
-                        font-size: 1rem;
-                        // font-weight: bolder;
-                        text-align: left;
-                        color: black;
-                        margin-top: 40px;
-                        line-height: 1.8;
-                    }
-    
-                    .modal-next {
-                        position: absolute;
-                        right:30px;
-                        bottom:5px;
-                        padding: 15px 30px;
-                        border: none;
-                        background-color: black;
-                        color: white;
-                        font-size: 1.2rem;
-                        font-weight: bold;
-                        cursor: pointer;
-                        transition: background-color 0.3s ease;
+                    gap: 15px;
+                    overflow-y: auto;
 
-                        &:hover{
-                            background-color: #90e0ef;
+                    .list-item {
+                        padding: 25px;
+                        cursor: pointer;
+                        text-align: center;
+                        font-weight: bold;
+                        font-size: 1.2rem;
+                        transition: background-color 0.3s ease, transform 0.3s ease;
+
+                        &.active {
+                            background-color: #f0f0f0;
+                            font-weight: bold;
+                        }
+
+                        &:hover {
+                            background-color: #f9f9f9;
+                            transform: translateY(-3px);
                         }
                     }
                 }
-            }
-            //달력부분 커스텀
-            .modal-date-picker{
-                position: relative;
-                width:100%;
-                h2{
-                    transform: translateY(30px);
-                    font-size:2rem;
-                    text-align: center;
-                    margin-bottom: 10px;
-                }
-                p{
-                    transform: translateY(30px);
-                    text-align: center;
-                    line-height: 25px;
-                    font-size: 1rem;
-                    color:#adb5bd;
-                }
-                .modal-calendar{
-                    width:100%;
-                    height:300px;
-                }
-                .rdrDefinedRangesWrapper{
-                    display: none;
-                }
-                .rdrCalendarWrapper{
-                    width:100%;
-                    height:400px;
+
+                .modal-details {
                     display: flex;
-                    justify-content: center;
-                }
-                .rdrMonths {
-                    transform: translateY(-50px);
-                    display: flex;
-                    justify-content: center;
-                    height:300px;
-                    .rdrMonth {
-                        width:400px;
-                        height:400px;
-                        margin:0 30px;
-                        padding:0;
-                    }
-                    .rdrMonthName{
-                        font-size:1.5rem;
-                        font-weight: bold;
-                        margin-bottom: 10px;
-                        text-align: center;
-                        color:black;
-                    }
-                }
-                .rdrWeekDays {
-                    display: grid;
-                    grid-template-columns: repeat(7 , 1fr);
-                    place-items:center;
-                    text-align: center;
-                    font-weight: bold;
-                    margin-bottom: 10px;
-                    gap:5px;
-                    .rdrWeekDay{
-                        width:35px;
-                        height: 35px;
-                        color:black;
-                    }
-                }
-                .rdrDays {
-                    display: grid;
-                    grid-template-columns: repeat(7, 1fr);
-                    gap: 5px;
-                    place-items:center;
-                    .rdrDay {
-                        position: relative;
+
+                    .details-image-container {
                         display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 600px;
+
+                        .details-image {
+                            width: 600px;
+                            height: 400px;
+                            object-fit: cover;
+                            // margin-bottom:30px;
+                            padding: 0 20px;
+                        }
+                    }
+
+                    .details-content {
+                        position: relative;
+                        width: 500px;
+                        display: flex;
+                        flex-direction: column;
                         justify-content: center;
                         align-items: center;
-                        width:35px;
-                        height:35px;
-                        font-size: 0.8rem;
-                        color: #333;
 
-                        &:hover {
-                            background-color: lightgray;
-                            color:white;
+                        .details-title {
+                            position: absolute;
+                            top: 90px;
+                            font-size: 2rem;
+                            font-weight: bold;
+                            color: black;
+                            // border-bottom:1px solid;
+                        }
+
+                        .details-description {
+                            margin-top: 30px;
+                            font-size: 1rem;
+                            // font-weight: bolder;
+                            text-align: left;
+                            color: black;
+                            margin-top: 40px;
+                            line-height: 1.8;
+                        }
+
+                        .modal-next {
+                            position: absolute;
+                            right: 30px;
+                            bottom: 5px;
+                            padding: 15px 30px;
+                            border: none;
+                            background-color: black;
+                            color: white;
+                            font-size: 1.2rem;
+                            font-weight: bold;
                             cursor: pointer;
-                            border-radius: 5px;
-                        }
-                        span {
-                            border-style: none;
-                        }
-                    }
-                    .rdrDayToday{   //오늘 날짜 디자인
-                        span::after{
-                            background:black;
-                        }
-                    }
-                    .rdrDayStartOfWeek{ //일요일
-                        span{
-                            color:red;
-                        }
-                    }
-                    .rdrDayEndOfWeek{   //토요일
-                        span{
-                            color:blue;
-                        }
-                    }
+                            transition: background-color 0.3s ease;
 
-                    .rdrStartEdge,.rdrInRange,.rdrEndEdge{
-                        width:35px;
-                        height: 35px;
-                        border-radius: 5px;
-                        background-color:#adb5bd;
-                        position: absolute;
-                        top:0px;
-                        left:0px;
+                            &:hover {
+                                background-color: #90e0ef;
+                            }
+                        }
                     }
                 }
-                .rdrMonthAndYearWrapper {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin: 0 20px;
 
-                    button {
-                        background-color: transparent;
-                        border: none;
-                        font-size: 1.2rem;
+                //달력부분 커스텀
+                .modal-date-picker {
+                    position: relative;
+                    width: 100%;
+
+                    h2 {
+                        transform: translateY(30px);
+                        font-size: 2rem;
+                        text-align: center;
+                        margin-bottom: 10px;
+                    }
+
+                    p {
+                        transform: translateY(30px);
+                        text-align: center;
+                        line-height: 25px;
+                        font-size: 1rem;
+                        color: #adb5bd;
+                    }
+
+                    .modal-calendar {
+                        width: 100%;
+                        height: 300px;
+                    }
+
+                    .rdrDefinedRangesWrapper {
+                        display: none;
+                    }
+
+                    .rdrCalendarWrapper {
+                        width: 100%;
+                        height: 400px;
+                        display: flex;
+                        justify-content: center;
+                    }
+
+                    .rdrMonths {
+                        transform: translateY(-50px);
+                        display: flex;
+                        justify-content: center;
+                        height: 300px;
+
+                        .rdrMonth {
+                            width: 400px;
+                            height: 400px;
+                            margin: 0 30px;
+                            padding: 0;
+                        }
+
+                        .rdrMonthName {
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                            text-align: center;
+                            color: black;
+                        }
+                    }
+
+                    .rdrWeekDays {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        place-items: center;
+                        text-align: center;
                         font-weight: bold;
-                        cursor: pointer;
-                        color: #007bff;
-                        z-index: 100;
-            
-                        &:hover {
-                            color: #0056b3;
+                        margin-bottom: 10px;
+                        gap: 5px;
+
+                        .rdrWeekDay {
+                            width: 35px;
+                            height: 35px;
+                            color: black;
                         }
-                    }           
-                    .rdrStaticRanges .rdrStaticRange {
-                        display: none; /* 숨김 */
                     }
-                }
-                .rdrMonthAndYearPickers{
-                    display: none;
-                }
-                .rdrDateDisplayWrapper{
-                    display: none;
-                }
-                //달력에서 다음 버튼
-                .modal-next-city {
-                    position: absolute;
-                    bottom:5px;
-                    right:20px;
-                    border-style: none;
-                    border-radius: 8px;
-                    background-color: black;
-                    color:white;
-                    width:100px;
-                    height:50px;
+
+                    .rdrDays {
+                        display: grid;
+                        grid-template-columns: repeat(7, 1fr);
+                        gap: 5px;
+                        place-items: center;
+
+                        .rdrDay {
+                            position: relative;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            width: 35px;
+                            height: 35px;
+                            font-size: 0.8rem;
+                            color: #333;
+
+                            &:hover {
+                                background-color: lightgray;
+                                color: white;
+                                cursor: pointer;
+                                border-radius: 5px;
+                            }
+
+                            span {
+                                border-style: none;
+                            }
+                        }
+
+                        .rdrDayToday {
+
+                            //오늘 날짜 디자인
+                            span::after {
+                                background: black;
+                            }
+                        }
+
+                        .rdrDayStartOfWeek {
+
+                            //일요일
+                            span {
+                                color: red;
+                            }
+                        }
+
+                        .rdrDayEndOfWeek {
+
+                            //토요일
+                            span {
+                                color: blue;
+                            }
+                        }
+
+                        .rdrStartEdge,
+                        .rdrInRange,
+                        .rdrEndEdge {
+                            width: 35px;
+                            height: 35px;
+                            border-radius: 5px;
+                            background-color: #adb5bd;
+                            position: absolute;
+                            top: 0px;
+                            left: 0px;
+                        }
+                    }
+
+                    .rdrMonthAndYearWrapper {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin: 0 20px;
+
+                        button {
+                            background-color: transparent;
+                            border: none;
+                            font-size: 1.2rem;
+                            font-weight: bold;
+                            cursor: pointer;
+                            color: #007bff;
+                            z-index: 100;
+
+                            &:hover {
+                                color: #0056b3;
+                            }
+                        }
+
+                        .rdrStaticRanges .rdrStaticRange {
+                            display: none;
+                            /* 숨김 */
+                        }
+                    }
+
+                    .rdrMonthAndYearPickers {
+                        display: none;
+                    }
+
+                    .rdrDateDisplayWrapper {
+                        display: none;
+                    }
+
+                    //달력에서 다음 버튼
+                    .modal-next-city {
+                        position: absolute;
+                        bottom: 5px;
+                        right: 20px;
+                        border-style: none;
+                        border-radius: 8px;
+                        background-color: black;
+                        color: white;
+                        width: 100px;
+                        height: 50px;
+                    }
                 }
             }
         }
