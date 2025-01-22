@@ -5,15 +5,24 @@ import "./SideBar.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../images/logoImage.png";
 import NoImage from "../../images/noImage.png";
-import { types } from "sass";
 
 const SideBar = (props) => {
-  console.log("선택된 도시", props.selectedCity);
-  console.log("선택된 시작일", props.startDate);
-  console.log("선택된 도착일", props.endDate);
-  const { selectedCity } = props;
-  console.log(props);
+
+  console.log("sibebarSelectedCity",props);
   //주석 처리한 부분은 삭제 예정 코드.
+
+  const [isModalOpen,setIsModalOpen] = useState(false);
+  const [plannerTitle, setPlannerTitle] = useState('');
+  const [plannerDescription, setPlannerDescription] = useState('');
+  const [addedItems, setAddedItems] = useState(new Set());
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  }
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,7 +38,7 @@ const SideBar = (props) => {
   const [day, setDay] = useState(0);
   const [area, setArea] = useState();
   const [selectedDay, setSelectedDay] = useState(1);
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(false);
 
   const [word, setWord] = useState("");
   const [search, setSearch] = useState([]);
@@ -41,28 +50,35 @@ const SideBar = (props) => {
   const [resultsPerPage] = useState(10); // 한 페이지에 표시할 결과 수
   const [pagesToShow] = useState(5); // 한 번에 표시할 페이지 번호 개수
 
-  const [images, setImages] = useState([]);
+  // const [images, setImages] = useState([]);
 
-  // 지역정보 저장
-  const handleArea = (data) => {
-    setArea(data);
-  };
+  // // 지역정보 저장
+  // const handleArea = (data) => {
+  //   setArea(data);
+  // };
 
   // 몇박인지 저장
-  const handleDate = (data) => {
-    setDay(data);
+  const handleDate = (start,end) => {
+    const startDay = new Date(start);
+    const endDay = new Date(end);
+    return Math.ceil((endDay - startDay) / (1000 * 60 * 60 * 24) + 1) //하루를 포함;
   };
 
-  const handleStateTitle = () => {
-    setDateState(false);
-    setListState(false);
-  };
+  useEffect(() => {
+    const calculatedDay = handleDate(props.startDate,props.endDate);
+    setDay(calculatedDay);
+  });
 
-  // 달력 및 지역 선택 활성화
-  const handleStateDate = () => {
-    setDateState(true);
-    setListState(false);
-  };
+  // const handleStateTitle = () => {
+  //   setDateState(false);
+  //   setListState(false);
+  // };
+
+  // // 달력 및 지역 선택 활성화
+  // const handleStateDate = () => {
+  //   setDateState(true);
+  //   setListState(false);
+  // };
 
   // 플래너 리스트 활성화
   const handleStatePlanner = () => {
@@ -91,7 +107,7 @@ const SideBar = (props) => {
           {
             type: typeState,
             word: encodeURIComponent(word.trim()),
-            areaname: selectedCity,
+            areaName: props.areaName,
             areaCode: props.areaCode,
             pageNo: currentPage,
           },
@@ -129,7 +145,7 @@ const SideBar = (props) => {
           {
             type: typeState,
             word: word,
-            areaname: areaName,
+            areaName: props.areaName,
           },
           { "Content-Type": "application/json" }
         )
@@ -170,7 +186,27 @@ const SideBar = (props) => {
   const handleSearchAdd = (event, data) => {
     event.stopPropagation();
     props.AddDestination({ day: selectedDay, data: data });
+
+    setAddedItems((prev) => {
+      const updatedSet = new Set(prev);
+      updatedSet.add(data.id);
+      return updatedSet;
+  });
+};
+
+  //플래너 추가된 장소 다시 제거함수
+  const handleSearchRemove = (event,data) => {
+    event.stopPropagation();
+    props.RemoveDestination({day: selectedDay, data:data});
+
+    setAddedItems((prev)=> {
+      const updateSet = new Set(prev);
+      updateSet.delete(data.id);
+      return updateSet;
+    });
   };
+
+  const isItemAdded = (id) => addedItems.has(id);
 
   // DB에 플래너 추가
   const addPlanner = async () => {
@@ -185,16 +221,19 @@ const SideBar = (props) => {
             .post(
               "http://localhost:9000/planner/addPlanner",
               {
-                areaName: areaName,
+                areaName: props.areaName,
                 isPublic: isPublic,
                 destination: props.DestinationData,
                 day: day,
-                userid: props.CookieData.userid,
+                userid: props.userid,
+                title:plannerTitle,
+                description:plannerDescription,
               },
               { "Content-Type": "application/json" }
             )
             .then((resp) => {
               alert("플래너를 성공적으로 작성하였습니다!");
+              closeModal(); //모달 닫기
               navigate("/");
             })
             .catch((err) => {
@@ -206,11 +245,11 @@ const SideBar = (props) => {
             .post(
               "http://localhost:9000/planner/updatePlanner",
               {
-                areaName: areaName,
+                areaName: props.areaName,
                 isPublic: isPublic,
                 destination: props.DestinationData,
                 day: day,
-                userid: props.CookieData.userid,
+                userid: props.userid,
                 plannerid: plannerID,
               },
               { "Content-Type": "application/json" }
@@ -393,7 +432,7 @@ const SideBar = (props) => {
 
           <div className={`optionButton ${typeState === "관광지" ? "highlight" : ""}`} onClick={()=>{
             if(typeState === "관광지") {
-              addPlanner();
+              openModal();
             } else{
               if( typeState === "식당" ) setTypeState("숙소");
               else if(typeState === "숙소") setTypeState("관광지");
@@ -403,6 +442,26 @@ const SideBar = (props) => {
             <span>{typeState === "관광지" ? "일정 생성" : "다음"}</span>
           </div>
         </div>
+
+          {/* 일정생성 마지막 모달창 */}
+          {isModalOpen && (
+            <div className="sideBar-modal">
+              <div className="sideBar-content">
+                <h3>플래너 정보 입력</h3>
+                <label>제목 : </label>
+                <input type="text" value={plannerTitle} onChange={(e) => setPlannerTitle(e.target.value)}/>
+                <label htmlFor=""></label>
+                <input type="text" value={plannerDescription} onChange={(e) => setPlannerDescription(e.target.value)}/>
+                <label>다른 사용자에게 공개</label>
+                <input type="checkbox" checked={isPublic} onChange={(e)=> setIsPublic(e.target.checked)} />
+                <div className="sideBar-modalBtn">
+                  <button onClick={addPlanner}>확인</button>
+                  <button onClick={closeModal}>취소</button>
+                </div>
+              </div>
+            </div>
+          )}
+
         {
           <div className="question">
             <p>SEARCH</p>
@@ -451,11 +510,11 @@ const SideBar = (props) => {
             </div>
             <div className="search-body">
               <ul>
-                {search &&
+                {search &&  //타입이 관광지인 경우
                   search.length > 0 &&
                   typeState == "관광지" &&
                   currentResults.map((el, index) => {
-                    console.log("image안나오는거보기", el);
+                    // console.log("image안나오는거보기", el);
                     return (
                       <li
                         key={index}
@@ -486,18 +545,32 @@ const SideBar = (props) => {
                           </div>
                         </div>
                         <div>
-                          <button
+                          {isItemAdded(el.id) ? (
+                            <button 
+                              onClick={(event) => {
+                                handleSearchRemove(event,el);
+                                console.log("Element ID:", el.id);
+
+                              }}
+                            >
+                              -
+                            </button>
+                          ) : (
+                            <button
                             onClick={(event) => {
                               handleSearchAdd(event, el);
+                              console.log("Element ID:", el.id);
+
                             }}
                           >
                             +
                           </button>
+                          )}
                         </div>
                       </li>
                     );
                   })}
-                {search &&
+                {search &&  //타입이 관광지가 아닐 경우
                   search.length > 0 &&
                   typeState != "관광지" &&
                   currentResults.map((el, index) => {
