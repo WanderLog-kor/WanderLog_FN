@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.scss';
-import LogoImage from '../images/footPrint.png';
+import LogoImage from './logoImage/logo1.png';
 import axios from 'axios';
 import { useState, useEffect } from "react";
 
@@ -44,21 +44,21 @@ const Header = () => {
         <header className="header-wrapper">
 
             <Link className="header-logo" to="/">
-            <div className="logo-wrapper">
-                    <span className="logo-text">여행가자</span>
-                    <img className="logo-icon" src={LogoImage} alt="Plane Icon" />
-                </div>
+
+                <span className="logo-text">WanderLog</span>
+                {/* <img className="logo-icon" src={LogoImage} alt="Plane Icon" /> */}
+
             </Link>
 
 
             <div className="header-btns">
-                <Link to="/tourist">
+                {/* <Link to="/tourist">
                     <button className="tourist-btn">관광지</button>
                 </Link>
 
                 <Link to="/travelcourse">
                     <button className="travelcourse-btn">여행코스</button>
-                </Link>
+                </Link> */}
 
 
                 {/* 로그인 여부에 따라 표시될 버튼 */}

@@ -13,7 +13,7 @@
   width: 100%;
   height: 150px;
   text-align: center;
-  font-size:3rem;
+  font-size: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,7 +32,7 @@
     label {
       display: block;
       margin-bottom: 5px;
-      color:black;
+      color: black;
     }
 
     input[type="text"],
@@ -50,20 +50,21 @@
 
       label {
         font-size: 14px;
-        color:gray;
+        color: gray;
       }
 
-      input{
-        margin-left:2px;
+      input {
+        margin-left: 2px;
       }
     }
 
-    .login-form_forgot-password{
-      margin-top:10px;
-      margin-bottom:20px;
-      font-size:1rem;
-      a{
-        text-decoration:none;
+    .login-form_forgot-password {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+
+      a {
+        text-decoration: none;
       }
     }
 
@@ -86,9 +87,11 @@
       color: white;
       transition: box-shadow 0.3s ease, background-color 0.3s ease;
     }
-    .login-form_loginButton:hover{
+
+    .login-form_loginButton:hover {
       background-color: #4169e1;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 효과 */
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      /* 부드러운 그림자 효과 */
     }
 
   }
@@ -99,7 +102,11 @@
   margin: 40px auto;
   text-align: center;
 
-  a{text-decoration: none;}
+  a {
+    margin-left: 10px;
+    text-decoration: none;
+    color: blue;
+  }
 }
 
 .login-form_oauth2 {
@@ -107,7 +114,7 @@
   height: 200px;
 
   .login-form_oauth2-buttons {
-    margin-top:30px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -117,7 +124,7 @@
       justify-content: space-around;
       width: 400px;
       padding: 0;
-      margin:0;
+      margin: 0;
 
       li {
         list-style: none;
@@ -125,35 +132,40 @@
         height: 60px;
         // border: 1px solid;
         border-radius: 10px;
-        margin:0 5px;
+        margin: 0 5px;
         overflow: hidden;
         display: flex;
         justify-content: center;
         align-items: center;
-        
+
         .login-form_oauth2-button {
-          width: 100%; /* li 크기에 맞춤 */
+          width: 100%;
+          /* li 크기에 맞춤 */
           height: 100%;
           display: flex;
           justify-content: center;
           align-items: center;
-          border: none; /* 기본 border 제거 */
-          background: none; /* 기본 배경 제거 */
-          cursor: pointer; /* 클릭 가능 커서 */
+          border: none;
+          /* 기본 border 제거 */
+          background: none;
+          /* 기본 배경 제거 */
+          cursor: pointer;
+          /* 클릭 가능 커서 */
           transition: box-shadow 0.3s ease, transform 0.3s ease;
 
-        img {
-          width: 100%;
-          height: auto;
-          object-fit: contain;
-        }
+          img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+          }
 
-        &:hover {
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-          transform: scale(1.1); /* 살짝 확대 효과 */
+          &:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.1);
+            /* 살짝 확대 효과 */
+          }
         }
       }
     }
   }
-}
 }

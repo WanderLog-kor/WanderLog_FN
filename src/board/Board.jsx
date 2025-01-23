@@ -20,7 +20,7 @@ const Board = () => {
 
     const pageSize = 16; // 한 페이지에 표시할 아이템 수
     const navigate = useNavigate();
-    const { loginStatus } = useLoginStatus();
+    const { loginStatus, loginData } = useLoginStatus();
 
     const handlePlannerClick = (plannerID) => {
         const plannerItem = planners.find((item) => item.plannerID === plannerID);
@@ -36,13 +36,16 @@ const Board = () => {
             page: page,
             size: pageSize,
             ...(selectedArea && { area: selectedArea }), // 지역 필터
-            ...(showMyCoursesOnly && { myCourses: true, userId: loginStatus?.data?.userid }), // 내가 작성한 코스만 보기, userid 추가
+            ...(showMyCoursesOnly && { myCourses: true, userId: loginData?.userid }), // 내가 작성한 코스만 보기
+            ...(!showMyCoursesOnly && { isPublic: 1 }), // 공개된 코스만 보기
         };
 
         try {
             const response = await axios.get(`http://localhost:9000/planner/board`, { params: query });
             const fetchedPlanners = response.data.content;
-            console.log(fetchedPlanners);
+            console.log('데이터 : ', fetchedPlanners);
+            console.log('loginStatus : ', loginStatus);
+            console.log('로그인데이터', loginData);
 
             // 지역에 맞는 데이터가 없으면 메시지 설정
             if (fetchedPlanners.length === 0) {
@@ -58,6 +61,7 @@ const Board = () => {
             setLoading(false);
         }
     };
+    
 
     const handleMoreClick = () => {
         if (currentPage < totalPages) {
@@ -100,12 +104,14 @@ const Board = () => {
                         <ul>
                             <li
                                 className={`board-myCourse ${activeTab === "board-myCourse" ? "on" : ""}`}
-                                onClick={() => handleTabClick("board-myCourse")}>
+                                onClick={() => handleTabClick("board-myCourse")}
+                                style={activeTab === "board-myCourse" ? { pointerEvents: "none"} : {}}>
                                 <span>내가 작성한 여행코스</span>
                             </li>
                             <li
                                 className={`board-userCourse ${activeTab === "board-userCourse" ? "on" : ""}`}
-                                onClick={() => handleTabClick("board-userCourse")}>
+                                onClick={() => handleTabClick("board-userCourse")}
+                                style={activeTab === "board-userCourse" ? { pointerEvents: "none"} : {}}>
                                 <span>다른 사용자의 여행코스</span>
                             </li>
                         </ul>
@@ -184,7 +190,7 @@ const Board = () => {
                                         <p className="planner-area">{planner.area}</p>
                                         <p className="planner-created-at">작성일 {new Date(planner.createAt).toLocaleDateString()}</p>
                                         <div className="planner-like-count">
-                                            <span class="material-symbols-outlined like-icon">
+                                            <span className="material-symbols-outlined like-icon">
                                                 favorite
                                             </span>
                                             <span className="like-number">{planner.likeCount}</span>

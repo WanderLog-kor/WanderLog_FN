@@ -5,12 +5,12 @@ import { useNavigate } from 'react-router-dom';
 // Context 생성
 const LoginContext = createContext();
 
-// 로그인 상태를 관리하는 커스텀 Hook
+// 로그인 정보를 관리하는 커스텀 Hook
 export const useLoginStatus = () => useContext(LoginContext);
 
 export const LoginProvider = ({ children }) => {
-    const [loginStatus, setLoginStatus] = useState(null);  // 로그인 상태
-    const [userid, setUserid] = useState(null);
+    const [loginStatus, setLoginStatus] = useState(false);  // 로그인 상태
+    const [loginData, setLoginData] = useState(null);  // 로그인 정보
     const navigate = useNavigate();  // navigate 훅 사용
 
     // 로그인 상태 확인
@@ -22,9 +22,9 @@ export const LoginProvider = ({ children }) => {
                     {},
                     { withCredentials: true }
                 );
-                setLoginStatus(response.data);  // 로그인 상태 확인
-                setUserid(response.data.userid);
-                
+                // 로그인 성공 시 로그인 정보 저장
+                setLoginStatus(true);
+                setLoginData(response.data);
             } catch (err) {
                 console.log("엑세스 토큰 갱신 시도");
                 await handleTokenRefresh();
@@ -36,6 +36,7 @@ export const LoginProvider = ({ children }) => {
             if (!userid) {
                 console.error("userid가 로컬 스토리지에 없습니다");
                 setLoginStatus(false);
+                setLoginData(null);
                 return;
             }
 
@@ -46,11 +47,13 @@ export const LoginProvider = ({ children }) => {
                     {},
                     { withCredentials: true }
                 );
-                setLoginStatus(true);  // 로그인 상태 확인
-                setUserid(retryResponse.data.userid);
+                // 로그인 성공 시 로그인 정보 저장
+                setLoginStatus(true);
+                setLoginData(retryResponse.data);
             } catch (refreshError) {
                 console.error("토큰 갱신 실패:", refreshError);
                 setLoginStatus(false);
+                setLoginData(null);
                 localStorage.removeItem("userid");
             }
         };
@@ -60,11 +63,10 @@ export const LoginProvider = ({ children }) => {
     }, [navigate]);
 
     return (
-        <LoginContext.Provider value={{ loginStatus,userid }}>
+        <LoginContext.Provider value={{ loginStatus, loginData }}>
             {children}
         </LoginContext.Provider>
     );
-
 };
 
 // 엑세스 토큰 갱신 함수
@@ -93,7 +95,7 @@ const PrivateRoute = ({ element, ...rest }) => {
         return <div>Loading...</div>;  // 로그인 상태를 확인하는 동안 로딩 표시
     }
 
-    if (loginStatus === false) {
+    if (!loginStatus) {
         navigate("/user/login");  // 로그인되지 않았다면 로그인 페이지로 리디렉션
         return null;  // 아무것도 렌더링하지 않음
     }

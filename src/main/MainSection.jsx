@@ -6,6 +6,7 @@ import { DateRangePicker } from "react-date-range";
 import { ko } from "date-fns/locale";
 import "react-date-range/dist/styles.css"; // 기본 스타일
 import "react-date-range/dist/theme/default.css"; // 테마 스타일
+import Header from "../components/Header";
 
 const travelDestinations = [
   {
@@ -276,6 +277,7 @@ const MainSection = () => {
   return (
     // 메인 페이지 부분
     <section className="main-section">
+      <Header />
       <p className="main-section__text">나만의 특별한 여행계획 만들기</p>
       <p className="main-section__subtext">
         나만의 계획을 생성하고 다른 사람들과 공유해보세요 !
