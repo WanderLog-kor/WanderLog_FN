@@ -74,7 +74,7 @@ const MakePlanner = ({}) => {
         );
     };
 
-    const handleAllDelete = () => { setPlannerData([]); }
+    const handleAllDelete = () => { setPlannerData([]);}
     const handleUpdateDest = (data) => { setPlannerData(data) }
 
     const handleClickPlanner = (data) => {setDestination(data);}

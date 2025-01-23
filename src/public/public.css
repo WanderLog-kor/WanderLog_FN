@@ -6,8 +6,10 @@
 }
 
 
-body {
+body,html {
     font-family: 'MinSans-Regular', sans-serif !important;
+    width: 100%;
+    height: 100%;
 }
 
 .ACTIVE {

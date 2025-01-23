@@ -3,16 +3,33 @@
   }  
 
 .planner {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: stretch;
+    // justify-content: stretch;
+    overflow: hidden;
 }
 
 .plannerSide {
-    height: 100vh;
+    width:100%;
+    height: 100%;
 }
 
 .plannerBody {
-    height: 100vh;
+    width:100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+
+    #map{
+        // flex: 1;
+        min-width: 200px;
+        width:100%;
+        height:100%;
+        transition: width 0.3s ease;
+
+        @media (max-width: 600px) {
+            display: none;
+        }
+    }
 }

@@ -5,25 +5,30 @@ import "./SideBar.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../images/logoImage.png";
 import NoImage from "../../images/noImage.png";
+import Search from "../../images/search.png"
 
 const SideBar = (props) => {
-
   // console.log("sibebarSelectedCity",props);
   //주석 처리한 부분은 삭제 예정 코드.
 
-  const [isModalOpen,setIsModalOpen] = useState(false);
-  const [plannerTitle, setPlannerTitle] = useState('');
-  const [plannerDescription, setPlannerDescription] = useState('');
-  const [addedItems, setAddedItems] = useState([]);
-  const [addedItemsByDay , setAddedItemsByDay] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false); //모달 오픈 상태
+  const [plannerTitle, setPlannerTitle] = useState(""); //제목
+  const [plannerDescription, setPlannerDescription] = useState(""); //내용
+  const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
+  const [isPlannerVisible, setIsPlannerVisible] = useState(true);
+
+  const togglePlannerVisibility = () => {
+    //플래너 부분 들어갔다 나오게 하기
+    setIsPlannerVisible(!isPlannerVisible);
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
-  }
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
-  }
+  };
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,18 +57,16 @@ const SideBar = (props) => {
   const [pagesToShow] = useState(5); // 한 번에 표시할 페이지 번호 개수
 
   // 몇박인지 저장
-  const handleDate = (start,end) => {
+  const handleDate = (start, end) => {
     const startDay = new Date(start);
     const endDay = new Date(end);
-    return Math.ceil((endDay - startDay) / (1000 * 60 * 60 * 24) + 1) //하루를 포함;
+    return Math.ceil((endDay - startDay) / (1000 * 60 * 60 * 24) + 1); //하루를 포함;
   };
 
   useEffect(() => {
-    const calculatedDay = handleDate(props.startDate,props.endDate);
+    const calculatedDay = handleDate(props.startDate, props.endDate);
     setDay(calculatedDay);
   });
-
-
 
   // 플래너 리스트 활성화
   const handleStatePlanner = () => {
@@ -76,6 +79,13 @@ const SideBar = (props) => {
     setSelectedDay(data);
     props.DayState(data);
   };
+
+   // typeState가 변경될 때 handleSearch 실행
+   useEffect(() => {
+    if (typeState === "식당" || typeState === "숙소" || typeState === "관광지") {
+      handleSearch();
+    }
+  }, [typeState]);
 
   // 검색을 위한 지역명 받아오기
   const handleAreaName = (data) => {
@@ -176,21 +186,24 @@ const SideBar = (props) => {
       ...prev,
       [day]: prev[day] ? [...prev[day], uniqueId] : [uniqueId],
     }));
-};
+  };
 
-const handleSearchRemove = (day, data) => {
-  const uniqueId = data.uniqueId;
-  props.DeleteDestination({ day, data }); // 부모 컴포넌트 업데이트
-  setAddedItemsByDay((prev) => {
-    const updatedDayItems = prev[day]?.filter((id) => id !== uniqueId) || [];
-    console.log('Removed Items:', updatedDayItems);
-    return {
-      ...prev,
-      [day]: updatedDayItems,
-    };
-  });
-};
-
+  const handleSearchRemove = (day, data) => {
+    const uniqueId = data.uniqueId;
+    props.DeleteDestination({ day, data }); // 부모 컴포넌트 업데이트
+    setAddedItemsByDay((prev) => {
+      const updatedDayItems = prev[day]?.filter((id) => id !== uniqueId) || [];
+      console.log("Removed Items:", updatedDayItems);
+      return {
+        ...prev,
+        [day]: updatedDayItems,
+      };
+    });
+  };
+  const handleAllDelete = () => {
+    props.DeleteAllDestination();
+    setAddedItemsByDay({});
+  };
   // DB에 플래너 추가
   const addPlanner = async () => {
     if (!listState) {
@@ -209,8 +222,8 @@ const handleSearchRemove = (day, data) => {
                 destination: props.DestinationData,
                 day: day,
                 userid: props.userid,
-                title:plannerTitle,
-                description:plannerDescription,
+                title: plannerTitle,
+                description: plannerDescription,
               },
               { "Content-Type": "application/json" }
             )
@@ -384,90 +397,110 @@ const handleSearchRemove = (day, data) => {
             <img className="sidebar-logo" src={Logo} alt="" />
           </div>
           <div
-            className="optionButton"
+             className={`optionButton ${typeState === "식당" ? "active" : ""}`}
             onClick={() => {
               setTypeState("식당");
-              handleSearch();
+              // handleSearch();
             }}
           >
             <span>식당</span>
           </div>
 
           <div
-            className="optionButton"
+            className={`optionButton ${typeState === "숙소" ? "active" : ""}`}
             onClick={() => {
               setTypeState("숙소");
-              handleSearch();
+              // handleSearch();
             }}
           >
             <span>숙소</span>
           </div>
 
           <div
-            className="optionButton"
+            className={`optionButton ${typeState === "관광지" ? "active" : ""}`}
             onClick={() => {
               setTypeState("관광지");
-              handleSearch();
+              // handleSearch();
             }}
           >
             <span>관광지</span>
           </div>
 
-          <div className={`optionButton ${typeState === "관광지" ? "highlight" : ""}`} onClick={()=>{
-            if(typeState === "관광지") {
-              openModal();
-            } else{
-              if( typeState === "식당" ) setTypeState("숙소");
-              else if(typeState === "숙소") setTypeState("관광지");
-              handleSearch();
+          <div
+            className={`optionButton planCommit ${
+              typeState === "관광지" ? "highlight" : ""
+            }`}
+            onClick={() => {
+              if (typeState === "식당") {
+                setTypeState("숙소");
+              } else if (typeState === "숙소") setTypeState("관광지");
+                else if (typeState === "관광지") openModal();
+              }
             }
-          }}>
-            <span>{typeState === "관광지" ? "일정 생성" : "다음"}</span>
+          >
+            <span>{typeState === "관광지" ? "저장" : "다음"}</span>
           </div>
         </div>
 
-          {/* 일정생성 마지막 모달창 */}
-          {isModalOpen && (
-            <div className="sideBar-modal">
-              <div className="sideBar-content">
-                <h3>플래너 정보 입력</h3>
-                <label>제목 : </label>
-                <input type="text" value={plannerTitle} onChange={(e) => setPlannerTitle(e.target.value)}/>
-                <label htmlFor=""></label>
-                <input type="text" value={plannerDescription} onChange={(e) => setPlannerDescription(e.target.value)}/>
-                <label>다른 사용자에게 공개</label>
-                <input type="checkbox" checked={isPublic} onChange={(e)=> setIsPublic(e.target.checked)} />
-                <div className="sideBar-modalBtn">
-                  <button onClick={addPlanner}>확인</button>
-                  <button onClick={closeModal}>취소</button>
-                </div>
+        {/* 맨 마지막에 생성되는 일정생성 모달창 */}
+        {isModalOpen && (
+          <div className="sideBar-modal">
+            <div className="sideBar-content">
+              <h3>플래너 정보 입력</h3>
+              <label>제목 : </label>
+              <input
+                type="text"
+                value={plannerTitle}
+                onChange={(e) => setPlannerTitle(e.target.value)}
+              />
+              <label htmlFor=""></label>
+              <input
+                type="text"
+                value={plannerDescription}
+                onChange={(e) => setPlannerDescription(e.target.value)}
+              />
+              <label>다른 사용자에게 공개</label>
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              <div className="sideBar-modalBtn">
+                <button onClick={addPlanner}>확인</button>
+                <button onClick={closeModal}>취소</button>
               </div>
             </div>
-          )}
+          </div>
+        )}
 
         {
           <div className="question">
-            <p>SEARCH</p>
+            {/* <p>SEARCH</p> */}
+            <h2 className="question-h2">{props.areaName}</h2>
+            <div className="question-date">{new Date(props.startDate).toLocaleDateString()} - {new Date(props.endDate).toLocaleDateString()}</div>
             <div className="question-search">
               <input
                 type="text"
                 value={word}
+                placeholder="검색어를 입력해주세요"
                 onChange={(e) => {
                   setWord(e.target.value);
                 }}
               />
-              <button onClick={handleSearch}>검색</button>
+              <span className="question-search-button" onClick={handleSearch}><img src={Search} alt=""/></span>
+              {/* <button className="question-search-btn" onClick={handleSearch}>검색</button> */}
             </div>
-            {totalPages > 0 && (
+            {/* {totalPages > 0 && (  //페이지 총 개수 나옴
               <span className="total-page">
                 {currentPage}/{totalPages}
               </span>
-            )}
+            )} */}
             <div className="search-btns">
               <button
                 className={`search-btn ${typeState === "식당" ? "active" : ""}`}
                 onClick={(e) => {
                   setTypeState(e.target.innerText);
+                  console.log(e.target.innerText);
                 }}
               >
                 식당
@@ -493,15 +526,19 @@ const handleSearchRemove = (day, data) => {
             </div>
             <div className="search-body">
               <ul>
-                {search &&  //타입이 관광지인 경우
+                {search && //타입이 관광지인 경우
                   search.length > 0 &&
                   typeState == "관광지" &&
-                  currentResults && currentResults.length>0 && currentResults.map((el, index) => {
-                    if(!el) return null; //el 이 null 또는 undefined 인 경우 무시
+                  currentResults &&
+                  currentResults.length > 0 &&
+                  currentResults.map((el, index) => {
+                    if (!el) return null; //el 이 null 또는 undefined 인 경우 무시
                     const uniqueId = `${el.name}-${el.x}-${el.y}`;
                     el.uniqueId = uniqueId;
-                    
-                    const isAdded = addedItemsByDay[selectedDay]?.includes(el.uniqueId);
+
+                    const isAdded = addedItemsByDay[selectedDay]?.includes(
+                      el.uniqueId
+                    );
                     return (
                       <li
                         key={index}
@@ -527,28 +564,28 @@ const handleSearchRemove = (day, data) => {
                             {el && el.category}
                           </div>
                           <div className="card-addr">{el && el.address}</div>
-                          <div className="card-desc">
+                          {/* <div className="card-desc">
                             {el && el.description}
-                          </div>
+                          </div> */}
                         </div>
-                        <div>
-                        <button
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            if(isAdded) {
-                              handleSearchRemove(selectedDay,el);
-                            }else{
-                              handleSearchAdd(selectedDay,el);
-                            }
-                          }}
-                        >
-                          {isAdded ? '-' : '+'}
-                        </button>
+                        <div className="card-add">
+                          <button
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              if (isAdded) {
+                                handleSearchRemove(selectedDay, el);
+                              } else {
+                                handleSearchAdd(selectedDay, el);
+                              }
+                            }}
+                          >
+                            {isAdded ? "-" : "+"}
+                          </button>
                         </div>
                       </li>
                     );
                   })}
-                {search &&  //타입이 관광지가 아닐 경우
+                {search && //타입이 관광지가 아닐 경우
                   search.length > 0 &&
                   typeState != "관광지" &&
                   currentResults.map((el, index) => {
@@ -598,7 +635,7 @@ const handleSearchRemove = (day, data) => {
                   }}
                   disabled={currentPage === 1}
                 >
-                  Previous
+                  이전
                 </button>
                 <span>
                   {pageNumbers
@@ -621,7 +658,7 @@ const handleSearchRemove = (day, data) => {
                   }}
                   disabled={currentPage + pagesToShow > totalPages}
                 >
-                  Next
+                  다음
                 </button>
               </div>
             )}
@@ -635,7 +672,9 @@ const handleSearchRemove = (day, data) => {
                 <div className="plannerMenu">
                   <p> Planner </p>
                   <button
-                    onClick={() => props.DeleteAllDestination()}
+                    onClick={() => {
+                      handleAllDelete();
+                    }}
                     className="delete-destination-btn"
                   >
                     비우기
@@ -708,7 +747,10 @@ const handleSearchRemove = (day, data) => {
                                       <button
                                         onClick={(event) => {
                                           event.stopPropagation();
-                                          handleSearchRemove(selectedDay,destination.data);
+                                          handleSearchRemove(
+                                            selectedDay,
+                                            destination.data
+                                          );
                                         }}
                                       >
                                         제거

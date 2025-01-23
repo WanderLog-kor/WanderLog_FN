@@ -231,10 +231,9 @@ const Map = (props) => {
             crs: EPSG5181,
             zoom:9,
         });
-        console.log(map);
         // map의 베이스
         const tileLayer =L.tileLayer('http://map{s}.daumcdn.net/map_2d/1807hsm/L{z}/{y}/{x}.png', {
-            minZoom:7,
+            minZoom:2,
             maxZoom:13,
             zoomReverse:true,
             zoomOffset:1,
@@ -260,7 +259,7 @@ const Map = (props) => {
 
     return (
         <>              
-            <div id="map" style={{ width: '900px', height: '100vh' }}></div>
+            <div id="map"></div>
         </>
     );
 }
