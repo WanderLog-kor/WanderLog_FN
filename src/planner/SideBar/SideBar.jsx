@@ -6,6 +6,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../images/logoImage.png";
 import NoImage from "../../images/noImage.png";
 import Search from "../../images/search.png"
+import Delete from "../../images/delete.png"
 
 const SideBar = (props) => {
   // console.log("sibebarSelectedCity",props);
@@ -16,6 +17,7 @@ const SideBar = (props) => {
   const [plannerDescription, setPlannerDescription] = useState(""); //내용
   const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
   const [isPlannerVisible, setIsPlannerVisible] = useState(true);
+  const [cardAdded, setCardAdded] = useState(false);
 
   const togglePlannerVisibility = () => {
     //플래너 부분 들어갔다 나오게 하기
@@ -403,7 +405,7 @@ const SideBar = (props) => {
               // handleSearch();
             }}
           >
-            <span>식당</span>
+            <span>식당 선택</span>
           </div>
 
           <div
@@ -413,7 +415,7 @@ const SideBar = (props) => {
               // handleSearch();
             }}
           >
-            <span>숙소</span>
+            <span>숙소 선택</span>
           </div>
 
           <div
@@ -423,7 +425,7 @@ const SideBar = (props) => {
               // handleSearch();
             }}
           >
-            <span>관광지</span>
+            <span>관광지 선택</span>
           </div>
 
           <div
@@ -488,7 +490,6 @@ const SideBar = (props) => {
                 }}
               />
               <span className="question-search-button" onClick={handleSearch}><img src={Search} alt=""/></span>
-              {/* <button className="question-search-btn" onClick={handleSearch}>검색</button> */}
             </div>
             {/* {totalPages > 0 && (  //페이지 총 개수 나옴
               <span className="total-page">
@@ -545,12 +546,13 @@ const SideBar = (props) => {
                         className="search-card"
                         onClick={() => {
                           props.ClickSearch(el);
+                          console.log(el.image,el);
                         }}
                       >
                         <div className="card-image">
                           <img
                             src={
-                              el && el.image !== "No image found"
+                              el && el.image !== ""
                                 ? el.image
                                 : NoImage
                             }
@@ -558,6 +560,65 @@ const SideBar = (props) => {
                           />
                         </div>
 
+                        <div className="card-body">
+                          <div className="card-name">{el && el.name}</div>
+                          <div className="card-category">
+                            {el && el.category}
+                          </div>
+                          <div className="card-addr">{el && el.address}</div>
+                          {/* <div className="card-desc">
+                            {el && el.description}
+                          </div> */}
+                        </div>
+                        <div className="card-add">
+                          <button className={isAdded ? "cardAdded" : ""}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              if (isAdded) {
+                                handleSearchRemove(selectedDay, el);
+                              } else {
+                                handleSearchAdd(selectedDay, el);
+                              }
+                            }}
+                          >
+                            {isAdded ? "-" : "+"}
+                          </button>
+                        </div>
+                      </li>
+                    );
+                  })}
+                {search && //타입이 관광지인 경우
+                  search.length > 0 &&
+                  typeState != "관광지" &&
+                  currentResults &&
+                  currentResults.length > 0 &&
+                  currentResults.map((el, index) => {
+                    if (!el) return null; //el 이 null 또는 undefined 인 경우 무시
+                    const uniqueId = `${el.name}-${el.x}-${el.y}`;
+                    el.uniqueId = uniqueId;
+
+                    const isAdded = addedItemsByDay[selectedDay]?.includes(
+                      el.uniqueId
+                    );
+                    return (
+                      <li
+                        key={index}
+                        className="search-card"
+                        onClick={() => {
+                          props.ClickSearch(el);
+                          console.log(el);
+                        }}
+                      >
+                        <div className="card-image">
+                          <img
+                            src={
+                              el && el.image !=="No image found"
+                                ? el.image
+                                : NoImage
+                            }
+                            alt=""
+                          />
+                        </div>
                         <div className="card-body">
                           <div className="card-name">{el && el.name}</div>
                           <div className="card-category">
@@ -580,46 +641,6 @@ const SideBar = (props) => {
                             }}
                           >
                             {isAdded ? "-" : "+"}
-                          </button>
-                        </div>
-                      </li>
-                    );
-                  })}
-                {search && //타입이 관광지가 아닐 경우
-                  search.length > 0 &&
-                  typeState != "관광지" &&
-                  currentResults.map((el, index) => {
-                    return (
-                      <li
-                        key={index}
-                        className="search-card"
-                        onClick={() => {
-                          props.ClickSearch(el);
-                        }}
-                      >
-                        <div className="card-image">
-                          {el && el.image != "No image found" && (
-                            <img src={el.image} alt="" />
-                          )}
-                          {el && el.image == "" && <img src={NoImage} alt="" />}
-                        </div>
-                        <div className="card-body">
-                          <div className="card-name">{el && el.name}</div>
-                          <div className="card-category">
-                            {el && el.category}
-                          </div>
-                          <div className="card-addr">{el && el.address}</div>
-                          <div className="card-desc">
-                            {el && el.description}
-                          </div>
-                        </div>
-                        <div>
-                          <button
-                            onClick={(event) => {
-                              handleSearchAdd(event, el);
-                            }}
-                          >
-                            +
                           </button>
                         </div>
                       </li>
@@ -665,12 +686,12 @@ const SideBar = (props) => {
           </div>
         }
         <div className="content">
-          {dateState && <div className="date"></div>}
           {listState && (
             <>
               <div className="content-planner">
+              <h2>{props.username} 님의 여행계획</h2>
                 <div className="plannerMenu">
-                  <p> Planner </p>
+                  <p>{`${selectedDay} 일차 계획`}</p>
                   <button
                     onClick={() => {
                       handleAllDelete();
@@ -688,7 +709,7 @@ const SideBar = (props) => {
                         nthDay.push(
                           <div
                             key={i}
-                            className="optionButton"
+                            className={`optionButton ${selectedDay === i ? "selectedDay" : ""}`}
                             onClick={() => {
                               handleSelect(i);
                             }}
@@ -744,7 +765,7 @@ const SideBar = (props) => {
                                       {destination && destination.data.address}
                                     </div>
                                     <div className="card-button">
-                                      <button
+                                      <button className="card-deleteBtn"
                                         onClick={(event) => {
                                           event.stopPropagation();
                                           handleSearchRemove(
@@ -753,13 +774,9 @@ const SideBar = (props) => {
                                           );
                                         }}
                                       >
-                                        제거
+                                        <img src={Delete} alt="삭제" />
                                       </button>
                                     </div>
-                                  </div>
-                                  <div className="card-desc">
-                                    {destination &&
-                                      destination.data.description}
                                   </div>
                                 </div>
                               </li>

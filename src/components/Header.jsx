@@ -21,7 +21,7 @@ const Header = () => {
                 { withCredentials: true }
             )
             .then((response) => {
-                console.log("쿠키 확인:", response.data);
+                console.log("쿠키 확인:", response.data,response.data.username);
                 // 쿠키가 유효하면 로그인 상태로 설정
                 setIsLogin(true);
             })

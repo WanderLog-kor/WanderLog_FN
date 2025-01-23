@@ -11,6 +11,7 @@ export const useLoginStatus = () => useContext(LoginContext);
 export const LoginProvider = ({ children }) => {
     const [loginStatus, setLoginStatus] = useState(null);  // 로그인 상태
     const [userid, setUserid] = useState(null);
+    const [username,setUsername] = useState(null);
     const navigate = useNavigate();  // navigate 훅 사용
 
     // 로그인 상태 확인
@@ -24,7 +25,7 @@ export const LoginProvider = ({ children }) => {
                 );
                 setLoginStatus(response.data);  // 로그인 상태 확인
                 setUserid(response.data.userid);
-                
+                setUsername(response.data.username);
             } catch (err) {
                 console.log("엑세스 토큰 갱신 시도");
                 await handleTokenRefresh();
@@ -48,6 +49,7 @@ export const LoginProvider = ({ children }) => {
                 );
                 setLoginStatus(true);  // 로그인 상태 확인
                 setUserid(retryResponse.data.userid);
+                setUsername(retryResponse.data.username);
             } catch (refreshError) {
                 console.error("토큰 갱신 실패:", refreshError);
                 setLoginStatus(false);
@@ -60,7 +62,7 @@ export const LoginProvider = ({ children }) => {
     }, [navigate]);
 
     return (
-        <LoginContext.Provider value={{ loginStatus,userid }}>
+        <LoginContext.Provider value={{ loginStatus,userid,username }}>
             {children}
         </LoginContext.Provider>
     );

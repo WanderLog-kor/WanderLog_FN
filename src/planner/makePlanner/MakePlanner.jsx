@@ -7,7 +7,7 @@ import './MakePlanner.scss'
 import { useLoginStatus } from '../../auth/PrivateRoute';
 
 const MakePlanner = ({}) => {
-    const {userid,loginStatus} = useLoginStatus();
+    const {userid,username,loginStatus} = useLoginStatus();
     const location = useLocation();
     const { startDate, endDate, areaName, areaCode,coordinates } = location.state || {};
 
@@ -89,6 +89,7 @@ const MakePlanner = ({}) => {
                     endDate={endDate}
                     areaCode={areaCode}
                     userid={userid}
+                    username={username}
                     // AreaCoordinate={handleArea}
                     DayState={handleDay}
                     DestinationData={plannerData}
