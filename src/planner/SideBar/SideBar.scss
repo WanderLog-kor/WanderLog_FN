@@ -493,35 +493,72 @@
         }
       }
     }
-  }
-  .search-btns {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    // margin: 10px 10px;
-
-    .search-btn {
-      margin: 3px 10px;
-      padding: 10px 20px;
-      font-size: 0.8rem;
-      cursor: pointer;
-      background-color: transparent;
-      color: #333;
-      border: none;
-      border-radius: 5px;
-
-      &:hover {
+    .search-btns {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      // margin: 10px 10px;
+  
+      .search-btn {
+        margin: 3px 10px;
+        padding: 10px 20px;
+        font-size: 0.8rem;
+        cursor: pointer;
         background-color: transparent;
+        color: #333;
+        border: none;
+        border-radius: 5px;
+  
+        &:hover {
+          background-color: transparent;
+        }
+        &.active {
+          background-color: #90e0ef;
+          color: white;
+          // font-weight: bold;
+        }
+        // &:nth-of-type(1){ //버튼 개별 요소 색깔 부여하기
+        //   background-color: blue;
+        //   color:white;
+        // }
       }
-      &.active {
-        background-color: #90e0ef;
-        color: white;
-        // font-weight: bold;
+    }
+  }
+  .sideBar-modal{
+
+    width:400px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .sideBar-content{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      h3{
+        font-weight: bold;
+        font-size:1.2rem;
+        margin-bottom:60px;
       }
-      // &:nth-of-type(1){ //버튼 개별 요소 색깔 부여하기
-      //   background-color: blue;
-      //   color:white;
-      // }
+
+      label{
+        margin-bottom: 10px;
+      }
+      .modal-input-title{
+        width:80%;
+        height:40px;
+        padding:10px;
+      }
+      .modal-input-description{
+        width:80%;
+        height:150px;
+        line-height: 1.5;
+        padding:10px;
+        box-sizing: border-box;
+      }
     }
   }
 }

@@ -446,27 +446,30 @@ const SideBar = (props) => {
 
         {/* 맨 마지막에 생성되는 일정생성 모달창 */}
         {isModalOpen && (
-          <div className="sideBar-modal">
+          <div className={`sideBar-modal ${isModalOpen ? "openModal" : ""}`}>
             <div className="sideBar-content">
-              <h3>플래너 정보 입력</h3>
-              <label>제목 : </label>
+              <h3>생성한 여행 계획의 이름과 설명을 정해주세요 !</h3>
+              <label>제목</label>
               <input
                 type="text"
+                className="modal-input-title"
                 value={plannerTitle}
                 onChange={(e) => setPlannerTitle(e.target.value)}
-              />
-              <label htmlFor=""></label>
-              <input
+              /> <br/>
+              <label>설명</label>
+              <textarea
                 type="text"
+                className="modal-input-description"
                 value={plannerDescription}
                 onChange={(e) => setPlannerDescription(e.target.value)}
-              />
-              <label>다른 사용자에게 공개</label>
+              /><br/>
+              <label>다른 사용자에게 공개
               <input
                 type="checkbox"
                 checked={isPublic}
                 onChange={(e) => setIsPublic(e.target.checked)}
               />
+              </label>
               <div className="sideBar-modalBtn">
                 <button onClick={addPlanner}>확인</button>
                 <button onClick={closeModal}>취소</button>
