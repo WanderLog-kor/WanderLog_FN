@@ -5,6 +5,7 @@ import TouristSection from '../main/TouristSection.jsx';
 import MainSection from '../main/MainSection.jsx';
 import TravelCourseSection from '../main/TravelCourseSection.jsx';
 import Sidebar from './Sidebar.jsx';
+import Submenu from './SubMenu.jsx';
 
 
 const Main = () => {
@@ -12,15 +13,15 @@ const Main = () => {
     return (
         <div className="main-wrapper">
 
+            <MainSection />
             <main className="main-content">
+                <Submenu />
 
 
-                <div className="main-content-area">
-                    <MainSection />
-                    <BoardSection />
-                    <TouristSection />
-                    <TravelCourseSection />
-                </div>
+                <BoardSection />
+                <TouristSection />
+                <TravelCourseSection />
+
 
                 <Sidebar />
 

@@ -6,6 +6,9 @@ import touristJson from './jsonFile/tourist.json';
 import { useLoginStatus } from '../auth/PrivateRoute';
 import Footer from '../components/Footer';
 import MainSection from '../main/MainSection';
+import Submenu from '../components/SubMenu';
+import travelCourseImg from '../components/iconImage/travel-guide.png';
+import Sidebar from '../components/Sidebar';
 
 const TravelCourse = () => {
     // 관광지 코스 검색이기 때문에 값 고정
@@ -75,7 +78,7 @@ const TravelCourse = () => {
                 setLoading(false);
             })
             .catch((error) => {
-                setLoading(false); 
+                setLoading(false);
             });
     };
 
@@ -246,14 +249,17 @@ const TravelCourse = () => {
     return (
 
         <>
-            <div className="tourist-subheader">
-                <MainSection />
-            </div>
 
+            <MainSection />
+            <Submenu />
+            <Sidebar />
+            
             <div className="tourist-wrapper">
 
                 <div className="tourist-category">
-
+                <h2 className="tourist-title">여행코스
+                        <img src={travelCourseImg}></img>
+                    </h2>
 
                     {/* 지역 필터 */}
                     <div className="region-filter">

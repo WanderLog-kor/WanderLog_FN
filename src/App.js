@@ -12,7 +12,7 @@ const App = () => {
   return (
     <Router>
       <LoginProvider>
-        <Header />
+        {/* <Header /> */}
         <Body />
       </LoginProvider>
     </Router>

@@ -6,10 +6,24 @@
     // 카테고리 필터 영역
     .tourist-category {
         width: 20%;
-        margin-top: 65px;
         height: 218vh;
         overflow-y: auto;
 
+        // 제목
+        .tourist-title {
+            display:flex;
+            align-items: center;
+            font-size: 2.5rem;
+            justify-content: center;
+            gap: 20px;
+            font-weight: bold;
+            margin-bottom: 50px;
+            img {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
         // 문구 (필터, 카테고리 공용)
         p {
             border-bottom: 1px solid #e7e7e7;
@@ -116,7 +130,8 @@
     // 본문 영역
     .tourist-content {
         width: 80%;
-        margin: 44px auto;
+        margin: 0 auto;
+
         .tourist-h1 {
             margin-bottom: 50px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
@@ -132,7 +147,7 @@
             justify-content: end;
             gap: 80px;
             padding: 0 38px;
-            margin-bottom: 30px;
+            margin-bottom: 65px;
 
             .tourist-search {
                 display: flex; // input과 버튼을 가로로 배치
@@ -144,11 +159,11 @@
                     width: 300px;
                     flex: 1;
                     padding: 12px 0;
-                    
+
                     font-size: 14px;
                     line-height: 18px;
                     color: #575756;
-                    
+
                     background-color: transparent;
                     // border-radius: 50px;
                     // border: 1px solid #575756;
@@ -156,12 +171,12 @@
                     border-bottom: 1px solid #575756;
                     border-radius: 0;
                     transition: all 250ms ease-in-out;
-                    
+
                     &::placeholder {
                         // text-transform: uppercase;
                         letter-spacing: 1.5px;
                     }
-                    
+
                     &:hover,
                     &:focus {
                         padding: 12px 24px;

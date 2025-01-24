@@ -6,6 +6,9 @@ import touristJson from './jsonFile/tourist.json';
 import { useLoginStatus } from '../auth/PrivateRoute';
 import Footer from '../components/Footer';
 import MainSection from '../main/MainSection';
+import touristIcon from '../components/iconImage/tourist-attraction.png';
+import Submenu from '../components/SubMenu';
+import Sidebar from '../components/Sidebar';
 
 const Tourist = () => {
     const [regionFilter, setRegionFilter] = useState('');
@@ -221,14 +224,15 @@ const Tourist = () => {
     }, [touristData, loginStatus]);
     return (
         <>
-            <div className="tourist-subheader">
-                <MainSection />
-            </div>
 
+            <MainSection />
+            <Submenu />
+            <Sidebar />
             <div className="tourist-wrapper">
-
                 <div className="tourist-category">
-
+                    <h2 className="tourist-title">관광지
+                        <img src={touristIcon}></img>
+                    </h2>
 
                     {/* 지역 필터 */}
                     <div className="region-filter">
