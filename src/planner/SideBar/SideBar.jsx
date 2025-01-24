@@ -226,7 +226,7 @@ const SideBar = (props) => {
                 day: day,
                 startDate: props.startDate,
                 endDate: props.endDate,
-                userid: props.userid,
+                userid: props.loginData.userid,
                 title: plannerTitle,
                 description: plannerDescription,
               },
