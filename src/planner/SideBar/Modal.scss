@@ -1,0 +1,33 @@
+.modal {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin:0;
+
+    textarea{
+        height:100px;
+    }
+    .form-check-input {
+        margin:0 5px;
+    }
+    .form-control{
+        margin:10px 0px;
+    }
+
+    .isPublic-label {
+        font-size:0.9rem;
+    }
+}
+
+.modal-dialog {
+    margin-top : 250px;
+    transition: transform 0.3s ease-out;
+}
+
+.modal-fade .modal-dialog {
+    transform: translateY(-20%);
+    opacity: 0;
+}
+
+.modal-show .modal-dialog {
+    transform: translateY(0);
+    opacity: 1;
+}

@@ -5,6 +5,7 @@ import Body from './components/Body';
 import '../src/public/public.css';
 import '../src/public/reset.css';
 import PrivateRoute, { LoginProvider } from './auth/PrivateRoute';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App = () => {
 

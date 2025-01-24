@@ -7,6 +7,7 @@ import Logo from "../../images/logoImage.png";
 import NoImage from "../../images/noImage.png";
 import Search from "../../images/search.png"
 import Delete from "../../images/delete.png"
+import Modal from "./Modal";
 
 const SideBar = (props) => {
   // console.log("sibebarSelectedCity",props);
@@ -223,6 +224,8 @@ const SideBar = (props) => {
                 isPublic: isPublic,
                 destination: props.DestinationData,
                 day: day,
+                startDate: props.startDate,
+                endDate: props.endDate,
                 userid: props.userid,
                 title: plannerTitle,
                 description: plannerDescription,
@@ -230,6 +233,7 @@ const SideBar = (props) => {
               { "Content-Type": "application/json" }
             )
             .then((resp) => {
+              console.log(resp);
               alert("플래너를 성공적으로 작성하였습니다!");
               closeModal(); //모달 닫기
               navigate("/");
@@ -247,6 +251,8 @@ const SideBar = (props) => {
                 isPublic: isPublic,
                 destination: props.DestinationData,
                 day: day,
+                startDate : props.startDate,
+                endDate: props.endDate,
                 userid: props.userid,
                 plannerid: plannerID,
               },
@@ -445,38 +451,18 @@ const SideBar = (props) => {
         </div>
 
         {/* 맨 마지막에 생성되는 일정생성 모달창 */}
-        {isModalOpen && (
-          <div className={`sideBar-modal ${isModalOpen ? "openModal" : ""}`}>
-            <div className="sideBar-content">
-              <h3>생성한 여행 계획의 이름과 설명을 정해주세요 !</h3>
-              <label>제목</label>
-              <input
-                type="text"
-                className="modal-input-title"
-                value={plannerTitle}
-                onChange={(e) => setPlannerTitle(e.target.value)}
-              /> <br/>
-              <label>설명</label>
-              <textarea
-                type="text"
-                className="modal-input-description"
-                value={plannerDescription}
-                onChange={(e) => setPlannerDescription(e.target.value)}
-              /><br/>
-              <label>다른 사용자에게 공개
-              <input
-                type="checkbox"
-                checked={isPublic}
-                onChange={(e) => setIsPublic(e.target.checked)}
-              />
-              </label>
-              <div className="sideBar-modalBtn">
-                <button onClick={addPlanner}>확인</button>
-                <button onClick={closeModal}>취소</button>
-              </div>
-            </div>
-          </div>
-        )}
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              plannerTitle={plannerTitle}
+              setPlannerTitle={setPlannerTitle}
+              plannerDescription={plannerDescription}
+              setPlannerDescription={setPlannerDescription}
+              isPublic={isPublic}
+              setIsPublic={setIsPublic}
+              onSave={addPlanner}
+            >
+            </Modal>
 
         {
           <div className="question">
@@ -737,19 +723,20 @@ const SideBar = (props) => {
                                 className="content-card"
                                 onClick={() => {
                                   props.ClickPlanner(destination);
+                                  console.log(destination.data);
                                 }}
                               >
                                 <div className="card-image">
                                   {destination &&
-                                    destination.data.image == null &&
+                                    destination.data.image == null ||
                                     destination.data.image ==
-                                      "No image found" && (
-                                      <img src={NoImage} alt="" />
+                                      "" && (
+                                      <img src={NoImage} alt="없음" />
                                     )}
                                   {destination &&
                                     destination.data.image != null &&
                                     destination.data.image !=
-                                      "No image found" && (
+                                      "" && (
                                       <img
                                         src={destination.data.image}
                                         alt=""
