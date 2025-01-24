@@ -678,7 +678,7 @@ const SideBar = (props) => {
           {listState && (
             <>
               <div className="content-planner">
-              <h2>{props.username} 님의 여행계획</h2>
+              <h2>{props.loginData.username} 님의 여행계획</h2>
                 <div className="plannerMenu">
                   <p>{`${selectedDay} 일차 계획`}</p>
                   <button
