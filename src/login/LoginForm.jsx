@@ -63,7 +63,7 @@ const LoginForm = () => {
 
     } catch (err) {
       console.log("로그인 실패,", err);
-      setError("로그인에 실패했습니다. 다시 시도해주세요");
+      setError(err.response.data.message);
     }
   };
 

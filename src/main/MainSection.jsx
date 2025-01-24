@@ -275,8 +275,8 @@ const MainSection = () => {
   }, [isMainModalOpen]);
 
   return (
-    // 메인 페이지 부분
-    <section className="main-section">
+    // 페이지 헤더
+    <header className="main-section">
       <Header />
       <p className="main-section__text">나만의 특별한 여행계획 만들기</p>
       <p className="main-section__subtext">
@@ -381,7 +381,7 @@ const MainSection = () => {
           </div>
         </div>
       )}
-    </section>
+    </header>
   );
 };
 

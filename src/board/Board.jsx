@@ -5,6 +5,7 @@ import './Board.scss';
 import Footer from '../components/Footer.jsx';
 import { useLoginStatus } from "../auth/PrivateRoute.jsx";
 import MainSection from "../main/MainSection.jsx";
+import Sidebar from "../components/Sidebar.jsx";
 
 const Board = () => {
     const [planners, setPlanners] = useState([]);
@@ -97,6 +98,7 @@ const Board = () => {
         <>
             <div className="board">
                 <MainSection />
+                <Sidebar />
                 <div className="board-wrapper">
 
                     {/* 탭 영역 */}

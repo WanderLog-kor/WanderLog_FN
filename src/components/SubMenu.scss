@@ -1,0 +1,42 @@
+// 서브메뉴
+.sub-menu {
+    margin: 50px auto;
+    width: 1500px;
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+
+    button {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .home-btn:hover,
+    .tourist-btn:hover,
+    .travelcourse-btn:hover,
+    .board-btn:hover {
+        // letter-spacing: 2px;
+        transform: scale(1.1);
+        cursor: pointer;
+    }
+
+    .tourist-btn,
+    .home-btn,
+    .travelcourse-btn,
+    .board-btn {
+        border: 0;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        border-radius: 35px;
+        font-size: 1.2rem;
+        padding: 10px 25px;
+        color: black;
+        transition: 0.25s;
+
+        img {
+            width: 40px;
+            height: 40px;
+        }
+    }
+}
