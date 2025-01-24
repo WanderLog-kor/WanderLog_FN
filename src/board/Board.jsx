@@ -6,6 +6,7 @@ import Footer from '../components/Footer.jsx';
 import { useLoginStatus } from "../auth/PrivateRoute.jsx";
 import MainSection from "../main/MainSection.jsx";
 import Sidebar from "../components/Sidebar.jsx";
+import Submenu from "../components/SubMenu.jsx";
 
 const Board = () => {
     const [planners, setPlanners] = useState([]);
@@ -118,7 +119,7 @@ const Board = () => {
                             </li>
                         </ul>
                     </div>
-
+      
                     <div className="board-top">
                         <h1 className="board-title">
                             {activeTab === "board-myCourse" ? "내가 작성한 여행 코스를 확인해 보세요!" : "다른 유저의 여행 계획을 확인해 보세요!"}
