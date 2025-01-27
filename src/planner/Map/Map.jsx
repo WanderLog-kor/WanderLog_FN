@@ -135,25 +135,21 @@ const Map = (props) => {
 <div class="custom-popup">
   <div style="width: 100%; height: 100%; background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; font-family: Arial, sans-serif; display: flex; flex-direction: column;">
     
-    <div style="display: flex; flex-direction: row; margin-bottom: 20px;">
+    <div style="display: flex; flex-direction: row; ">
       
-      <div style="display: flex; flex-direction: row; margin-bottom: 15px; width: 100%;">
+      <div style="display: flex; flex-direction: row; justify-content:center; align-items:center; width: 100%;">
         <div style="width: 100px; height: 100px; margin-right: 15px; flex-shrink: 0;">
           <img src="${image}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" />
         </div>
 
-        <div style="display: flex; flex-direction: column; justify-content: center; text-align: left; flex-grow: 1;">
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items:center ;text-align: left; flex-grow: 1;">
           <h3 style="font-size: 16px; font-weight: bold; color: #333; margin: 0; padding: 0;">${data.name}</h3>
           <p style="font-size: 12px; color: #888; margin: 1px 0; padding: 0;">${data.category}</p>
           <p style="font-size: 12px; color: #555; margin: 1px 0; padding: 0;"> ${data.address}</p>
         </div>
       </div>
 
-      <div style="position: absolute; bottom: 20px; right: 20px;">
-        <button class="planner-btn ${data.name}" style="display: block; width: fit-content; padding: 8px 16px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; text-align: center; text-decoration: none; transition: background-color 0.3s ease, transform 0.2s ease;">
-          플래너에 추가
-        </button>
-      </div>
+
     </div>
   </div>
 </div>
@@ -163,14 +159,15 @@ const Map = (props) => {
               ).openPopup();
         })
         marker.on('popupopen',function(e){
-        const nodeList = e.target._popup._contentNode.childNodes[1].childNodes[1].childNodes[1].childNodes[3].childNodes;
+            console.log(e);
+        const nodeList = e.target._popup._contentNode.childNodes[1].childNodes[1].childNodes[1].childNodes;
         nodeList[1].addEventListener('click', async () => {
             await  axios.post('http://localhost:9000/planner/findDestination',
                     {"businessName":data.name, "businessCategory":data.category,"streetFullAddress":data.address,"coordinate_x":data.x,"coordinate_y":data.y},
                     {"Content-Type":"application/json"},
             )
             .then(resp=>{
-                props.AddDestination({"day":props.DayData,"data":resp.data})
+                // props.AddDestination({"day":props.DayData,"data":resp.data})
             })
             .catch(err=>{console.log(err)})
         });

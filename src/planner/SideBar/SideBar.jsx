@@ -184,6 +184,7 @@ const SideBar = (props) => {
   const handleSearchAdd = (day, data) => {
     const uniqueId = data.uniqueId;
     // event.stopPropagation();
+    props.ClickSearch(data);
     props.AddDestination({ day: selectedDay, data: data });
     setAddedItemsByDay((prev) => ({
       ...prev,
@@ -402,7 +403,8 @@ const SideBar = (props) => {
               }
             }}
           >
-            <img className="sidebar-logo" src={Logo} alt="" />
+            {/* <img className="sidebar-logo" src={Logo} alt="" /> */}
+            <h2 className="sidebar-logo">WanderLog</h2>
           </div>
           <div
              className={`optionButton ${typeState === "식당" ? "active" : ""}`}
@@ -438,15 +440,10 @@ const SideBar = (props) => {
             className={`optionButton planCommit ${
               typeState === "관광지" ? "highlight" : ""
             }`}
-            onClick={() => {
-              if (typeState === "식당") {
-                setTypeState("숙소");
-              } else if (typeState === "숙소") setTypeState("관광지");
-                else if (typeState === "관광지") openModal();
-              }
+            onClick={()=>{openModal();}
             }
           >
-            <span>{typeState === "관광지" ? "저장" : "다음"}</span>
+            <span>저장</span>
           </div>
         </div>
 
