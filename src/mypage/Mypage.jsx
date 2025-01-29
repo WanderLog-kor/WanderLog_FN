@@ -7,7 +7,7 @@ const Mypage = () => {
   return (
     <div>
         <MyInformation/>
-        <Planners/>
+        {/* <Planners/> */}
     </div>
   );
 };

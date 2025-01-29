@@ -3,14 +3,17 @@ import axios from "axios";
 import useMyPage from "./useMyPage"; // Custom hook import
 import useProfileImage from "./useProfileImage";
 import "./MyInformation.scss"
+import { useLoginStatus } from '../auth/PrivateRoute'
 
 const MyInformation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-
+  const {loginData,loginStatus} = useLoginStatus();
+  console.log("로그인 데이터" , loginData);
   // 비밀번호 필드 활성화 상태 추가
+  const [detailProfile,setDetailProfile] = useState(false); //상세정보 보기 상태변수
 
   const [isEmailEditing, setIsEmailEditing] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false); // 비밀번호 유효성 여부
@@ -20,7 +23,7 @@ const MyInformation = () => {
     userid: "",
     username: "",
     email: "",
-    gender: "",
+    // gender: "",
   });
   const {
     setValidationMessages,
@@ -57,14 +60,14 @@ const MyInformation = () => {
       try {
         setLoading(true);
 
-        // 쿠키 유효성 확인
-        await axios.post(
-          "http://localhost:9000/api/cookie/validate",
-          {},
-          {
-            withCredentials: true,
-          }
-        );
+        // 쿠키 유효성 확인   //필요없음
+        // await axios.post(
+        //   "http://localhost:9000/api/cookie/validate",
+        //   {},
+        //   {
+        //     withCredentials: true,
+        //   }
+        // );
 
         // 사용자 데이터 가져오기
         const userResponse = await axios.get(
@@ -80,7 +83,7 @@ const MyInformation = () => {
           userid: userResponse.data.userid,
           username: userResponse.data.username,
           email: userResponse.data.email,
-          gender: userResponse.data.gender,
+          // gender: userResponse.data.gender,
         });
         setLoading(false);
       } catch (err) {
@@ -310,9 +313,46 @@ const MyInformation = () => {
     }
   };
 
+  const handleProfileButton = ()=>{
+    if(detailProfile){
+
+    }
+  }
+
   return (
     <div className="mypage-container">
-      <h2>{userData.username}님의 마이페이지</h2>
+      {!detailProfile ? (
+        <div className="basic-profile">
+          <img
+            src={userData.img? `http://localhost:9000${userData.img}`: "/ProfileImg/anonymous.jpg"}
+            alt="프로필 사진"
+            className="profile-img"
+          />
+          <h2>{userData.username}</h2>
+          <button onClick={()=>{setDetailProfile(true)}}>프로필 관리</button>
+        </div>
+      ):(
+        //상세 정보 보기
+        <div className="detail-profile">
+          <img 
+        src={imagePreview || (userData.img ? `http://localhost:9000${userData.img}` : "/ProfileImg/anonymous.jpg")}
+        alt="프로필 사진"
+        className="profile-img" />
+
+        <h2 className="detail-username">{userData.username}</h2>
+        <div className="detail-userInfo">
+          <h2>프로필 설정</h2>
+          <div></div>
+        </div>
+
+        </div>
+
+
+
+        
+      )}
+
+
       <div className="image-preview-container">
         {isEditing ? (
           <>
@@ -473,7 +513,7 @@ const MyInformation = () => {
               </div>
             )}
 
-            {/* Buttons */}
+            {/* 프로필 관리 버튼 클릭 여부 */}
             <div>
               {!isPasswordEditing ? (
                 <button type="button" onClick={handlePasswordEditClick}>
@@ -506,10 +546,10 @@ const MyInformation = () => {
               alt="프로필 사진"
               className="profile-img"
             />
-            <p>아이디: {userData.userid}</p>
+            <p>{userData.userid}</p>
             <p>이메일: {userData.email}</p>
-            <p>성별 : {userData.gender}</p>
-            <p>생년월일 : {userData.birth}</p>
+            {/* <p>성별 : {userData.gender}</p> */}
+            {/* <p>생년월일 : {userData.birth}</p> */}
             <button onClick={handleEditClick}>수정</button>
             <button type="button" onClick={handleDelet}>
               회원탈퇴
