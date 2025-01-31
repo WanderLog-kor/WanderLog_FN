@@ -2,18 +2,34 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useMyPage from "./useMyPage"; // Custom hook import
 import useProfileImage from "./useProfileImage";
-import "./MyInformation.scss"
-import { useLoginStatus } from '../auth/PrivateRoute'
+import "./MyInformation.scss";
+import { useLoginStatus } from "../auth/PrivateRoute";
+import Header from "../components/Header";
+import Edit from "../images/edit.png";
+import Setting from "../images/settings.png";
+import { previousMonday } from "date-fns";
 
 const MyInformation = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-  const {loginData,loginStatus} = useLoginStatus();
-  console.log("로그인 데이터" , loginData);
+  const { loginData, loginStatus } = useLoginStatus();
+  console.log(loginData);
+
   // 비밀번호 필드 활성화 상태 추가
-  const [detailProfile,setDetailProfile] = useState(false); //상세정보 보기 상태변수
+  const [detailProfile, setDetailProfile] = useState(false); //상세정보 보기 상태변수
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+
+  const handleOpenPasswordModal = () => {
+    setIsPasswordModalOpen(true); //
+  };
+
+  const handleClosePasswordModal = () => {
+    setIsPasswordModalOpen(false); // 
+    setValidationMessages({});
+    setFormData((prev) => ({ ...prev, nowPassword: "", password: "", repassword: "" })); 
+  };
 
   const [isEmailEditing, setIsEmailEditing] = useState(false);
   const [isPasswordValid, setIsPasswordValid] = useState(false); // 비밀번호 유효성 여부
@@ -36,6 +52,7 @@ const MyInformation = () => {
     handleCancelPasswordEditing,
     validateEmail,
     isPasswordEditing,
+    setIsPasswordEditing,
     handleChange,
     sendAuthCode,
     verifyAuthCode,
@@ -83,9 +100,13 @@ const MyInformation = () => {
           userid: userResponse.data.userid,
           username: userResponse.data.username,
           email: userResponse.data.email,
+          birth: userResponse.data.birth,
+          password: "",
+          nowPassword: userResponse.data.password,
           // gender: userResponse.data.gender,
         });
         setLoading(false);
+        console.log("현재 유저 정보",userResponse.data);
       } catch (err) {
         console.error("오류:", err);
         setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
@@ -153,8 +174,9 @@ const MyInformation = () => {
       authCode: "",
     }));
   };
+  console.log("유저데이터",userData);
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = async (e) => {
     const { name, value } = e.target;
 
     // 비밀번호 변경
@@ -162,27 +184,51 @@ const MyInformation = () => {
       ...prev,
       [name]: value,
     }));
+    console.log("현재 입력한 값:", value);
+    console.log("userData.password:", userData.password);
 
     // 비밀번호 유효성 검사 호출
+    if (name === "nowPassword") {
+      try{
+        const response = await axios.post(
+          "http://localhost:9000/user/mypage/check-password",
+          {password : value},
+          {withCredentials: true}
+        );
+
+        setValidationMessages((prev) =>({
+          ...prev,
+          nowPassword: "현재 비밀번호가 확인되었습니다",
+          nowPasswordColor: "validation-success",
+        }));
+      }catch (error) {
+        setValidationMessages((prev) =>({
+          ...prev,
+          nowPassword: "현재 비밀번호가 올바르지 않습니다.",
+          nowPasswordColor: "validation-error",
+        }));
+      }
+    }
+
+    // 비밀번호 확인 로직
     if (name === "password") {
       const validationResult = validatePassword(value);
-      setValidationMessages((prev) => ({
+      setValidationMessages((prev)=>({
         ...prev,
-        password: validationResult.message,
+        password:validationResult.message,
         passwordColor: validationResult.color,
       }));
     }
 
-    // 비밀번호 확인 로직
     if (name === "repassword") {
-      if (formData.password !== value) {
-        setValidationMessages((prev) => ({
+      if(formData.password !== value){
+        setValidationMessages((prev)=>({
           ...prev,
-          repassword: "비밀번호 확인이 일치하지 않습니다.",
+          repassword : "비밀번호 확인이 일치하지 않습니다",
           repasswordColor: "validation-error",
         }));
         setIsPasswordValid(false);
-      } else {
+      }else {
         setValidationMessages((prev) => ({
           ...prev,
           repassword: "비밀번호가 일치합니다.",
@@ -192,63 +238,68 @@ const MyInformation = () => {
       }
     }
   };
+  
 
   const handleSaveChanges = async () => {
-    // 비밀번호, 사용자 이름, 이메일 확인
-    if (isPasswordEditing && !isPasswordValid) {
-      alert("비밀번호 확인을 다시 확인해주세요.");
-      return;
-    }
-
-    if (isEmailEditing && !isAuthCodeLocked) {
-      alert("이메일 인증을 완료해주세요.");
-      return;
-    }
-
-    if (!formData.username) {
-      alert("이름을 입력해 주세요.");
-      return;
-    }
-
-    // if (!formData.email || !isAuthCodeLocked) {
-    //   alert("이메일 인증을 완료해주세요.");
-    //   return;
-    // }
-
-    if (
-      formData.username === userData.username &&
-      formData.email === userData.email &&
-      formData.profileImage === userData.img &&
-      (!formData.password || formData.password === "")
-    ) {
-      alert("변경된 사항이 없습니다.");
-      return;
-    }
 
     try {
+      const passwordCheckResponse = await axios.post(
+        "http://localhost:9000/user/mypage/check-password",
+        { password: formData.nowPassword },
+        { withCredentials: true }
+      );
+
+      if(passwordCheckResponse.data !== "비밀번호가 일치합니다"){
+        alert("현재 비밀번호가 일치하지 않습니다.");
+       return;
+      }
+
+    if (!formData.password || !formData.repassword) {
+      alert("새 비밀번호를 입력해주세요!");
+      return;
+    }
+    if (formData.password !== formData.repassword) {
+      alert("비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+
+
+    // 비밀번호, 사용자 이름, 이메일 확인
+    const passwordValidationResult = validatePassword(formData.password);
+    if(passwordValidationResult.color === "validation-error"){
+      alert(passwordValidationResult.message);
+      return ;
+    }
+
       // 사용자 정보 업데이트
       await axios.put(
         "http://localhost:9000/user/mypage/userupdate",
         {
-          profileImg: formData.profileImage,
-          username: formData.username,
-          email: formData.email,
+          // profileImg: formData.profileImage,
+          // username: formData.username,
+          // email: formData.email,
           password: formData.password, // 비밀번호도 함께 업데이트
+          repassword: formData.repassword,
         },
         { withCredentials: true }
       );
       console.log("유저 정보가 성공적으로 변경되었습니다.");
       alert("유저 정보가 성공적으로 변경되었습니다.");
 
-      // 새로고침
-      window.location.reload();
+      setFormData((prev) => ({ ...prev, nowPassword:"", password: "", repassword: "" }));
+      setIsPasswordEditing(false);
+      // setIsPasswordValidationVisible(false);
+      setValidationMessages({});
+      setIsPasswordModalOpen(false);
+      setDetailProfile(false);
     } catch (err) {
       console.error("유저 정보 변경 중 오류:", err);
-      setValidationMessages((prev) => ({
-        ...prev,
-        username: "서버 오류로 유저 정보를 변경할 수 없습니다.",
-        usernameColor: "validation-error",
-      }));
+      alert("서버 오류로 비밀번호를 변경할 수 없습니다.");
+      // setValidationMessages((prev) => ({
+      //   ...prev,
+      //   username: "서버 오류로 유저 정보를 변경할 수 없습니다.",
+      //   usernameColor: "validation-error",
+      // }));
     }
   };
 
@@ -313,250 +364,213 @@ const MyInformation = () => {
     }
   };
 
-  const handleProfileButton = ()=>{
-    if(detailProfile){
-
+  const handleProfileButton = () => {
+    if (detailProfile) {
     }
-  }
+  };
 
   return (
     <div className="mypage-container">
       {!detailProfile ? (
         <div className="basic-profile">
-          <img
-            src={userData.img? `http://localhost:9000${userData.img}`: "/ProfileImg/anonymous.jpg"}
-            alt="프로필 사진"
-            className="profile-img"
-          />
-          <h2>{userData.username}</h2>
-          <button onClick={()=>{setDetailProfile(true)}}>프로필 관리</button>
-        </div>
-      ):(
-        //상세 정보 보기
-        <div className="detail-profile">
-          <img 
-        src={imagePreview || (userData.img ? `http://localhost:9000${userData.img}` : "/ProfileImg/anonymous.jpg")}
-        alt="프로필 사진"
-        className="profile-img" />
-
-        <h2 className="detail-username">{userData.username}</h2>
-        <div className="detail-userInfo">
-          <h2>프로필 설정</h2>
-          <div></div>
-        </div>
-
-        </div>
-
-
-
-        
-      )}
-
-
-      <div className="image-preview-container">
-        {isEditing ? (
-          <>
-            {/* Profile Image */}
-            <div
-              className="image-preview-container"
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-            >
-              <img
-                src={imagePreview}
-                alt="미리보기"
-                className="circle-preview"
-                style={{ width: "150px", height: "150px", borderRadius: "50%" }}
-              />
-            </div>
-            <div id="imgbutton">
-              <button type="button" onClick={handleFileInputClick}>
-                이미지 업로드
-              </button>
-              <button type="button" onClick={handleCancelImage}>
-                이미지 취소
-              </button>
-              <button type="button" onClick={handleResetToDefaultImage}>
-                기본 이미지로 변경
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={handleFileChange}
-              />
-            </div>
-
-            {/* Username */}
-            <input
-              type="text"
-              name="username"
-              placeholder="이름"
-              value={formData.username}
-              onChange={handleUsernameChange}
-            />
-            {validationMessages.username && (
-              <div
-                className={`validation-message ${validationMessages.usernameColor}`}
-              >
-                {validationMessages.username}
-              </div>
-            )}
-
-            {/* Email */}
-            <div
-              className={`emailbox ${
-                validationMessages.email ? "has-message" : ""
-              }`}
-            >
-              <div className="email-wrapper">
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  placeholder="이메일 입력"
-                  onChange={handleEmailChange}
-                  disabled={!isEmailEditing}
-                />
-                {isEmailEditing ? (
-                  <>
-                    <button type="button" onClick={sendAuthCode}>
-                      인증 코드 받기
-                    </button>
-                    <button type="button" onClick={handleCancelEmailEditing}>
-                      취소
-                    </button>
-                  </>
-                ) : (
-                  <button type="button" onClick={() => setIsEmailEditing(true)}>
-                    이메일 수정
-                  </button>
-                )}
-              </div>
-              {validationMessages.email && (
-                <div
-                  className={`validation-message ${validationMessages.emailColor}`}
-                >
-                  {validationMessages.email}
-                </div>
-              )}
-            </div>
-
-            {/* Auth Code */}
-            {authCodeSent &&
-              validationMessages.emailColor === "validation-success" && (
-                <div className="auth-codebox">
-                  <div className="auth-code-wrapper">
-                    <input
-                      type="text"
-                      name="authCode"
-                      placeholder="인증 코드 입력"
-                      value={formData.authCode}
-                      onChange={handleChange}
-                      disabled={isAuthCodeLocked}
-                    />
-                    <div id="timer">
-                      {Math.floor(timer / 60)}:
-                      {String(timer % 60).padStart(2, "0")}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={verifyAuthCode}
-                      disabled={isAuthCodeLocked}
-                    >
-                      인증 코드 확인
-                    </button>
-                  </div>
-                  {validationMessages.authCode && (
-                    <div
-                      className={`validation-message ${validationMessages.authCodeColor}`}
-                    >
-                      {validationMessages.authCode}
-                    </div>
-                  )}
-                </div>
-              )}
-
-            {/* Password */}
-            <input
-              type="password"
-              name="password"
-              placeholder="비밀번호"
-              value={formData.password}
-              onChange={handlePasswordChange}
-              disabled={!isPasswordEditing}
-            />
-            {validationMessages.password && (
-              <div
-                className={`validation-message ${validationMessages.passwordColor}`}
-              >
-                {validationMessages.password}
-              </div>
-            )}
-
-            {/* Confirm Password */}
-            {isPasswordEditing && (
-              <input
-                type="password"
-                name="repassword"
-                value={formData.repassword}
-                placeholder="비밀번호 확인"
-                onChange={handlePasswordChange}
-              />
-            )}
-            {isPasswordEditing && validationMessages.repassword && (
-              <div
-                className={`validation-message ${validationMessages.repasswordColor}`}
-              >
-                {validationMessages.repassword}
-              </div>
-            )}
-
-            {/* 프로필 관리 버튼 클릭 여부 */}
-            <div>
-              {!isPasswordEditing ? (
-                <button type="button" onClick={handlePasswordEditClick}>
-                  비밀번호 변경
-                </button>
-              ) : (
-                <button type="button" onClick={handleCancelPasswordEditing}>
-                  변경 취소
-                </button>
-              )}
-            </div>
-
-            <div>
-              <button type="button" onClick={handleSaveChanges}>
-                유저 정보 변경
-              </button>
-              <button type="button" onClick={handleCancelChanges}>
-                취소
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
+          <div className="profile-header">
+            <Header> </Header>
             <img
               src={
-                userData.img
+                imagePreview ||
+                (userData.img
                   ? `http://localhost:9000${userData.img}`
-                  : "/ProfileImg/anonymous.jpg"
+                  : "/ProfileImg/anonymous.jpg")
               }
               alt="프로필 사진"
               className="profile-img"
             />
-            <p>{userData.userid}</p>
-            <p>이메일: {userData.email}</p>
-            {/* <p>성별 : {userData.gender}</p> */}
-            {/* <p>생년월일 : {userData.birth}</p> */}
-            <button onClick={handleEditClick}>수정</button>
-            <button type="button" onClick={handleDelet}>
-              회원탈퇴
+          </div>
+          <div className="profile-body">
+                      
+          <h2>{userData.username}</h2>
+          <button
+            onClick={() => {
+              setDetailProfile(true);
+            }}
+            className="detailProfile-button"
+          >
+            프로필 관리
+            <img src={Setting} alt="세팅" className="setting-image"/>
+          </button>
+          </div>
+        </div>
+      ) : (
+        //상세 정보 보기
+        <div className="detail-profile">
+          <div className="profile-header">
+            <Header> </Header>
+            <img
+              src={
+                imagePreview ||
+                (userData.img
+                  ? `http://localhost:9000${userData.img}`
+                  : "/ProfileImg/anonymous.jpg")
+              }
+              alt="프로필 사진"
+              className="profile-img"
+            />
+            <button onClick={handleFileInputClick} className="editButton">
+              <img src={Edit} alt="수정" />
             </button>
-          </>
-        )}
-      </div>
+            <h2 className="detail-username">{userData.username}</h2>
+          </div>
+
+          <div className="detail-userInfo">
+            <h2>프로필 설정</h2>
+            <div className="detail-input mb-3">
+              <label className="d-block mb-2 detail-input_label">이메일</label>
+              <input
+                type="text"
+                className="form-control mb-3"
+                placeholder={userData.email}
+                aria-label="이메일"
+                disabled
+              />
+
+              <label className="d-block mb-2 detail-input_label">닉네임</label>
+              <input
+                type="text"
+                className="form-control mb-3"
+                aria-label="닉네임"
+                aria-describedby="basic-addon2"
+                defaultValue={userData.username}
+              />
+
+              <label className="d-block mb-2 detail-input_label">
+                생년월일
+              </label>
+              <input
+                type="text"
+                className="form-control mb-3"
+                aria-label="생년월일"
+                aria-describedby="basic-addon2"
+                defaultValue={userData.birth}
+                disabled
+              />
+
+              <div className="detail-password">
+                <label className="d-block mb-2 detail-input_label">
+                  비밀번호
+                </label>
+                <input
+                  type="password"
+                  className="form-control mb-3"
+                  aria-label="비밀번호"
+                  aria-describedby="basic-addon2"
+                  value="********"
+                  disabled
+                />
+                <button
+                  className="btn btn-secondary btn-sm pweditButton"
+                  onClick={handleOpenPasswordModal}
+                >
+                  비밀번호 변경
+                </button>
+
+                {isPasswordModalOpen && (
+                  <div className="password-modal">
+                    <div className="modal-content">
+                      <h2>비밀번호 변경</h2>
+                      {/* Password Input */}
+                      <input
+                        type="password"
+                        name="nowPassword"
+                        placeholder="현재 비밀번호"
+                        className="form-control mb-2"
+                        onChange={handlePasswordChange}
+                      />
+                      {validationMessages.nowPassword && (
+                        <div
+                          className={`validation-message ${validationMessages.nowPasswordColor}`}
+                        >
+                          {validationMessages.nowPassword}
+                        </div>
+                      )}
+                      <input
+                        type="password"
+                        name="password"
+                        placeholder="새 비밀번호"
+                        className="form-control mb-2"
+                        onChange={handlePasswordChange}
+                      />
+                      {validationMessages.password && (
+                        <div
+                          className={`validation-message ${validationMessages.passwordColor}`}
+                        >
+                          {validationMessages.password}
+                        </div>
+                      )}
+                      <input
+                        type="password"
+                        name="repassword"
+                        placeholder="새 비밀번호 확인"
+                        className="form-control"
+                        onChange={handlePasswordChange}
+                      />
+                      {validationMessages.repassword && (
+                        <div
+                          className={`validation-message ${validationMessages.repasswordColor}`}
+                        >
+                          {validationMessages.repassword}
+                        </div>
+                      )}
+
+                      <div className="modal-buttons">
+                        <button
+                          className="btn btn-secondary"
+                          onClick={handleClosePasswordModal}
+                        >
+                          취소
+                        </button>
+                        <button
+                          className="btn btn-primary"
+                          onClick={handleSaveChanges}
+                        >
+                          저장
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="detail-buttons">
+              <div className="backAndSaveBtn">
+                <button
+                  onClick={() => {
+                    setDetailProfile(false);
+                  }}
+                  className="btn btn-secondary"
+                >
+                  뒤로 가기
+                </button>
+                <button
+                  // onClick={}
+                  className="btn btn-primary"
+                  disabled
+                >
+                  저장
+                </button>
+              </div>
+              <div className="detail-userDelete my-3">
+                <button
+                  // onClick={}
+                  className="delete-btn btn btn-danger"
+                >
+                  회원탈퇴
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

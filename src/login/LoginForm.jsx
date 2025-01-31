@@ -69,7 +69,7 @@ const LoginForm = () => {
 
   return (
     <div className="login-form_wrapper">
-      <div className="login-form_logo">여행가자</div>
+      <div className="login-form_logo" onClick={()=>{window.location.href="/"}}>WanderLog</div>
       <div className="login-form_login">
         <form onSubmit={handleSubmit}>
           <label htmlFor="userid">유저 ID:</label>

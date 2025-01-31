@@ -1,175 +1,372 @@
-// SCSS 파일
-.mypage-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+// // SCSS 파일
+// .mypage-container {
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   padding: 20px;
 
-  h2 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+//   h2 {
+//     font-size: 24px;
+//     font-weight: bold;
+//     margin-bottom: 20px;
+//   }
+
+//   .image-preview-container {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     margin-bottom: 20px;
+
+//     img {
+//       width: 150px;
+//       height: 150px;
+//       border-radius: 50%;
+//       border: 2px solid #ccc;
+//       margin-bottom: 10px;
+//     }
+
+//     #imgbutton {
+//       display: flex;
+//       gap: 10px;
+
+//       button {
+//         padding: 8px 16px;
+//         font-size: 14px;
+//         border: 1px solid #ccc;
+//         border-radius: 5px;
+//         background-color: #f7f7f7;
+//         cursor: pointer;
+
+//         &:hover {
+//           background-color: #eaeaea;
+//         }
+//       }
+
+//       input[type="file"] {
+//         display: none;
+//       }
+//     }
+//   }
+
+//   .info-section {
+//     width: 100%;
+//     max-width: 600px;
+
+//     p {
+//       font-size: 16px;
+//       margin: 10px 0;
+//     }
+
+//     input[type="text"],
+//     input[type="email"],
+//     input[type="password"],
+//     input[type="number"] {
+//       width: 100%;
+//       max-width: 400px;
+//       padding: 8px 12px;
+//       margin: 8px 0;
+//       border: 1px solid #ccc;
+//       border-radius: 5px;
+//     }
+
+//     .validation-message {
+//       font-size: 14px;
+//       margin-top: 4px;
+
+//       &.validation-error {
+//         color: red;
+//       }
+
+//       &.validation-success {
+//         color: green;
+//       }
+//     }
+
+//     .emailbox {
+//       margin-top: 15px;
+
+//       .email-wrapper {
+//         display: flex;
+//         align-items: center;
+//         gap: 10px;
+
+//         input[type="email"] {
+//           flex-grow: 1;
+//         }
+//       }
+//     }
+
+//     .auth-codebox {
+//       margin-top: 10px;
+
+//       .auth-code-wrapper {
+//         display: flex;
+//         align-items: center;
+//         gap: 10px;
+
+//         input[type="text"] {
+//           flex-grow: 1;
+//         }
+
+//         #timer {
+//           font-size: 14px;
+//           color: #555;
+//         }
+//       }
+//     }
+//   }
+
+//   .button-group {
+//     display: flex;
+//     justify-content: center;
+//     gap: 15px;
+//     margin-top: 20px;
+
+//     button {
+//       padding: 10px 20px;
+//       font-size: 16px;
+//       border: 1px solid #ccc;
+//       border-radius: 5px;
+//       background-color: #f7f7f7;
+//       cursor: pointer;
+
+//       &:hover {
+//         background-color: #eaeaea;
+//       }
+//     }
+//   }
+
+//   .default-view {
+//     .profile-img {
+//       width: 150px;
+//       height: 150px;
+//       border-radius: 50%;
+//       border: 2px solid #ccc;
+//       margin-bottom: 10px;
+//     }
+
+//     .user-details {
+//       margin-top: 10px;
+
+//       p {
+//         font-size: 16px;
+//         margin: 5px 0;
+//       }
+//     }
+
+//     .action-buttons {
+//       display: flex;
+//       gap: 10px;
+
+//       button {
+//         padding: 8px 16px;
+//         font-size: 14px;
+//         border: 1px solid #ccc;
+//         border-radius: 5px;
+//         background-color: #f7f7f7;
+//         cursor: pointer;
+
+//         &:hover {
+//           background-color: #eaeaea;
+//         }
+//       }
+//     }
+//   }
+// }
+
+.mypage-container{
+  width:100%;
+  height:100vh;
+
+  .basic-profile{
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+
+    .profile-header{
+      width:100%;
+      height:300px;
+      border:1px solid;
+      text-align: center;
+      background-color: #748cab;
+      position: relative;
+      
+      margin-bottom:100px;
+      
+      .profile-img{
+        position: absolute;
+        bottom:-75px;
+        left:50%;
+        transform: translateX(-50%);  // 정확한 중앙 정렬
+        width:150px;
+        height:150px;
+        border:1px solid;
+        border-radius: 50%;
+      }
+    }
+    .profile-body{
+      width:100%;
+      height:100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      h2{
+        font-size: 1.4rem;
+        margin-bottom:10px;
+      }
+
+      .detailProfile-button{
+        display: flex;
+        align-items: center;
+        border: none;
+        background-color: white;
+        color:#4cc9f0;
+        margin-left:10px;
+        .setting-image{width:20px; height:20px; }
+      }
+    }
+
   }
 
-  .image-preview-container {
+
+  .detail-profile{  //상세정보 창
+    width:100%;
+    height:100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-
-    img {
-      width: 150px;
-      height: 150px;
-      border-radius: 50%;
-      border: 2px solid #ccc;
-      margin-bottom: 10px;
-    }
-
-    #imgbutton {
-      display: flex;
-      gap: 10px;
-
-      button {
-        padding: 8px 16px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f7f7f7;
-        cursor: pointer;
-
-        &:hover {
-          background-color: #eaeaea;
-        }
-      }
-
-      input[type="file"] {
-        display: none;
-      }
-    }
-  }
-
-  .info-section {
-    width: 100%;
-    max-width: 600px;
-
-    p {
-      font-size: 16px;
-      margin: 10px 0;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="number"] {
-      width: 100%;
-      max-width: 400px;
-      padding: 8px 12px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
-
-    .validation-message {
-      font-size: 14px;
-      margin-top: 4px;
-
-      &.validation-error {
-        color: red;
-      }
-
-      &.validation-success {
-        color: green;
-      }
-    }
-
-    .emailbox {
-      margin-top: 15px;
-
-      .email-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        input[type="email"] {
-          flex-grow: 1;
-        }
-      }
-    }
-
-    .auth-codebox {
-      margin-top: 10px;
-
-      .auth-code-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        input[type="text"] {
-          flex-grow: 1;
-        }
-
-        #timer {
-          font-size: 14px;
-          color: #555;
-        }
-      }
-    }
-  }
-
-  .button-group {
-    display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #f7f7f7;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #eaeaea;
-      }
+    align-items: center;
+    
+    .planner-container{
+      display: none;
     }
-  }
 
-  .default-view {
-    .profile-img {
-      width: 150px;
-      height: 150px;
+    .profile-header{
+      position: relative;
+      width:100%;
+      height:700px;
+      border:1px solid;
+      text-align: center;
+      background-color: #748cab;
+
+      margin-bottom:200px;
+    
+    .profile-img{
+      position: absolute;
+      bottom:-75px;
+      left:50%;
+      transform: translateX(-50%);  // 정확한 중앙 정렬
+      width:150px;
+      height:150px;
+      border:1px solid;
       border-radius: 50%;
-      border: 2px solid #ccc;
-      margin-bottom: 10px;
     }
 
-    .user-details {
-      margin-top: 10px;
+    .editButton{
+      width:30px;
+      height:30px;
+      border: 3px solid white;
+      border-radius: 50%;
+      background-color: #343a40;
 
-      p {
-        font-size: 16px;
-        margin: 5px 0;
+      position:absolute;
+      bottom:-75px;
+      left:52%;
+      img{
+        width: 100%;
+        height:100%;
       }
     }
 
-    .action-buttons {
+    .detail-username{
+      position: absolute;
+      bottom:-120px;
+      left:50%;
+      transform: translateX(-50%);
+      font-size: 1.5rem;
+    }
+   }
+
+   .detail-userInfo{
+    width:500px;
+    height:100%;
+
+    // flex-grow:1;
+    // display: flex;
+    // flex-direction: column;
+    // justify-content: flex-start;
+    // align-items: center;
+
+    h2{
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom:20px;
+    }
+
+    .detail-input{
+      width:100%;
+
+      .detail-input_label{
+        font-size: 0.8rem;
+        color:#6c757d;
+      }
+
+      .detail-password{
+        position: relative;
+
+      .pweditButton{
+        position: absolute;
+        bottom:4px;
+        right:10px;
+        font-size:0.8rem;
+        padding: 5px 10px; // ✅ 버튼 크기 조정
+      }
+      }
+    }
+
+    .detail-buttons{
+      .backAndSaveBtn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap:20px;
+      }
+      .detail-userDelete{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      button{
+        width:100%;
+      }
+    }
+
+    .password-modal{
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
-      gap: 10px;
-
-      button {
-        padding: 8px 16px;
-        font-size: 14px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f7f7f7;
-        cursor: pointer;
-
-        &:hover {
-          background-color: #eaeaea;
+      justify-content: center;
+      align-items: center;
+      .modal-content{
+        background: white;
+        padding:20px;
+        border-radius: 10px;
+        width:400px;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        .modal-buttons{
+          display: flex;
+          justify-content: space-between;
+          margin-top:15px;
         }
       }
     }
+   }
   }
 }

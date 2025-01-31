@@ -89,7 +89,7 @@ const Planners = () => {
   if (error || plannersError || likeError) return <div>오류가 발생했습니다.</div>;
 
   return (
-    <div>
+    <div className="planner-container">
       <div className="my-planner-container">
         <h3>내가 만든 Planner 목록</h3>
         {planners?.length === 0 ? (
