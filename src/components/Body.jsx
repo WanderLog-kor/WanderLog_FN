@@ -22,6 +22,8 @@ import VerifyCodePage from '../login/components/VerifyCodePage.jsx';
 import PasswordResetPage from '../login/components/PasswordResetPage.jsx';
 import SocialLoginHandler from '../login/SocialLoginHandler.jsx';
 import Mypage from '../mypage/Mypage.jsx';
+import ErrorUnauthorized from '../auth/ErrorUnautorized.jsx';
+import ErrorForbidden from '../auth/ErrorForbidden.jsx';
 const Body = () => {
 
 
@@ -45,6 +47,8 @@ const Body = () => {
             <Route path="/verify-code" element={<VerifyCodePage />}></Route>
             <Route path="/reset-password" element={<PasswordResetPage />}></Route>
             <Route path="/oauth2/success" element={<SocialLoginHandler />}></Route>
+            <Route path="/error/unauthorized" element={<ErrorUnauthorized  />}></Route>
+            <Route path="/error/forbidden" element={<ErrorForbidden  />}></Route>
 
             {/* 계획 생성 */}
             <Route path="/makePlanner" element={<MakePlanner />}></Route> {/*로그인 체킹은 마지막에 하도록 */}

@@ -224,6 +224,17 @@ const MainSection = () => {
       return;
     }
 
+    sessionStorage.setItem(
+      "travelData",
+      JSON.stringify({
+        areaName: selectedCity,
+        areaCode: areaCode,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        coordinates: transformCoordinates,
+      })
+    );
+
     navigate("/makePlanner", {
       state: {
         areaName: selectedCity,

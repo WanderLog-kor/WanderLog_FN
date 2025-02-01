@@ -30,6 +30,7 @@ const PasswordResetPage = ()=>{
                 headers : {Authorization : `Bearer ${token}`},
             });
             setMessage("비밀번호가 성공적으로 변경되었습니다");
+            alert("비밀번호가 성공적으로 변경되었습니다");
             setTimeout(()=>{
                 window.location.href = "/";
             },2000); //메시지 나오고 2초 뒤에 리다이렉트

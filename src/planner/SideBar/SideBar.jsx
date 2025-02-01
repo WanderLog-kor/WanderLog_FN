@@ -15,16 +15,16 @@ const SideBar = (props) => {
   //주석 처리한 부분은 삭제 예정 코드.
   const { loginStatus } = useLoginStatus();
   const [isModalOpen, setIsModalOpen] = useState(false); //모달 오픈 상태
-  const [plannerTitle, setPlannerTitle] = useState(
-    `${props.loginData.username}님의 여행계획`
-  ); //제목
-  const [plannerDescription, setPlannerDescription] = useState(
-    `${props.loginData.username} 님이 계획하신 여행계획입니다.`
-  ); //내용
+  const [plannerTitle, setPlannerTitle] = useState(loginStatus ? 
+    (`${props.loginData.username}님의 여행계획`) : ("Guest 님의 여행계획")); //제목
+
+  const [plannerDescription, setPlannerDescription] = useState(loginStatus ? 
+    (`${props.loginData.username} 님이 계획하신 여행계획입니다.`) : ("Guest 님이 계획하신 여행계획입니다.")); //내용
+
   const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
   const [isPlannerVisible, setIsPlannerVisible] = useState(true);
   const [cardAdded, setCardAdded] = useState(false);
-
+  
   const togglePlannerVisibility = () => {
     //플래너 부분 들어갔다 나오게 하기
     setIsPlannerVisible(!isPlannerVisible);
@@ -220,6 +220,12 @@ const SideBar = (props) => {
 
   // DB에 플래너 추가
   const addPlanner = async () => {
+    if(!loginStatus) {
+      alert("로그인이 필요한 서비스입니다. 로그인 페이지로 이동합니다");
+      navigate(`/user/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return ;
+    }
+
     if (!listState) {
       alert("이전 단계를 완료하세요.");
       return;
@@ -699,7 +705,7 @@ const SideBar = (props) => {
           {listState && (
             <>
               <div className="content-planner">
-                <h2>{props.loginData.username} 님의 여행계획</h2>
+                <h2>{loginStatus ? (props.loginData.username) : ("Guest")} 님의 여행계획</h2>
                 <div className="plannerMenu">
                   <p>{`${selectedDay} 일차 계획`}</p>
                   <button

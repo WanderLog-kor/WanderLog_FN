@@ -9,11 +9,12 @@ import { useLoginStatus } from '../../auth/PrivateRoute';
 const MakePlanner = ({}) => {
     const {loginData,loginStatus} = useLoginStatus();
     const location = useLocation();
-    const { startDate, endDate, areaName, areaCode,coordinates } = location.state || {};
+    // const { startDate, endDate, areaName, areaCode,coordinates } = location.state || {};
+    const navigate = useNavigate();
 
-    useEffect(() => {
-        // 전달받은 데이터를 확인하는 로그
-    }, [areaName, startDate, endDate]); // 의존성 배열에 데이터 추가
+    // useEffect(() => {
+    //     // 전달받은 데이터를 확인하는 로그
+    // }, [areaName, startDate, endDate]); // 의존성 배열에 데이터 추가
     // ------------------------------------------------
 
 
@@ -24,6 +25,7 @@ const MakePlanner = ({}) => {
     const [destination, setDestination] = useState();
     const [searchDestination, setSearchDestination] = useState();
 
+    const [travelData , setTravelData] = useState(location.state || {});
     
 
     // const handleOption = (data) => { setOptionState(data); }
@@ -49,6 +51,19 @@ const MakePlanner = ({}) => {
     //     })
     //     .catch(err=>{console.log(err)});
     // }
+
+    useEffect(()=>{
+        if(!location.state) {
+            const backupData = sessionStorage.getItem("travelData");
+            if(backupData) {
+                const parsedData = JSON.parse(backupData);
+                setTravelData(parsedData);
+            }else{
+                alert("여행 정보를 찾을 수 없습니다. 다시 설정해주세요.");
+                navigate("/"); // 데이터가 없으면 홈으로 이동
+            }
+        }
+    },[location.state,navigate]);
 
     const handleData = (data) => {
         setPlannerData((plannerData)=> [...plannerData, data]);
@@ -84,10 +99,10 @@ const MakePlanner = ({}) => {
         <div className='planner' >
             <div className='plannerSide' >
                 <SideBar
-                    areaName={areaName} //도시명 SideBar 로 전달
-                    startDate={startDate}
-                    endDate={endDate}
-                    areaCode={areaCode}
+                    areaName={travelData.areaName} //도시명 SideBar 로 전달
+                    startDate={travelData.startDate}
+                    endDate={travelData.endDate}
+                    areaCode={travelData.areaCode}
                     loginData={loginData}
                     // AreaCoordinate={handleArea}
                     DayState={handleDay}
@@ -105,8 +120,8 @@ const MakePlanner = ({}) => {
                 {/* <Option OptionData={handleOption}/> */}
                 <Map 
                     // OptionData={optionState}
-                    coordinates={coordinates}
-                    AreaData={areaState}
+                    coordinates={travelData.coordinates}
+                    AreaData={travelData.areaState}
                     DayData={selectedDay}
                     AddDestination={handleData}
                     ClickDestination={destination}

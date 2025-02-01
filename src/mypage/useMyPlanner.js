@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useMyPlanner = () => {
+const useMyPlanner = (detailProfile) => {
   const [planners, setPlanners] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -32,8 +32,10 @@ const useMyPlanner = () => {
   
 
   useEffect(() => {
-    fetchPlanners();
-  }, []);
+    if(!detailProfile){
+      fetchPlanners();
+    }
+  }, [detailProfile]);
 
   return { planners, loading, error };
 };

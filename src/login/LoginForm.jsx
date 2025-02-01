@@ -1,4 +1,5 @@
 import { useState } from "react";
+import {useNavigate, useLocation} from "react-router-dom";
 import axios from "axios";
 // import "./LoginForm.scss";
 import "./scss/LoginForm.scss"
@@ -10,6 +11,8 @@ const LoginForm = () => {
     rememberMe: false,
   });
   const [error, setError] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   //입력 값 변경 처리
   const handleChange = (e) => {
@@ -38,6 +41,7 @@ const LoginForm = () => {
     window.location.href = " http://localhost:9000/oauth2/authorization/instagram "
   }
 
+  const redirectPath = new URLSearchParams(location.search).get("redirect") || "/";
 
   //로그인 요청
   const handleSubmit = async (e) => {
@@ -59,7 +63,11 @@ const LoginForm = () => {
       localStorage.setItem("userid",formData.userid); //로컬 스토리지에 userid 저장
       //로그인 성공 시 처리
       alert("로그인 성공 !");
-      window.location.href = "/";
+      const backupTravelData = sessionStorage.getItem("travelData"); //세션스토리지에 있는 도시정보 가져오기
+      if(backupTravelData) {
+        navigate("/makePlanner");
+      }
+      navigate("/");
 
     } catch (err) {
       console.log("로그인 실패,", err);

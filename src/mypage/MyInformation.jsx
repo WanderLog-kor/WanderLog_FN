@@ -9,7 +9,7 @@ import Edit from "../images/edit.png";
 import Setting from "../images/settings.png";
 import { previousMonday } from "date-fns";
 
-const MyInformation = () => {
+const MyInformation = ({detailProfile,setDetailProfile}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
@@ -20,7 +20,7 @@ const MyInformation = () => {
   console.log(loginData);
 
   // 비밀번호 필드 활성화 상태 추가
-  const [detailProfile, setDetailProfile] = useState(false); //상세정보 보기 상태변수
+  // const [detailProfile, setDetailProfile] = useState(false); //상세정보 보기 상태변수
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
   const handleOpenPasswordModal = () => {
@@ -575,7 +575,7 @@ const MyInformation = () => {
               <div className="backAndSaveBtn">
                 <button
                   onClick={() => {
-                    setDetailProfile(false);
+                    setDetailProfile(false); 
                   }}
                   className="btn btn-secondary"
                 >
