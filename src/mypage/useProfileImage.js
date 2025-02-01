@@ -1,7 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import axios from "axios";
 
-const useProfileImage = (formData, setFormData, userData) => {
+const MAX_FILE_SIZE = 5 * 1024 * 1024; //이미지파일 크기제한용 5MB
+
+const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
   if (typeof setFormData !== "function") {
     throw new Error("setFormData는 반드시 함수여야 합니다.");
   }
@@ -18,12 +20,18 @@ const useProfileImage = (formData, setFormData, userData) => {
     }
   }, [userData]);
 
+
+
   const fileInputRef = useRef(null);
 
-  const handleImageUpload = ()=> (
-    async (file) => {
+  const handleImageUpload = async (file)=> {
       if (!file) return;
 
+    if(file.size > MAX_FILE_SIZE){
+      alert("파일 용량이 큽니다. 5MB 이하의 이미지를 선택해주세요.");
+      return ;
+    }
+    console.log("핸들업로그함수");
       const formData = new FormData();
       formData.append("file", file);
 
@@ -41,28 +49,41 @@ const useProfileImage = (formData, setFormData, userData) => {
             ...prev,
             profileImage: `/upload/profile/${file.name}`,
           }));
+
+          if(typeof setIsSaveEnabled === "function"){
+            setIsSaveEnabled(true); console.log("저장버튼 활성화")
+          }
+
         } else {
           console.error("이미지 업로드 실패:", response.data);
         }
       } catch (error) {
         console.error("이미지 업로드 중 오류 발생:", error.message);
       }
-    },
-    [setFormData]
-  );
+    };
 
-  const handleImagePreview = useCallback((file) => {
+  const handleImagePreview = useCallback((file) => { console.log("핸들프리뷰함수");
     if (file) {
       const reader = new FileReader();
-      reader.onload = (e) => setImagePreview(e.target.result);
+      reader.onload = (e) => {
+        setImagePreview(e.target.result); 
+        if(typeof setIsSaveEnabled === "function"){
+          setIsSaveEnabled(true);
+        }};
       reader.readAsDataURL(file);
     }
-  }, []);
+  }, [setIsSaveEnabled]);
 
   const handleFileChange = useCallback(
     (e) => {
-      const file = e.target.files[0];
+      const file = e.target.files[0]; 
       if (file) {
+        console.log("핸들파일체인지",file);
+
+        if(file.size > MAX_FILE_SIZE){
+          alert("파일 용량이 큽니다. 5MB 이하의 이미지를 선택해주세요");
+          return ;
+        }
         handleImagePreview(file);
         handleImageUpload(file);
       }

@@ -9,6 +9,11 @@ const PasswordResetPage = ()=>{
     const [confirmPassword,setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
     const [error,setError] = useState("");
+    const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const userid = searchParams.get("userid")
+    const handleHome = () => window.location.href = "/" ;
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
@@ -19,7 +24,7 @@ const PasswordResetPage = ()=>{
         setMessage("");
         setError("");
         try{
-            const token = localStorage.getItem("resetToken");
+            const token = localStorage.getItem("resetToken")?.trim();
             await axios.post("http://localhost:9000/user/reset-password",
             { newPassword }, {
                 headers : {Authorization : `Bearer ${token}`},
@@ -32,11 +37,14 @@ const PasswordResetPage = ()=>{
         }catch(err){
             setError("비밀번호 변경에 실패했습니다. 링크가 유효하지 않거나 문제가 발생했습니다");
             localStorage.removeItem("resetToken"); //비밀번호 변경 완료하면 로컬 스토리지 삭제
+            alert("이메일 인증부터 다시 해주세요");
+            navigate(`/email-auth?userid=${userid}`);
         }
     };
 
     return (
         <div className="password-reset-page">
+            <div className="reset-header" onClick={handleHome}>WanderLog</div>
             <h2 className="password-reset-title">비밀번호 변경</h2>
                 <form onSubmit={handleSubmit} className="password-reset-form">
                     <label htmlFor="newPassword">새 비밀번호</label>

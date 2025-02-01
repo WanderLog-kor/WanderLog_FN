@@ -5,17 +5,22 @@ import "./SideBar.scss";
 import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../../images/logoImage.png";
 import NoImage from "../../images/noImage.png";
-import Search from "../../images/search.png"
-import Delete from "../../images/delete.png"
+import Search from "../../images/search.png";
+import Delete from "../../images/delete.png";
 import Modal from "./Modal";
+import { useLoginStatus } from "../../auth/PrivateRoute";
 
 const SideBar = (props) => {
   // console.log("sibebarSelectedCity",props);
   //주석 처리한 부분은 삭제 예정 코드.
-
+  const { loginStatus } = useLoginStatus();
   const [isModalOpen, setIsModalOpen] = useState(false); //모달 오픈 상태
-  const [plannerTitle, setPlannerTitle] = useState(""); //제목
-  const [plannerDescription, setPlannerDescription] = useState(""); //내용
+  const [plannerTitle, setPlannerTitle] = useState(
+    `${props.loginData.username}님의 여행계획`
+  ); //제목
+  const [plannerDescription, setPlannerDescription] = useState(
+    `${props.loginData.username} 님이 계획하신 여행계획입니다.`
+  ); //내용
   const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
   const [isPlannerVisible, setIsPlannerVisible] = useState(true);
   const [cardAdded, setCardAdded] = useState(false);
@@ -83,9 +88,13 @@ const SideBar = (props) => {
     props.DayState(data);
   };
 
-   // typeState가 변경될 때 handleSearch 실행
-   useEffect(() => {
-    if (typeState === "식당" || typeState === "숙소" || typeState === "관광지") {
+  // typeState가 변경될 때 handleSearch 실행
+  useEffect(() => {
+    if (
+      typeState === "식당" ||
+      typeState === "숙소" ||
+      typeState === "관광지"
+    ) {
       handleSearch();
     }
   }, [typeState]);
@@ -208,67 +217,80 @@ const SideBar = (props) => {
     props.DeleteAllDestination();
     setAddedItemsByDay({});
   };
+
   // DB에 플래너 추가
   const addPlanner = async () => {
     if (!listState) {
       alert("이전 단계를 완료하세요.");
-    } else {
-      if (props.DestinationData.length === 0) {
-        alert("경로를 지정해주세요.");
-      } else {
-        if (plannerID == 0) {
-          await axios
-            .post(
-              "http://localhost:9000/planner/addPlanner",
-              {
-                areaName: props.areaName,
-                isPublic: isPublic,
-                destination: props.DestinationData,
-                day: day,
-                startDate: props.startDate,
-                endDate: props.endDate,
-                userid: props.loginData.userid,
-                title: plannerTitle,
-                description: plannerDescription,
-              },
-              { "Content-Type": "application/json" }
-            )
-            .then((resp) => {
-              console.log(resp);
-              alert("플래너를 성공적으로 작성하였습니다!");
-              closeModal(); //모달 닫기
-              navigate("/");
-            })
-            .catch((err) => {
-              console.log(err);
-              alert("플래너를 작성하지 못했습니다.");
-            });
-        } else {
-          await axios
-            .post(
-              "http://localhost:9000/planner/updatePlanner",
-              {
-                areaName: props.areaName,
-                isPublic: isPublic,
-                destination: props.DestinationData,
-                day: day,
-                startDate : props.startDate,
-                endDate: props.endDate,
-                userid: props.userid,
-                plannerid: plannerID,
-              },
-              { "Content-Type": "application/json" }
-            )
-            .then((resp) => {
-              alert("플래너를 성공적으로 수정하였습니다!");
-              navigate("/planner/board");
-            })
-            .catch((err) => {
-              console.log(err);
-              alert("플래너를 수정하지 못했습니다.");
-            });
-        }
+      return;
+    }
+
+    if (props.DestinationData.length === 0) {
+      alert("경로를 지정해주세요.");
+      return;
+    }
+
+    const plannerDays = new Set(props.DestinationData.map((item) => item.day));
+
+    for(let i=1; i <= day; i++){
+      if(!plannerDays.has(i)) {
+        alert(`${i}일차에 최소 한 개 이상의 여행 장소를 추가해주세요`);
+        return ;
       }
+    }
+
+    if (plannerID === 0) {
+      await axios
+        .post(
+          "http://localhost:9000/planner/addPlanner",
+          {
+            areaName: props.areaName,
+            isPublic: isPublic,
+            destination: props.DestinationData,
+            day: day,
+            startDate: props.startDate,
+            endDate: props.endDate,
+            userid: props.loginData.userid,
+            title: plannerTitle,
+            description: plannerDescription,
+          },
+          { "Content-Type": "application/json" }
+        )
+        .then((resp) => {
+          console.log(resp);
+          alert("플래너를 성공적으로 작성하였습니다!");
+          closeModal(); //모달 닫기
+          navigate("/");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("플래너를 작성하지 못했습니다.");
+        });
+    } else {
+      await axios
+        .post(
+          "http://localhost:9000/planner/updatePlanner",
+          {
+            areaName: props.areaName,
+            isPublic: isPublic,
+            destination: props.DestinationData,
+            day: day,
+            startDate: props.startDate,
+            endDate: props.endDate,
+            userid: props.loginData.userid,
+            title: plannerTitle,
+            description: plannerDescription,
+          },
+          { "Content-Type": "application/json" }
+        )
+        .then((resp) => {
+          alert("플래너를 성공적으로 수정하였습니다!");
+          navigate("/planner/board");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("플래너를 수정하지 못했습니다.");
+        });
     }
   };
 
@@ -407,7 +429,7 @@ const SideBar = (props) => {
             <h2 className="sidebar-logo">WanderLog</h2>
           </div>
           <div
-             className={`optionButton ${typeState === "식당" ? "active" : ""}`}
+            className={`optionButton ${typeState === "식당" ? "active" : ""}`}
             onClick={() => {
               setTypeState("식당");
               // handleSearch();
@@ -440,32 +462,35 @@ const SideBar = (props) => {
             className={`optionButton planCommit ${
               typeState === "관광지" ? "highlight" : ""
             }`}
-            onClick={()=>{openModal();}
-            }
+            onClick={() => {
+              openModal();
+            }}
           >
             <span>저장</span>
           </div>
         </div>
 
         {/* 맨 마지막에 생성되는 일정생성 모달창 */}
-            <Modal
-              isOpen={isModalOpen}
-              onClose={closeModal}
-              plannerTitle={plannerTitle}
-              setPlannerTitle={setPlannerTitle}
-              plannerDescription={plannerDescription}
-              setPlannerDescription={setPlannerDescription}
-              isPublic={isPublic}
-              setIsPublic={setIsPublic}
-              onSave={addPlanner}
-            >
-            </Modal>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          plannerTitle={plannerTitle}
+          setPlannerTitle={setPlannerTitle}
+          plannerDescription={plannerDescription}
+          setPlannerDescription={setPlannerDescription}
+          isPublic={isPublic}
+          setIsPublic={setIsPublic}
+          onSave={addPlanner}
+        ></Modal>
 
         {
           <div className="question">
             {/* <p>SEARCH</p> */}
             <h2 className="question-h2">{props.areaName}</h2>
-            <div className="question-date">{new Date(props.startDate).toLocaleDateString()} - {new Date(props.endDate).toLocaleDateString()}</div>
+            <div className="question-date">
+              {new Date(props.startDate).toLocaleDateString()} -{" "}
+              {new Date(props.endDate).toLocaleDateString()}
+            </div>
             <div className="question-search">
               <input
                 type="text"
@@ -475,7 +500,9 @@ const SideBar = (props) => {
                   setWord(e.target.value);
                 }}
               />
-              <span className="question-search-button" onClick={handleSearch}><img src={Search} alt=""/></span>
+              <span className="question-search-button" onClick={handleSearch}>
+                <img src={Search} alt="" />
+              </span>
             </div>
             {/* {totalPages > 0 && (  //페이지 총 개수 나옴
               <span className="total-page">
@@ -532,16 +559,12 @@ const SideBar = (props) => {
                         className="search-card"
                         onClick={() => {
                           props.ClickSearch(el);
-                          console.log(el.image,el);
+                          console.log(el.image, el);
                         }}
                       >
                         <div className="card-image">
                           <img
-                            src={
-                              el && el.image !== ""
-                                ? el.image
-                                : NoImage
-                            }
+                            src={el && el.image !== "" ? el.image : NoImage}
                             alt=""
                           />
                         </div>
@@ -557,7 +580,8 @@ const SideBar = (props) => {
                           </div> */}
                         </div>
                         <div className="card-add">
-                          <button className={isAdded ? "cardAdded" : ""}
+                          <button
+                            className={isAdded ? "cardAdded" : ""}
                             onClick={(event) => {
                               event.stopPropagation();
                               if (isAdded) {
@@ -598,7 +622,7 @@ const SideBar = (props) => {
                         <div className="card-image">
                           <img
                             src={
-                              el && el.image !=="No image found"
+                              el && el.image !== "No image found"
                                 ? el.image
                                 : NoImage
                             }
@@ -675,7 +699,7 @@ const SideBar = (props) => {
           {listState && (
             <>
               <div className="content-planner">
-              <h2>{props.loginData.username} 님의 여행계획</h2>
+                <h2>{props.loginData.username} 님의 여행계획</h2>
                 <div className="plannerMenu">
                   <p>{`${selectedDay} 일차 계획`}</p>
                   <button
@@ -695,7 +719,9 @@ const SideBar = (props) => {
                         nthDay.push(
                           <div
                             key={i}
-                            className={`optionButton ${selectedDay === i ? "selectedDay" : ""}`}
+                            className={`optionButton ${
+                              selectedDay === i ? "selectedDay" : ""
+                            }`}
                             onClick={() => {
                               handleSelect(i);
                             }}
@@ -724,16 +750,14 @@ const SideBar = (props) => {
                                 }}
                               >
                                 <div className="card-image">
-                                  {destination &&
-                                    destination.data.image == null ||
-                                    destination.data.image ==
-                                      "" && (
+                                  {(destination &&
+                                    destination.data.image == null) ||
+                                    (destination.data.image == "" && (
                                       <img src={NoImage} alt="없음" />
-                                    )}
+                                    ))}
                                   {destination &&
                                     destination.data.image != null &&
-                                    destination.data.image !=
-                                      "" && (
+                                    destination.data.image != "" && (
                                       <img
                                         src={destination.data.image}
                                         alt=""
@@ -752,7 +776,8 @@ const SideBar = (props) => {
                                       {destination && destination.data.address}
                                     </div>
                                     <div className="card-button">
-                                      <button className="card-deleteBtn"
+                                      <button
+                                        className="card-deleteBtn"
                                         onClick={(event) => {
                                           event.stopPropagation();
                                           handleSearchRemove(
