@@ -4,6 +4,7 @@ import useMyPlanner from "./useMyPlanner";
 // import useLikePlanner from "./useLikePlanner";
 import { useNavigate } from "react-router-dom";
 import "./Planners.scss";
+import Image from "../images/main.jpg";
 
 const Planners = ({ detailProfile }) => {
   const [loading, setLoading] = useState(true);
@@ -12,6 +13,7 @@ const Planners = ({ detailProfile }) => {
   // const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
   // const [destinations, setDestinations] = useState([]);
   const navigate = useNavigate();
+  const [myPlanner,setMyPlanner] = useState(true);
 
   // 사용자 데이터 가져오기
   useEffect(() => {
@@ -47,7 +49,6 @@ const Planners = ({ detailProfile }) => {
     fetchUserData();
   }, []);
 
-
   // 내가 만든 플래너와 좋아요한 플래너 데이터 가져오기
   const {
     planners,
@@ -73,6 +74,10 @@ const Planners = ({ detailProfile }) => {
       state: { plannerItem },
     });
   };
+
+  const handlePlannerStatus = (status) =>{
+    setMyPlanner(status)
+  }
 
   // const handlelikePlannerClick = (plannerID) => {
   //   if (!likedPlanners || likedPlanners.length === 0) {
@@ -100,27 +105,46 @@ const Planners = ({ detailProfile }) => {
       {!detailProfile && (
         <div className={`planner-container`}>
           <div className="my-planner-container">
-            {planners?.length === 0 ? (
-              <p>작성된 플래너가 없습니다.</p>
-            ) : (
-              <ul>
-                {planners?.map((planner, index) => (
-                  <li
-                    key={planner.plannerID || index}
-                    className="planner-item"
-                    onClick={() => handlePlannerClick(planner.plannerID)}
-                  >
-                    <h4>{planner.plannerTitle}</h4>
-                    <p>PlannerID: {planner.plannerID}</p>
-                    <p>지역: {planner.area}</p>
-                    <p>여행 일수: {planner.day}일</p>
-                    <p>설명: {planner.description}</p>
-                    <p>생성 날짜: {planner.createAt}</p>
-                    <p>수정 날짜: {planner.updateAt}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <div className="planner-option">
+              <div className={`planner-option-btn ${myPlanner ? "active" : ""}`} onClick={() => handlePlannerStatus(true)}>
+                나의 일정{planners?.length}
+              </div>
+              <div className={`planner-option-btn ${!myPlanner ? "active" : ""}`} onClick={() => handlePlannerStatus(false)}>나의 관심목록</div>
+            </div>
+            <div className="planner-titletag">나의 일정</div>
+
+            <div className="planner-list">
+              {myPlanner ? (
+                planners?.length === 0 ? (
+                <p>작성된 플래너가 없습니다.</p>
+              ) : (
+                <ul>
+                  {planners?.map((planner, index) => (
+                    <li
+                      key={planner.plannerID || index}
+                      className="planner-item"
+                      onClick={() => handlePlannerClick(planner.plannerID)}
+                    >
+                      <div className="planner-thumbnail">
+                        <img src={planner.destinations?.[0]?.image || Image} alt="없으" />
+                      </div>
+                      <div className="planner-desription">
+                        <p>지역: {planner.area}</p>
+                        <h2>{planner.plannerTitle}</h2>
+                        <p>여행 일수: {planner.day}일</p>
+                        <p>설명: {planner.description}</p>
+                        <p>생성 날짜: {planner.createAt}</p>
+                        <p>수정 날짜: {planner.updateAt}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )
+              ): (
+                <h2>좋아요 부분입니당</h2>
+              )}
+              
+            </div>
           </div>
 
           {/* <div>

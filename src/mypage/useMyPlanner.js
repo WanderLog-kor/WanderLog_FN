@@ -17,8 +17,10 @@ const useMyPlanner = (detailProfile) => {
           withCredentials: true,
         }
       );
-  
-      console.log("플래너 데이터 가져오기 성공:", response.data);
+  for(let i=0;i<response.data.length;i++){
+    console.log("반복",response.data[i]);
+  }
+  console.log(response.data[1].destinations[0].image);
       setPlanners(response.data);
       setError(null); // 에러 초기화
     } catch (err) {
