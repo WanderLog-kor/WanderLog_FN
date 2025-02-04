@@ -1,5 +1,6 @@
 import { useState } from "react";
-import {useNavigate, useLocation} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import HeaderLogo from '../components/logoImage/logo2.png'
 import axios from "axios";
 // import "./LoginForm.scss";
 import "./scss/LoginForm.scss"
@@ -60,14 +61,15 @@ const LoginForm = () => {
         }
       );
       console.log("로그인 성공:", response.data);
-      localStorage.setItem("userid",formData.userid); //로컬 스토리지에 userid 저장
+      localStorage.setItem("userid", formData.userid); //로컬 스토리지에 userid 저장
       //로그인 성공 시 처리
       alert("로그인 성공 !");
       const backupTravelData = sessionStorage.getItem("travelData"); //세션스토리지에 있는 도시정보 가져오기
-      if(backupTravelData) {
+      if (backupTravelData) {
         navigate(redirectPath);
-      }else{
+      } else {
         navigate("/");
+
       }
 
     } catch (err) {
@@ -77,79 +79,87 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="login-form_wrapper">
-      <div className="login-form_logo" onClick={()=>{window.location.href="/"}}>WanderLog</div>
-      <div className="login-form_login">
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="userid">유저 ID:</label>
-          <input
-            type="text"
-            id="userid"
-            name="userid"
-            value={formData.userid}
-            onChange={handleChange}
-            required
-          />
-          <div className="login-form_checkbox">
-            <label>ID 저장
-              <input
-                type="checkbox"
-                name="rememberMe"
-                checked={formData.rememberMe}
-                onChange={handleChange}
-              /></label>
+    <div className="login-page-wrapper">
+      <header className="login-page-header">
+        <div className="login-page-header-content">
+          <Link to="/"><img src={HeaderLogo}></img></Link>
+        </div>
+
+      </header>
+      <div className="login-form-content">
+        <div className="login-form_logo" onClick={() => { window.location.href = "/" }}>WanderLog</div>
+        <div className="login-form_login">
+          <form onSubmit={handleSubmit}>
+            <label htmlFor="userid">유저 ID:</label>
+            <input
+              type="text"
+              id="userid"
+              name="userid"
+              value={formData.userid}
+              onChange={handleChange}
+              required
+            />
+            <div className="login-form_checkbox">
+              <label>ID 저장
+                <input
+                  type="checkbox"
+                  name="rememberMe"
+                  checked={formData.rememberMe}
+                  onChange={handleChange}
+                /></label>
+            </div>
+            <label htmlFor="password">PASSWORD:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <div className="login-form_forgot-password">
+              <a href="/forgot">비밀번호를 잊으셨나요?</a>
+            </div>
+            {error && <p className="login-form_error-message">{error}</p>}
+            <button className="login-form_loginButton" type="submit">
+              로그인
+            </button>
+          </form>
+        </div>
+        <div className="login-form_join">
+          아직 회원이 아니세요? <a href="/user/join">회원가입</a>
+        </div>
+        <hr />
+        <div className="login-form_oauth2">
+          <div style={{ textAlign: "center" }}>SNS 간편 로그인</div>
+          <div className="login-form_oauth2-buttons">
+            <ul>
+              <li>
+                <button className="login-form_oauth2-button" onClick={kakaoLogin}>
+                  <img src="/images/kakaobutton.png" alt="카카오로그인" />
+                </button>
+              </li>
+              <li>
+                <button
+                  className="login-form_oauth2-button" onClick={naverLogin}>
+                  <img src="/images/naverbutton.png" alt="네이버 로그인" />
+                </button>
+              </li>
+              <li>
+                <button className="login-form_oauth2-button" onClick={googleLogin}>
+                  <img src="/images/googlebutton.png" alt="구글 로그인" />
+                </button>
+              </li>
+              <li>
+                <button className="login-form_oauth2-button" onClick={instaLogin}>
+                  <img src="/images/instabutton.png" alt="인스타 로그인" />
+                </button>
+              </li>
+            </ul>
           </div>
-          <label htmlFor="password">PASSWORD:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          <div className="login-form_forgot-password">
-            <a href="/forgot">비밀번호를 잊으셨나요?</a>
-          </div>
-          {error && <p className="login-form_error-message">{error}</p>}
-          <button className="login-form_loginButton" type="submit">
-            로그인
-          </button>
-        </form>
-      </div>
-      <div className="login-form_join">
-        아직 회원이 아니세요? <a href="/user/join">회원가입</a>
-      </div>
-      <hr />
-      <div className="login-form_oauth2">
-        <div style={{ textAlign: "center" }}>SNS 간편 로그인</div>
-        <div className="login-form_oauth2-buttons">
-          <ul>
-            <li>
-              <button className="login-form_oauth2-button" onClick={kakaoLogin}>
-                <img src="/images/kakaobutton.png" alt="카카오로그인" />
-              </button>
-            </li>
-            <li>
-              <button
-                className="login-form_oauth2-button" onClick={naverLogin}>
-                <img src="/images/naverbutton.png" alt="네이버 로그인" />
-              </button>
-            </li>
-            <li>
-              <button className="login-form_oauth2-button" onClick={googleLogin}>
-                <img src="/images/googlebutton.png" alt="구글 로그인" />
-              </button>
-            </li>
-            <li>
-              <button className="login-form_oauth2-button" onClick={instaLogin}>
-                <img src="/images/instabutton.png" alt="인스타 로그인" />
-              </button>
-            </li>
-          </ul>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

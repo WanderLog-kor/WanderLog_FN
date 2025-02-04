@@ -30,7 +30,13 @@
 }
 
 
-
+.tourist-info-page {
+    position: relative;
+    .header-wrapper {
+        position: static;
+        margin-bottom: 20px;
+    }
+}
 
 // 관광지 자세히 보기 페이지 전체
 .touristInfo-wrapper {
