@@ -25,7 +25,12 @@ const MakePlanner = ({}) => {
     const [destination, setDestination] = useState();
     const [searchDestination, setSearchDestination] = useState();
 
-    const [travelData , setTravelData] = useState(location.state || {});
+    const updatePlannerData = location.state?.updatePlannerData || {};
+    const newPlannerData = location.state || {};
+
+    const [travelData , setTravelData] = useState(
+        Object.keys(updatePlannerData).length > 0 ? updatePlannerData : newPlannerData
+    );
     
 
     // const handleOption = (data) => { setOptionState(data); }
@@ -105,6 +110,7 @@ const MakePlanner = ({}) => {
                     areaCode={travelData.areaCode}
                     loginData={loginData}
                     // AreaCoordinate={handleArea}
+                    plannerid={updateData?.plannerid}
                     DayState={handleDay}
                     DestinationData={plannerData}
                     DeleteDestination={handleDeleteDest}

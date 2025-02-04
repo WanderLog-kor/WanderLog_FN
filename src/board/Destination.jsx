@@ -265,19 +265,18 @@ const Destination = () => {
     }
 
 
-
     const handleUpdatePlanner = () => {
         const updateData = {
+            areaName: plannerItem.area,
             plannerid: plannerItem.plannerID,
             title: plannerItem.plannerTitle,
-            areaName: plannerItem.area,
             description: plannerItem.description,
             isPublic: plannerItem.public,
             day: plannerItem.day,
             userid: plannerItem.userId,
             destinations: destinations,
         }
-        navigate('/makePlanner', { state: { updateData } });
+        navigate('/makePlanner', { state: {updatePlannerData :updateData } });
     }
 
     return (

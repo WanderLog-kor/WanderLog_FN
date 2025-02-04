@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import useMyPlanner from "./useMyPlanner";
-// import useLikePlanner from "./useLikePlanner";
+import useLikePlanner from "./useLikePlanner";
 import { useNavigate } from "react-router-dom";
 import "./Planners.scss";
+import LikedPlannerList from "./components/LikedPlannerList";
 import Image from "../images/main.jpg";
 
 const Planners = ({ detailProfile }) => {
@@ -14,6 +15,13 @@ const Planners = ({ detailProfile }) => {
   // const [destinations, setDestinations] = useState([]);
   const navigate = useNavigate();
   const [myPlanner,setMyPlanner] = useState(true);
+
+  // 내가 만든 플래너와 좋아요한 플래너 데이터 가져오기
+  const {planners} = useMyPlanner();
+
+  //좋아요 한 요소 불러오기
+  const { likedPlanners } = useLikePlanner(userData?.userid);
+console.log("라이크입니다",likedPlanners);
 
   // 사용자 데이터 가져오기
   useEffect(() => {
@@ -49,14 +57,6 @@ const Planners = ({ detailProfile }) => {
     fetchUserData();
   }, []);
 
-  // 내가 만든 플래너와 좋아요한 플래너 데이터 가져오기
-  const {
-    planners,
-    loading: plannersLoading,
-    error: plannersError,
-  } = useMyPlanner();
-  // const { likedPlanners, loading: likeLoading, error: likeError } = useLikePlanner(userData?.userid);
-
   // 플래너 클릭 핸들러
   const handlePlannerClick = (plannerID) => {
     if (!planners || planners.length === 0) {
@@ -75,9 +75,15 @@ const Planners = ({ detailProfile }) => {
     });
   };
 
-  const handlePlannerStatus = (status) =>{
-    setMyPlanner(status)
+  const handleClickMyPlanner = () =>{
+    setMyPlanner(true);
+  };
+
+  const handleClickLikePlanner = () =>{
+    setMyPlanner(false);
+
   }
+
 
   // const handlelikePlannerClick = (plannerID) => {
   //   if (!likedPlanners || likedPlanners.length === 0) {
@@ -106,12 +112,12 @@ const Planners = ({ detailProfile }) => {
         <div className={`planner-container`}>
           <div className="my-planner-container">
             <div className="planner-option">
-              <div className={`planner-option-btn ${myPlanner ? "active" : ""}`} onClick={() => handlePlannerStatus(true)}>
+              <div className={`planner-option-btn ${myPlanner ? "active" : ""}`} onClick={() => handleClickMyPlanner()}>
                 나의 일정{planners?.length}
               </div>
-              <div className={`planner-option-btn ${!myPlanner ? "active" : ""}`} onClick={() => handlePlannerStatus(false)}>나의 관심목록</div>
+              <div className={`planner-option-btn ${!myPlanner ? "active" : ""}`} onClick={()=> handleClickLikePlanner()} >나의 관심목록</div>
             </div>
-            <div className="planner-titletag">나의 일정</div>
+            <div className="planner-titletag">{!myPlanner ? "나의 관심목록" : "나의 일정"}</div>
 
             <div className="planner-list">
               {myPlanner ? (
@@ -141,37 +147,10 @@ const Planners = ({ detailProfile }) => {
                 </ul>
               )
               ): (
-                <h2>좋아요 부분입니당</h2>
-              )}
-              
+                <LikedPlannerList likedPlanners={likedPlanners} handlePlannerClick={handlePlannerClick} userid={userData?.userid}/> 
+              )} 
             </div>
           </div>
-
-          {/* <div>
-      <h2>좋아요한 플래너 목록</h2>
-      {likeLoading ? (
-        <p>좋아요한 플래너를 불러오는 중...</p>
-      ) : likedPlanners.length === 0 ? (
-        <p>좋아요한 플래너가 없습니다.</p>
-      ) : (
-        <ul>
-          {likedPlanners.map((likedPlanners, index) => (
-            <li
-              key={likedPlanners.plannerID || index}
-              className="planner-item"
-              onClick={() => handlelikePlannerClick(likedPlanners.plannerID)}
-            >
-              <h4>{likedPlanners.plannerTitle}</h4>
-              <p>PlannerID: {likedPlanners.plannerID}</p>
-              <p>지역: {likedPlanners.area}</p>
-              <p>여행 일수: {likedPlanners.day}일</p>
-              <p>설명: {likedPlanners.description}</p>
-              <p>생성 날짜: {likedPlanners.createdAt}</p>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div> */}
         </div>
       )}
     </>

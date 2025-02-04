@@ -65,9 +65,10 @@ const LoginForm = () => {
       alert("로그인 성공 !");
       const backupTravelData = sessionStorage.getItem("travelData"); //세션스토리지에 있는 도시정보 가져오기
       if(backupTravelData) {
-        navigate("/makePlanner");
+        navigate(redirectPath);
+      }else{
+        navigate("/");
       }
-      navigate("/");
 
     } catch (err) {
       console.log("로그인 실패,", err);

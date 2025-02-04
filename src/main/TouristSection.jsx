@@ -56,6 +56,7 @@ const TouristSection = () => {
         })
             .then((response) => {
                 setTouristData(response.data.items.item || []);
+                console.log(response.data.items);
             })
             .catch((error) => {
                 console.error('Error fetching courses:', error);

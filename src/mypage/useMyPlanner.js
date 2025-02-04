@@ -20,7 +20,7 @@ const useMyPlanner = (detailProfile) => {
   for(let i=0;i<response.data.length;i++){
     console.log("반복",response.data[i]);
   }
-  console.log(response.data[1].destinations[0].image);
+  // console.log(response.data[1].destinations[0].image);
       setPlanners(response.data);
       setError(null); // 에러 초기화
     } catch (err) {
