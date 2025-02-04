@@ -180,7 +180,7 @@ const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab ë°
                 </ul>
             </div>
 
-            <div className="destination-content" style={{ 'padding-top': '20px' }}>
+            <div className="destination-details-content" style={{ 'padding-top': '20px' }}>
                 {destinations.length > 0 ? (
                     destinations.map((destination, index) => {
                         const isNewDay = index === 0 || destination.day !== destinations[index - 1]?.day;

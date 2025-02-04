@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useLocation, Link } from 'react-router-dom';
 import './TouristInfo.scss';
 import homepageIcon from '../images/homepageIcon.png'
-import favIcon from '../images/favIcon.png'
 import { Tooltip, OverlayTrigger } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DOMPurify from 'dompurify';
@@ -15,6 +14,8 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { EffectFade, Navigation, Pagination } from 'swiper/modules';
+import { useLoginStatus } from '../auth/PrivateRoute';
+import Sidebar from '../components/Sidebar';
 
 const details = [
     { key: 'infocenter', label: '문의 및 안내 :' },
@@ -36,6 +37,7 @@ const TouristInfo = () => {
     const [detailIntro, setDetailIntro] = useState('');
     const [photoUrls, setPhotoUrls] = useState([]);
     const mapContainer = useRef(null);
+    const { loginStatus } = useLoginStatus();
 
     const openMapDetail = (lat, lng) => {
         const kakaoMapUrl = `https://map.kakao.com/link/map/${lat},${lng}`;
@@ -92,122 +94,164 @@ const TouristInfo = () => {
     }, [detail]);
 
     return (
-        <div className="touristInfo-wrapper">
-            {/* content 부분 */}
-            {detail.title && (
-                <div className="desc-content">
-                    <span className="travelcourse-aBtn">
-                        <a href="/tourist">
-                            <span className="ico"></span>
-                            관광지
-                        </a>
-                    </span>
-                    <h2 className="desc__title">{detail.title}</h2>
-                    <div className="desc__address-container">
-                        <span>{detail.addr1}</span>
+        <>
+            <Sidebar />
+            <div className="tourist-info-page">
+                <header className="header-wrapper scrolled">
+                    <div className="header-content">
+                        <Link className="header-logo" to="/">
+                            <span className="logo-text">WanderLog</span>
+                        </Link>
+
+
+                        <div className="header-btns">
+
+                            {/* 로그인 여부에 따라 표시될 버튼 */}
+                            {!loginStatus ? (
+                                <>
+                                    <Link to="/user/login">
+                                        <button className="login-btn">로그인</button>
+                                    </Link>
+                                    <Link to="/user/join">
+                                        <button className="join-btn">회원가입</button>
+                                    </Link>
+                                </>
+                            ) : (
+                                <>
+                                    <Link to="/user/mypage">
+                                        <button className="join-btn">마이페이지</button>
+                                    </Link>
+
+                                    <Link to="/user/logout">
+                                        <button className="logout-btn">로그아웃</button>
+                                    </Link>
+                                </>
+                            )}
+
+                        </div>
+
+
                     </div>
-                    <div className="desc__homepage">
-                        <OverlayTrigger
-                            placement="top"
-                            overlay={<Tooltip id="tooltip" className="custom-tooltip">즐겨찾기</Tooltip>}
-                        >
-                            <img className="favIcon" src={favIcon} />
-                        </OverlayTrigger>
-                        {detail.homepage && (
-                            <OverlayTrigger
-                                placement="top"
-                                overlay={<Tooltip id="tooltip" className="custom-tooltip">홈페이지</Tooltip>}
-                            >
-                                <a className="tohomepage-btn" href={detail.homepage.match(/href="(.*?)"/)?.[1]} target="_blank" rel="noopener noreferrer">
-                                    <img className="homepageIcon" src={homepageIcon} />
+
+                </header>
+                <div className="touristInfo-wrapper">
+                    {/* content 부분 */}
+                    {detail.title && (
+                        <div className="desc-content">
+                            <span className="travelcourse-aBtn">
+                                <a href="/tourist">
+                                    <span className="ico"></span>
+                                    관광지
                                 </a>
-                            </OverlayTrigger>
-                        )}
+                            </span>
+                            <h2 className="desc__title">{detail.title}</h2>
+                            <div className="desc__address-container">
+                                <span>{detail.addr1}</span>
+                            </div>
+                            <div className="desc__homepage">
+                                {/* <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip id="tooltip" className="custom-tooltip">즐겨찾기</Tooltip>}
+                                >
+                                    <img className="favIcon" src={favIcon} />
+                                </OverlayTrigger> */}
+                                {detail.homepage && (
+                                    <OverlayTrigger
+                                        placement="top"
+                                        overlay={<Tooltip id="tooltip" className="custom-tooltip">홈페이지</Tooltip>}
+                                    >
+                                        <a className="tohomepage-btn" href={detail.homepage.match(/href="(.*?)"/)?.[1]} target="_blank" rel="noopener noreferrer">
+                                            <img className="homepageIcon" src={homepageIcon} />
+                                        </a>
+                                    </OverlayTrigger>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 이미지 블록 */}
+                    <div className="image-block">
+                        <Swiper
+                            spaceBetween={30}
+                            effect={'fade'}
+                            navigation={true}
+                            pagination={{ clickable: true }}
+                            modules={[EffectFade, Navigation, Pagination]}
+                            className="mySwiper"
+                        >
+                            <SwiperSlide>
+                                <img src={detail.firstimage} alt="First Image" />
+                            </SwiperSlide>
+                            {photoUrls.length > 0 && photoUrls.map((url, index) => (
+                                <SwiperSlide key={index}>
+                                    <img src={url} alt={`Tourist Image ${index}`} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
                     </div>
-                </div>
-            )}
 
-            {/* 이미지 블록 */}
-            <div className="image-block">
-                <Swiper
-                    spaceBetween={30}
-                    effect={'fade'}
-                    navigation={true}
-                    pagination={{ clickable: true }}
-                    modules={[EffectFade, Navigation, Pagination]}
-                    className="mySwiper"
-                >
-                    <SwiperSlide>
-                        <img src={detail.firstimage} alt="First Image" />
-                    </SwiperSlide>
-                    {photoUrls.length > 0 && photoUrls.map((url, index) => (
-                        <SwiperSlide key={index}>
-                            <img src={url} alt={`Tourist Image ${index}`} />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-            </div>
+                    <div className="overview-content">
+                        <h2 className="overview__title">상세정보</h2>
+                        <p className="overview-detail">{detail.overview}</p>
+                    </div>
 
-            <div className="overview-content">
-                <h2 className="overview__title">상세정보</h2>
-                <p className="overview-detail">{detail.overview}</p>
-            </div>
+                    <div ref={mapContainer} style={{ width: '100%', height: '400px', margin: '20px 0', position: 'relative' }}>
+                        <button
+                            className="map-detail-btn"
+                            onClick={() => openMapDetail(detail.mapy, detail.mapx)}
+                            style={{
+                                position: 'absolute',
+                                bottom: '10px',
+                                right: '10px',
+                                backgroundColor: '#007bff',
+                                color: '#fff',
+                                padding: '10px 15px',
+                                borderRadius: '5px',
+                                border: 'none',
+                                cursor: 'pointer',
+                                zIndex: '20',
+                            }}
+                        >
+                            자세히 보기
+                        </button>
+                    </div>
 
-            <div ref={mapContainer} style={{ width: '100%', height: '400px', margin: '20px 0', position: 'relative' }}>
-                <button
-                    className="map-detail-btn"
-                    onClick={() => openMapDetail(detail.mapy, detail.mapx)}
-                    style={{
-                        position: 'absolute',
-                        bottom: '10px',
-                        right: '10px',
-                        backgroundColor: '#007bff',
-                        color: '#fff',
-                        padding: '10px 15px',
-                        borderRadius: '5px',
-                        border: 'none',
-                        cursor: 'pointer',
-                        zIndex: '20',
-                    }}
-                >
-                    자세히 보기
-                </button>
-            </div>
-
-            <div className="detail-content">
-                <ul className="detailInfo-ul">
-                    {detailInfo?.item?.map((subItem, index) => (
-                        <li key={index} className="detail_items">
-                            <strong className="detail_items-title">{subItem.infoname} : </strong>
-                            <span className="detail_items-text"
-                                dangerouslySetInnerHTML={{
-                                    __html: DOMPurify.sanitize(subItem.infotext),
-                                }}
-                            ></span>
-                        </li>
-                    ))}
-                </ul>
-
-                <ul className="detailInfo-ul">
-                    {details.map(({ key, label }) => {
-                        const value = detailIntro[key];
-                        return (
-                            value && value !== '없음' && (
-                                <li className="detail_items" key={key}>
-                                    <strong className="detail_items-title">{label}</strong>
-                                    <span
-                                        className="detail_items-text"
+                    <div className="detail-content">
+                        <ul className="detailInfo-ul">
+                            {detailInfo?.item?.map((subItem, index) => (
+                                <li key={index} className="detail_items">
+                                    <strong className="detail_items-title">{subItem.infoname} : </strong>
+                                    <span className="detail_items-text"
                                         dangerouslySetInnerHTML={{
-                                            __html: DOMPurify.sanitize(value),
+                                            __html: DOMPurify.sanitize(subItem.infotext),
                                         }}
                                     ></span>
                                 </li>
-                            )
-                        );
-                    })}
-                </ul>
+                            ))}
+                        </ul>
+
+                        <ul className="detailInfo-ul">
+                            {details.map(({ key, label }) => {
+                                const value = detailIntro[key];
+                                return (
+                                    value && value !== '없음' && (
+                                        <li className="detail_items" key={key}>
+                                            <strong className="detail_items-title">{label}</strong>
+                                            <span
+                                                className="detail_items-text"
+                                                dangerouslySetInnerHTML={{
+                                                    __html: DOMPurify.sanitize(value),
+                                                }}
+                                            ></span>
+                                        </li>
+                                    )
+                                );
+                            })}
+                        </ul>
+                    </div>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

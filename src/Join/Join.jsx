@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import './Join.scss'; // 스타일 파일
 import signUpImg from './signup.png';
 import { useCallback } from "react";
-
+import HeaderLogo from '../components/logoImage/logo2.png'
 const Join = () => {
     const [formData, setFormData] = useState({
         userid: "",
@@ -265,21 +266,21 @@ const Join = () => {
                 checkFormValidity(formData, { ...validationMessages, useridColor: "error" });
                 return;
             }
-    
+
             // 백엔드 중복 검사
             const response = await axios.post("http://localhost:9000/user/check-id", { userid });
             const available = response.data.available;
-    
+
             // 상태 업데이트 후 바로 버튼 활성화 상태 갱신
             setValidationMessages((prev) => ({
                 ...prev,
                 userid: available ? "사용 가능한 ID입니다." : "이미 사용 중인 ID입니다.",
-                useridColor: available ? "success" : "validation-error", 
+                useridColor: available ? "success" : "validation-error",
             }));
-    
+
             // 중복 검사 결과에 따라 버튼 활성화 상태 갱신
             checkFormValidity(formData, { ...validationMessages, useridColor: available ? "success" : "validation-error" });
-    
+
         } catch (error) {
             console.error("ID 중복 확인 중 오류 발생:", error);
             setValidationMessages((prev) => ({
@@ -287,11 +288,11 @@ const Join = () => {
                 userid: "서버 오류로 ID를 확인할 수 없습니다.",
                 useridColor: "validation-error", // 오류 색상 적용
             }));
-    
+
             checkFormValidity(formData, { ...validationMessages, useridColor: "validation-error" });
         }
     };
-    
+
 
 
     // email 형식 및 중복
@@ -528,216 +529,223 @@ const Join = () => {
 
 
     return (
-        <div className="join-content">
-            <img className="join-content__leftImg" src={signUpImg}></img>
+        <div className="join-page">
+            <header className="join-page-header">
+                <div className="join-page-header-content">
+                    <Link to="/"><img src={HeaderLogo}></img></Link>
+                </div>
 
-            <div className="join-form-container">
-                <form className="join-form" onSubmit={handleSubmit}>
-                    <h1>회원가입</h1>
+            </header>
+            <div className="join-content">
+                <img className="join-content__leftImg" src={signUpImg}></img>
 
-                    <div className="join-profile-content">
-                        {/* 프로필 */}
-                        <label
-                            htmlFor="imgupload"
-                            className="image-preview-container"
-                            onDrop={handleDrop}
-                            onDragOver={handleDragOver}
-                        >
-                            <img src={imagePreview} alt="미리보기" className="circle-preview" />
-                        </label>
+                <div className="join-form-container">
+                    <form className="join-form" onSubmit={handleSubmit}>
+                        <h1>회원가입</h1>
 
-                        {/* 드롭다운 버튼 */}
-                        <span id="dropdown-button" className="material-symbols-outlined" onClick={toggleDropdown}>
-                            add_a_photo
-                        </span>
+                        <div className="join-profile-content">
+                            {/* 프로필 */}
+                            <label
+                                htmlFor="imgupload"
+                                className="image-preview-container"
+                                onDrop={handleDrop}
+                                onDragOver={handleDragOver}
+                            >
+                                <img src={imagePreview} alt="미리보기" className="circle-preview" />
+                            </label>
 
-                        {isDropdownOpen && (
-                            <div className="dropdown-menu">
-                                <button
-                                    type="button"
-                                    onClick={() => { handleFileInputClick(); }}
-                                    className="dropdown-item" >
-                                    이미지 업로드
-                                </button>
-                                {formData.profileImage && (
+                            {/* 드롭다운 버튼 */}
+                            <span id="dropdown-button" className="material-symbols-outlined" onClick={toggleDropdown}>
+                                add_a_photo
+                            </span>
+
+                            {isDropdownOpen && (
+                                <div className="dropdown-menu">
                                     <button
                                         type="button"
-                                        onClick={() => { handleCancelImage(); setDropdownOpen(false); }}
+                                        onClick={() => { handleFileInputClick(); }}
                                         className="dropdown-item" >
-                                        기본 이미지로
+                                        이미지 업로드
                                     </button>
-                                )}
-                            </div>
-                        )}
-                        <input
-                            ref={fileInputRef}
-                            id="fileInput"
-                            type="file"
-                            accept="image/*"
-                            style={{ display: "none" }}
-                            onChange={(e) => handleImageUpload(e.target.files[0])}
-                        />
-                    </div>
-
-                    <div className="join-id-content">
-                        {/* 아이디 */}
-                        <label htmlFor="userId">아이디</label>
-                        <input
-
-                            type="text"
-                            name="userid"
-                            placeholder="아이디를 입력해주세요."
-                            id="userId"
-                            onChange={(e) => {
-                                handleChange(e);
-                                checkUserId(e.target.value);
-                            }}
-                        />
-                        {/* 아이디 유효성 */}
-                        {validationMessages.userid && (
-                            <div
-                                className={`validation-message ${validationMessages.useridColor === "success"
-                                    ? "validation-success"
-                                    : "validation-error"
-                                    }`}
-                            >
-                                {validationMessages.userid}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="join-username-content">
-                        {/* 이름 */}
-                        <label htmlFor="userName">이름</label>
-                        <input
-                            type="text"
-                            name="username"
-                            id="userName"
-                            placeholder="이름을 입력해주세요."
-                            onChange={handleChange}
-                        />
-                        {/* 이름 유효성 */}
-                        {validationMessages.username && (
-                            <div className={`validation-message ${validationMessages.usernameColor}`}>
-                                {validationMessages.username}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* 이메일 */}
-                    <div className={`join-email-content ${validationMessages.email ? 'has-message' : ''} ${validationMessages.username ? 'name-message' : ''}`}>
-                        <label htmlFor="email">이메일</label>
-                        <input
-                            type="email"
-                            name="email"
-                            id="email"
-                            placeholder="이메일을 입력해주세요."
-                            onChange={handleChange}
-                            onBlur={(e) => checkEmail(e.target.value)}
-                            disabled={isAuthCodeVerified} // 인증이 완료되면 이메일 입력칸 비활성화
-                        />
-                        <button
-                            className="emailbutton"
-                            type="button"
-                            onClick={() => {
-                                if (validationMessages.emailColor === "validation-success" && !isAuthCodeVerified) {
-                                    sendAuthCode();
-                                } else {
-                                    alert("올바른 이메일 형식을 입력하세요.");
-                                }
-                            }}
-                            disabled={isAuthCodeVerified} // 인증 완료된 경우 버튼 비활성화
-                        >
-                            {isAuthCodeVerified ? '인증 완료' : '인증 코드 받기'}
-                        </button>
-                        {/* 이메일 유효성 및 인증 완료 메시지 */}
-                        <div className={`validation-message ${isAuthCodeVerified ? 'validation-success' : validationMessages.emailColor}`}>
-                            {isAuthCodeVerified ? '인증이 완료되었습니다.' : validationMessages.email}
+                                    {formData.profileImage && (
+                                        <button
+                                            type="button"
+                                            onClick={() => { handleCancelImage(); setDropdownOpen(false); }}
+                                            className="dropdown-item" >
+                                            기본 이미지로
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                            <input
+                                ref={fileInputRef}
+                                id="fileInput"
+                                type="file"
+                                accept="image/*"
+                                style={{ display: "none" }}
+                                onChange={(e) => handleImageUpload(e.target.files[0])}
+                            />
                         </div>
 
-                    </div>
+                        <div className="join-id-content">
+                            {/* 아이디 */}
+                            <label htmlFor="userId">아이디</label>
+                            <input
 
-                    {/* 인증코드 */}
-                    {authCodeSent && validationMessages.emailColor === "validation-success" && !isAuthCodeVerified && (
-                        <div className={`auth-codebox ${validationMessages.authCode ? 'auth-message' : ''}`}>
-                            <div className="auth-code-wrapper">
-                                <input
-                                    type="text"
-                                    name="authCode"
-                                    className="auth-code"
-                                    placeholder="인증 코드를 입력해주세요"
-                                    onChange={handleChange}
-                                />
-                                <div id="timer">
-                                    {Math.floor(timer / 60)}:{timer % 60}
-                                </div>
-                                <button className="verifybutton" type="button" onClick={verifyAuthCode}>
-                                    인증 코드 확인
-                                </button>
-                            </div>
-                            {validationMessages.authCode && (
-                                <div className={`validation-message ${validationMessages.authCodeColor}`}>
-                                    {validationMessages.authCode}
+                                type="text"
+                                name="userid"
+                                placeholder="아이디를 입력해주세요."
+                                id="userId"
+                                onChange={(e) => {
+                                    handleChange(e);
+                                    checkUserId(e.target.value);
+                                }}
+                            />
+                            {/* 아이디 유효성 */}
+                            {validationMessages.userid && (
+                                <div
+                                    className={`validation-message ${validationMessages.useridColor === "success"
+                                        ? "validation-success"
+                                        : "validation-error"
+                                        }`}
+                                >
+                                    {validationMessages.userid}
                                 </div>
                             )}
                         </div>
-                    )}
 
+                        <div className="join-username-content">
+                            {/* 이름 */}
+                            <label htmlFor="userName">이름</label>
+                            <input
+                                type="text"
+                                name="username"
+                                id="userName"
+                                placeholder="이름을 입력해주세요."
+                                onChange={handleChange}
+                            />
+                            {/* 이름 유효성 */}
+                            {validationMessages.username && (
+                                <div className={`validation-message ${validationMessages.usernameColor}`}>
+                                    {validationMessages.username}
+                                </div>
+                            )}
+                        </div>
 
-                    {/* 비밀번호 */}
-                    <div className="join-password-content">
-                        <label htmlFor="password">비밀번호</label>
-                        <input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요." onChange={handleChange} />
-                        {validationMessages.password && (
-                            <div className={`validation-message ${validationMessages.passwordColor}`}>
-                                {validationMessages.password}
+                        {/* 이메일 */}
+                        <div className={`join-email-content ${validationMessages.email ? 'has-message' : ''} ${validationMessages.username ? 'name-message' : ''}`}>
+                            <label htmlFor="email">이메일</label>
+                            <input
+                                type="email"
+                                name="email"
+                                id="email"
+                                placeholder="이메일을 입력해주세요."
+                                onChange={handleChange}
+                                onBlur={(e) => checkEmail(e.target.value)}
+                                disabled={isAuthCodeVerified} // 인증이 완료되면 이메일 입력칸 비활성화
+                            />
+                            <button
+                                className="emailbutton"
+                                type="button"
+                                onClick={() => {
+                                    if (validationMessages.emailColor === "validation-success" && !isAuthCodeVerified) {
+                                        sendAuthCode();
+                                    } else {
+                                        alert("올바른 이메일 형식을 입력하세요.");
+                                    }
+                                }}
+                                disabled={isAuthCodeVerified} // 인증 완료된 경우 버튼 비활성화
+                            >
+                                {isAuthCodeVerified ? '인증 완료' : '인증 코드 받기'}
+                            </button>
+                            {/* 이메일 유효성 및 인증 완료 메시지 */}
+                            <div className={`validation-message ${isAuthCodeVerified ? 'validation-success' : validationMessages.emailColor}`}>
+                                {isAuthCodeVerified ? '인증이 완료되었습니다.' : validationMessages.email}
+                            </div>
+
+                        </div>
+
+                        {/* 인증코드 */}
+                        {authCodeSent && validationMessages.emailColor === "validation-success" && !isAuthCodeVerified && (
+                            <div className={`auth-codebox ${validationMessages.authCode ? 'auth-message' : ''}`}>
+                                <div className="auth-code-wrapper">
+                                    <input
+                                        type="text"
+                                        name="authCode"
+                                        className="auth-code"
+                                        placeholder="인증 코드를 입력해주세요"
+                                        onChange={handleChange}
+                                    />
+                                    <div id="timer">
+                                        {Math.floor(timer / 60)}:{timer % 60}
+                                    </div>
+                                    <button className="verifybutton" type="button" onClick={verifyAuthCode}>
+                                        인증 코드 확인
+                                    </button>
+                                </div>
+                                {validationMessages.authCode && (
+                                    <div className={`validation-message ${validationMessages.authCodeColor}`}>
+                                        {validationMessages.authCode}
+                                    </div>
+                                )}
                             </div>
                         )}
-                        {/* 비밀번호 확인 */}
-                        <input id="rePassword" type="password" name="repassword" placeholder="비밀번호를 다시 한번 입력해주세요." onChange={handleChange} />
-                        {validationMessages.repassword && (
-                            <div className={`validation-message ${validationMessages.repasswordColor}`}>
-                                {validationMessages.repassword}
-                            </div>
-                        )}
-                    </div>
-
-                    <div className="join-birth-content">
-                        {/* 생년월일 */}
-                        <label htmlFor="birth">생년월일</label>
-                        <input
-                            type="text"
-                            name="birth"
-                            id="birth"
-                            placeholder="생년월일(YYYYMMDD)을 입력해주세요"
-                            maxLength={8}
-                            onChange={handleChange}
-                        />
-                        {/* 생년월일 유효성 */}
-                        {validationMessages.birth && (
-                            <div className={`validation-message ${validationMessages.birthColor}`}>
-                                {validationMessages.birth}
-                            </div>
-                        )}
-                    </div>
 
 
-                    <div className="join-btn">
-                        {/* 회원가입 버튼 */}
-                        <button type="submit"
-                            disabled={!isFormValid} // 유효하지 않으면 비활성화
-                            className={isFormValid ? "active" : "inactive"} >
-                            회원가입
-                        </button>
-                    </div>
+                        {/* 비밀번호 */}
+                        <div className="join-password-content">
+                            <label htmlFor="password">비밀번호</label>
+                            <input id="password" type="password" name="password" placeholder="비밀번호를 입력해주세요." onChange={handleChange} />
+                            {validationMessages.password && (
+                                <div className={`validation-message ${validationMessages.passwordColor}`}>
+                                    {validationMessages.password}
+                                </div>
+                            )}
+                            {/* 비밀번호 확인 */}
+                            <input id="rePassword" type="password" name="repassword" placeholder="비밀번호를 다시 한번 입력해주세요." onChange={handleChange} />
+                            {validationMessages.repassword && (
+                                <div className={`validation-message ${validationMessages.repasswordColor}`}>
+                                    {validationMessages.repassword}
+                                </div>
+                            )}
+                        </div>
 
-                </form>
+                        <div className="join-birth-content">
+                            {/* 생년월일 */}
+                            <label htmlFor="birth">생년월일</label>
+                            <input
+                                type="text"
+                                name="birth"
+                                id="birth"
+                                placeholder="생년월일(YYYYMMDD)을 입력해주세요"
+                                maxLength={8}
+                                onChange={handleChange}
+                            />
+                            {/* 생년월일 유효성 */}
+                            {validationMessages.birth && (
+                                <div className={`validation-message ${validationMessages.birthColor}`}>
+                                    {validationMessages.birth}
+                                </div>
+                            )}
+                        </div>
+
+
+                        <div className="join-btn">
+                            {/* 회원가입 버튼 */}
+                            <button type="submit"
+                                disabled={!isFormValid} // 유효하지 않으면 비활성화
+                                className={isFormValid ? "active" : "inactive"} >
+                                회원가입
+                            </button>
+                        </div>
+
+                    </form>
+
+                </div >
 
             </div >
 
-        </div >
-
-
+        </div>
 
     );
 };

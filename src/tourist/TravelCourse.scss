@@ -196,14 +196,14 @@
 }
 
 .tourist-pagination button:hover {
-    background-color: #76c7db;
+    background-color: #333;
     color: white;
 }
 
 .tourist-pagination button.active {
-    background-color: #76c7db;
+    background-color: #333;
     color: white;
-    border-color: #76c7db;
+    border-color: #333;
 }
 
 /* 로딩 중 상태 */

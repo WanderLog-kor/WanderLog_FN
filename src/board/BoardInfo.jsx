@@ -5,7 +5,7 @@ import DestinationDetails from './DestinationDetails.jsx';
 // import Comments from './Comments';
 import './Destination.scss';
 import Destination from './Destination.jsx';
-import LogoImage from '../images/logoImage.png';
+import LogoImage from '../components/logoImage/logo2.png';
 import LogoTitle from '../images/logotitle.png';
 
 
@@ -46,7 +46,6 @@ const Destination1 = () => {
                 <li>
                     <Link className="header-logo" to="/">
                         <img className="logoImage" src={LogoImage} alt="logo"></img>
-                        <img className="logoTitle" src={LogoTitle} alt="logo"></img>
                     </Link>
                 </li>
 
