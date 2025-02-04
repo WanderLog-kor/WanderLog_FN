@@ -14,14 +14,14 @@ const Planners = ({ detailProfile }) => {
   // const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
   // const [destinations, setDestinations] = useState([]);
   const navigate = useNavigate();
-  const [myPlanner,setMyPlanner] = useState(true);
+  const [myPlanner, setMyPlanner] = useState(true);
 
   // 내가 만든 플래너와 좋아요한 플래너 데이터 가져오기
-  const {planners} = useMyPlanner();
+  const { planners } = useMyPlanner();
 
   //좋아요 한 요소 불러오기
   const { likedPlanners } = useLikePlanner(userData?.userid);
-console.log("라이크입니다",likedPlanners);
+  console.log("라이크입니다", likedPlanners);
 
   // 사용자 데이터 가져오기
   useEffect(() => {
@@ -75,11 +75,11 @@ console.log("라이크입니다",likedPlanners);
     });
   };
 
-  const handleClickMyPlanner = () =>{
+  const handleClickMyPlanner = () => {
     setMyPlanner(true);
   };
 
-  const handleClickLikePlanner = () =>{
+  const handleClickLikePlanner = () => {
     setMyPlanner(false);
 
   }
@@ -115,40 +115,42 @@ console.log("라이크입니다",likedPlanners);
               <div className={`planner-option-btn ${myPlanner ? "active" : ""}`} onClick={() => handleClickMyPlanner()}>
                 나의 일정{planners?.length}
               </div>
-              <div className={`planner-option-btn ${!myPlanner ? "active" : ""}`} onClick={()=> handleClickLikePlanner()} >나의 관심목록</div>
+              <div className={`planner-option-btn ${!myPlanner ? "active" : ""}`} onClick={() => handleClickLikePlanner()} >나의 관심목록</div>
             </div>
             <div className="planner-titletag">{!myPlanner ? "나의 관심목록" : "나의 일정"}</div>
 
             <div className="planner-list">
               {myPlanner ? (
                 planners?.length === 0 ? (
-                <p>작성된 플래너가 없습니다.</p>
+                  <p>작성된 플래너가 없습니다.</p>
+                ) : (
+                  <ul>
+                    {planners?.map((planner, index) => (
+                      <li
+                        key={planner.plannerID || index}
+                        className="planner-item"
+                        onClick={() => handlePlannerClick(planner.plannerID)}
+                      >
+                        <div className="planner-thumbnail">
+                          <img src={planner.destinations?.[0]?.image || Image} alt="없으" />
+                        </div>
+                        <div className="planner-desription">
+                          <p>지역: {planner.area}</p>
+                          <h2>{planner.plannerTitle}</h2>
+                          <p>여행 일수: {planner.day}일</p>
+                          <p>여행 일정 : {planner.startDate} ~ {planner.endDate}</p>
+
+                          <p>설명: {planner.description}</p>
+                          <p>생성 날짜: {planner.createAt}</p>
+
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                )
               ) : (
-                <ul>
-                  {planners?.map((planner, index) => (
-                    <li
-                      key={planner.plannerID || index}
-                      className="planner-item"
-                      onClick={() => handlePlannerClick(planner.plannerID)}
-                    >
-                      <div className="planner-thumbnail">
-                        <img src={planner.destinations?.[0]?.image || Image} alt="없으" />
-                      </div>
-                      <div className="planner-desription">
-                        <p>지역: {planner.area}</p>
-                        <h2>{planner.plannerTitle}</h2>
-                        <p>여행 일수: {planner.day}일</p>
-                        <p>설명: {planner.description}</p>
-                        <p>생성 날짜: {planner.createAt}</p>
-                        <p>수정 날짜: {planner.updateAt}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              )
-              ): (
-                <LikedPlannerList likedPlanners={likedPlanners} handlePlannerClick={handlePlannerClick} userid={userData?.userid}/> 
-              )} 
+                <LikedPlannerList likedPlanners={likedPlanners} handlePlannerClick={handlePlannerClick} userid={userData?.userid} />
+              )}
             </div>
           </div>
         </div>
