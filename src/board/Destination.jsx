@@ -135,7 +135,7 @@ const Destination = () => {
             axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
                 .then((response) => {
                     setUsername(response.data[0].username);
-                    setDestinations(response.data);
+                    setDestinations(response.data); console.log(response);
                 })
                 .catch((error) => {
                     console.error("Error fetching destinations:", error);
@@ -283,14 +283,15 @@ const Destination = () => {
         전남: "38",
         제주: "39",
     };
-    console.log(plannerItem);
     const handleUpdatePlanner = () => {
-
+        
         const areaCode = areaCodeMap[plannerItem.area] || "0"; //areaName 없으면 도시코드 0
-
+        
         const updateData = {
             areaName: plannerItem.area,
             areaCode: areaCode,
+            startDate:plannerItem.startDate,
+            endDate:plannerItem.endDate,
             plannerid: plannerItem.plannerID,
             title: plannerItem.plannerTitle,
             description: plannerItem.description,
@@ -300,6 +301,7 @@ const Destination = () => {
             destinations: destinations,
         }
         navigate('/makePlanner', { state: { updatePlannerData: updateData } });
+        console.log(updateData);
     }
 
     return (

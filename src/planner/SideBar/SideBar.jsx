@@ -24,7 +24,7 @@ const SideBar = (props) => {
   const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
   const [isPlannerVisible, setIsPlannerVisible] = useState(true);
   const [cardAdded, setCardAdded] = useState(false);
-  console.log("시발",props);
+  // console.log("시발",props);
   const togglePlannerVisibility = () => {
     //플래너 부분 들어갔다 나오게 하기
     setIsPlannerVisible(!isPlannerVisible);
@@ -75,6 +75,22 @@ const SideBar = (props) => {
     const calculatedDay = handleDate(props.startDate, props.endDate);
     setDay(calculatedDay);
   });
+
+  useEffect(()=>{
+    if(props.destination) {
+
+      const initializedItems = {};
+      props.destination.forEach((dest)=>{
+        if(!initializedItems[dest.day]) {
+          initializedItems[dest.day] = [];
+        }
+        const uniqueId = `${dest.name}-${dest.x}-${dest.y}`;
+        initializedItems[dest.day].push(uniqueId);
+      })
+
+      setAddedItemsByDay(initializedItems);
+    }
+  },[props.destination]);
 
   // 플래너 리스트 활성화
   const handleStatePlanner = () => {
@@ -202,7 +218,7 @@ const SideBar = (props) => {
   };
 
   const handleSearchRemove = (day, data) => {
-    const uniqueId = data.uniqueId;
+    const uniqueId = data.uniqueId; 
     props.DeleteDestination({ day, data }); // 부모 컴포넌트 업데이트
     setAddedItemsByDay((prev) => {
       const updatedDayItems = prev[day]?.filter((id) => id !== uniqueId) || [];
@@ -217,6 +233,7 @@ const SideBar = (props) => {
     props.DeleteAllDestination();
     setAddedItemsByDay({});
   };
+
 
   // DB에 플래너 추가
   const addPlanner = async () => {
@@ -237,15 +254,42 @@ const SideBar = (props) => {
     }
 
     const plannerDays = new Set(props.DestinationData.map((item) => item.day));
-
+   
     for(let i=1; i <= day; i++){
       if(!plannerDays.has(i)) {
         alert(`${i}일차에 최소 한 개 이상의 여행 장소를 추가해주세요`);
         return ;
       }
     }
+    if (props.plannerid) {
 
-    if (plannerID === 0) {
+      await axios
+        .post(
+          "http://localhost:9000/planner/updatePlanner",
+          {
+            plannerid:props.plannerid,
+            areaName: props.areaName,
+            isPublic: isPublic,
+            destination: props.destination,
+            day: day,
+            startDate: props.startDate,
+            endDate: props.endDate,
+            userid: props.loginData.userid,
+            title: plannerTitle,
+            description: plannerDescription,
+          },
+          { "Content-Type": "application/json" }
+        )
+        .then((resp) => {
+          console.log(resp);
+          alert("플래너를 성공적으로 수정하였습니다!");
+          navigate("/planner/board");
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("플래너를 수정하지 못했습니다.");
+        });
+    } else {
       await axios
         .post(
           "http://localhost:9000/planner/addPlanner",
@@ -272,32 +316,6 @@ const SideBar = (props) => {
         .catch((err) => {
           console.log(err);
           alert("플래너를 작성하지 못했습니다.");
-        });
-    } else {
-      await axios
-        .post(
-          "http://localhost:9000/planner/updatePlanner",
-          {
-            plannerid:props.plannerid,
-            areaName: props.areaName,
-            isPublic: isPublic,
-            destination: props.DestinationData,
-            day: day,
-            startDate: props.startDate,
-            endDate: props.endDate,
-            userid: props.loginData.userid,
-            title: plannerTitle,
-            description: plannerDescription,
-          },
-          { "Content-Type": "application/json" }
-        )
-        .then((resp) => {
-          alert("플래너를 성공적으로 수정하였습니다!");
-          navigate("/planner/board");
-        })
-        .catch((err) => {
-          console.log(err);
-          alert("플래너를 수정하지 못했습니다.");
         });
     }
   };
@@ -649,6 +667,7 @@ const SideBar = (props) => {
                         </div>
                         <div className="card-add">
                           <button
+                            className={isAdded ? "cardAdded" : ""}
                             onClick={(event) => {
                               event.stopPropagation();
                               if (isAdded) {

@@ -133,7 +133,7 @@ const Board = () => {
                                     onChange={(e) => setSelectedArea(e.target.value)}
                                 >
                                     <option value="">전체</option>
-                                    <option value="서울특별시">서울</option>
+                                    <option value="서울">서울</option> {/* 이거 도시 이름 줄여서 써야 조회됨. DB에 그렇게 저장돼서 그런듯 */}
                                     <option value="부산광역시">부산</option>
                                     <option value="대구광역시">대구</option>
                                     <option value="인천광역시">인천</option>

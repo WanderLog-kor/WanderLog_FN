@@ -31,7 +31,34 @@ const MakePlanner = ({}) => {
     const [travelData , setTravelData] = useState(
         Object.keys(updatePlannerData).length > 0 ? updatePlannerData : newPlannerData
     );
+
+    useEffect(()=>{
+
+        if(travelData?.destinations) {
+            // console.log("Setting plannerData from travelData.destinations:", travelData.destinations);
+
+            const formattedDestinations = travelData.destinations.map(dest => ({
+                day: dest.day,
+                data: {
+                    name: dest.name,
+                    category: dest.category,
+                    address: dest.address,
+                    x: dest.x,
+                    y: dest.y,
+                    image: dest.image,
+                    uniqueId:dest.uniqueId,
+                }
+            }));
+
+            setPlannerData(formattedDestinations);
+        }
+    },[travelData]);
     
+    // useEffect(()=>{
+    //     if(travelData?.destinations){
+    //         setPlannerData(travelData.destinations);
+    //     }
+    // },[travelData]);
 
     // const handleOption = (data) => { setOptionState(data); }
 
@@ -103,6 +130,9 @@ const MakePlanner = ({}) => {
     useEffect(() => {
         console.log("updatePlannerData:", updatePlannerData); // 🔥 데이터 확인
     }, [updatePlannerData]);
+    useEffect(() => {
+        console.log("travelData:", travelData); // 🔥 데이터 확인
+    }, [updatePlannerData]);
     
 
     return (
@@ -115,7 +145,8 @@ const MakePlanner = ({}) => {
                     areaCode={travelData.areaCode}
                     loginData={loginData}
                     // AreaCoordinate={handleArea}
-                    plannerid={updatePlannerData?.plannerid}
+                    plannerid={travelData?.plannerid}
+                    destination={travelData.destinations}
                     DayState={handleDay}
                     DestinationData={plannerData}
                     DeleteDestination={handleDeleteDest}
