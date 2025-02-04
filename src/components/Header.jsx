@@ -2,8 +2,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Header.scss';
-import LogoImage from './logoImage/logo1.png';
-import axios from 'axios';
 import { useState, useEffect } from "react";
 import { useLoginStatus } from '../auth/PrivateRoute';
 
@@ -42,13 +40,9 @@ const Header = () => {
 
     return (
         <header className={`header-wrapper ${isScrolled ? "scrolled" : ""}`}>
-
             <div className="header-content">
                 <Link className="header-logo" to="/">
-
                     <span className="logo-text">WanderLog</span>
-                    {/* <img className="logo-icon" src={LogoImage} alt="Plane Icon" /> */}
-
                 </Link>
 
 

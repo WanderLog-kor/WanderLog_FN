@@ -230,7 +230,7 @@ const SideBar = (props) => {
       alert("이전 단계를 완료하세요.");
       return;
     }
-
+    
     if (props.DestinationData.length === 0) {
       alert("경로를 지정해주세요.");
       return;
