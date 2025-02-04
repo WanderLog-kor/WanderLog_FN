@@ -41,7 +41,7 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
 
   useEffect(() => {
     if (category === "tourist") {
- 
+
       fetchLikedTourists();
     }
   }, [category, userid]);
@@ -58,7 +58,7 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
       );
 
       const likedTravelcourseData = response.data;
-    //   console.log("받아온 여행코스 ID 목록:", likedTravelcourseData);
+      //   console.log("받아온 여행코스 ID 목록:", likedTravelcourseData);
 
       setLikedTravelCourse(likedTravelcourseData);
     } catch (err) {
