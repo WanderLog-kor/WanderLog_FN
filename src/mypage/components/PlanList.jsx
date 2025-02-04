@@ -27,6 +27,8 @@ const PlanList = ({filteredPlanners,handlePlannerClick}) => {
                 <p>설명: {likePlan.description}</p>
                 <p>생성 날짜: {likePlan.createAt}</p>
                 <p>수정 날짜: {likePlan.updateAt}</p>
+                <p>출발일: {likePlan.startDate}</p>
+                <p>도착일: {likePlan.endDate}</p>
               </div>
             </li>
           ))

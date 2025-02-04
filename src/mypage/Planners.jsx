@@ -141,6 +141,8 @@ console.log("라이크입니다",likedPlanners);
                         <p>설명: {planner.description}</p>
                         <p>생성 날짜: {planner.createAt}</p>
                         <p>수정 날짜: {planner.updateAt}</p>
+                        <p>출발일: {planner.startDate}</p>
+                        <p>도착일: {planner.endDate}</p>
                       </div>
                     </li>
                   ))}
