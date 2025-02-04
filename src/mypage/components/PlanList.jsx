@@ -27,7 +27,7 @@ const PlanList = ({ filteredPlanners, handlePlannerClick }) => {
               <p>여행 일정 : {likePlan.startDate} ~ {likePlan.endDate}</p>
 
               <p>설명: {likePlan.description}</p>
-              <p>생성 날짜: {likePlan.createAt}</p>
+              <p>생성 날짜: {likePlan.createAt.split('T')[0]}</p>
 
             </div>
           </li>

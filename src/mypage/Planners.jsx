@@ -141,7 +141,7 @@ const Planners = ({ detailProfile }) => {
                           <p>여행 일정 : {planner.startDate} ~ {planner.endDate}</p>
 
                           <p>설명: {planner.description}</p>
-                          <p>생성 날짜: {planner.createAt}</p>
+                          <p>생성 날짜: {planner.createAt.split('T')[0]}</p>
 
                         </div>
                       </li>

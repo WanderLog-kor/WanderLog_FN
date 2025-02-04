@@ -175,7 +175,7 @@ const Destination = () => {
 
     }, [plannerID]);
 
- 
+
 
 
 
@@ -187,11 +187,12 @@ const Destination = () => {
             alert('로그인이 필요한 서비스입니다');
             return;
         }
-        console.log('axios"s plannerID : ' , plannerID)
+        console.log('axios"s plannerID : ', plannerID)
         axios.post('http://localhost:9000/planner/board/toggleLike',
-            { plannerID: plannerID,
-                userId : loginStatus.userid
-             },
+            {
+                plannerID: plannerID,
+                userId: loginStatus.userid
+            },
             {
                 headers: {
                     'Content-Type': 'application/json', // JSON 포맷으로 전송
@@ -298,7 +299,7 @@ const Destination = () => {
             userid: plannerItem.userId,
             destinations: destinations,
         }
-        navigate('/makePlanner', { state: {updatePlannerData :updateData } });
+        navigate('/makePlanner', { state: { updatePlannerData: updateData } });
     }
 
     return (
@@ -335,6 +336,10 @@ const Destination = () => {
                                     <span className="topcard-isPublic">비공개</span>
                             }
 
+
+                        </div>
+                        <div className="topcard-date">
+                            {plannerItem.startDate} ~ {plannerItem.endDate}
 
                         </div>
                     </div >
