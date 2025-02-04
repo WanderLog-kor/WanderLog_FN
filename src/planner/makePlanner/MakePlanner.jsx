@@ -110,7 +110,7 @@ const MakePlanner = ({}) => {
                     areaCode={travelData.areaCode}
                     loginData={loginData}
                     // AreaCoordinate={handleArea}
-                    plannerid={updateData?.plannerid}
+                    plannerid={updatePlannerData?.plannerid}
                     DayState={handleDay}
                     DestinationData={plannerData}
                     DeleteDestination={handleDeleteDest}
