@@ -31,6 +31,7 @@ const BoardSection = () => {
         axios.get(`http://localhost:9000/planner/list?page=${-1}&size=${pageSize}`)
             .then((response) => {
                 setPlanners(response.data.content); // 데이터 리스트
+                console.log("플래너 ?",response);
             })
             .catch((error) => {
                 console.error("플래너 가져오기 실패", error);

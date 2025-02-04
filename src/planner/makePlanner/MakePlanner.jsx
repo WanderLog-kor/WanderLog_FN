@@ -99,6 +99,11 @@ const MakePlanner = ({}) => {
 
     const handleClickPlanner = (data) => {setDestination(data);}
     const handleClickSearch = (data) => {setSearchDestination(data);}
+    
+    useEffect(() => {
+        console.log("updatePlannerData:", updatePlannerData); // 🔥 데이터 확인
+    }, [updatePlannerData]);
+    
 
     return (
         <div className='planner' >

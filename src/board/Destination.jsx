@@ -263,11 +263,33 @@ const Destination = () => {
             })
 
     }
-
-
+    const areaCodeMap = {
+        서울: "1",
+        인천: "2",
+        대전: "3",
+        대구: "4",
+        광주: "5",
+        부산: "6",
+        울산: "7",
+        세종: "8",
+        경기: "31",
+        강원도: "32",
+        충북: "33",
+        충남: "34",
+        경북: "35",
+        경남: "36",
+        전북: "37",
+        전남: "38",
+        제주: "39",
+    };
+    console.log(plannerItem);
     const handleUpdatePlanner = () => {
+
+        const areaCode = areaCodeMap[plannerItem.area] || "0"; //areaName 없으면 도시코드 0
+
         const updateData = {
             areaName: plannerItem.area,
+            areaCode: areaCode,
             plannerid: plannerItem.plannerID,
             title: plannerItem.plannerTitle,
             description: plannerItem.description,
