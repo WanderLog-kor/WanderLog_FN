@@ -17,7 +17,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
   const { loginData, loginStatus } = useLoginStatus();
   const [isSaveEnabled, setIsSaveEnabled] = useState(false);
   const [originUsername , setOriginUsername] = useState(userData?.username || "");
-  console.log(loginData);
+  // console.log(loginData);
 
   // 비밀번호 필드 활성화 상태 추가
   // const [detailProfile, setDetailProfile] = useState(false); //상세정보 보기 상태변수
@@ -114,7 +114,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
           // gender: userResponse.data.gender,
         });
         setLoading(false);
-        console.log("현재 유저 정보",userResponse.data);
+        // console.log("현재 유저 정보",userResponse.data);
       } catch (err) {
         console.error("오류:", err);
         setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
@@ -182,7 +182,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
       authCode: "",
     }));
   };
-  console.log("유저데이터",userData);
+  // console.log("유저데이터",userData);
 
   const handlePasswordChange = async (e) => {
     const { name, value } = e.target;
@@ -192,8 +192,8 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
       ...prev,
       [name]: value,
     }));
-    console.log("현재 입력한 값:", value);
-    console.log("userData.password:", userData.password);
+    // console.log("현재 입력한 값:", value);
+    // console.log("userData.password:", userData.password);
 
     // 비밀번호 유효성 검사 호출
     if (name === "nowPassword") {

@@ -6,13 +6,13 @@ const PlanList = ({ filteredPlanners, handlePlannerClick }) => {
   return (
     <ul>
       {filteredPlanners.length === 0 ? (
-        <p>선택한 카테고리에 해당하는 관심목록이 없습니다.</p>
+        <p>좋아요 한 여행계획이 없습니다.</p>
       ) : (
         filteredPlanners.map((likePlan, index) => (
           <li
             key={likePlan.plannerId || index}
             className="planner-item"
-            onClick={() => handlePlannerClick(likePlan.plannerId)}
+            onClick={() => handlePlannerClick(likePlan.plannerID)} //여기 plannerID 에 ID 대문자로 해야함
           >
             <div className="planner-thumbnail">
               <img

@@ -24,7 +24,7 @@ const SideBar = (props) => {
   const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
   const [isPlannerVisible, setIsPlannerVisible] = useState(true);
   const [cardAdded, setCardAdded] = useState(false);
-  // console.log("시발",props);
+
   const togglePlannerVisibility = () => {
     //플래너 부분 들어갔다 나오게 하기
     setIsPlannerVisible(!isPlannerVisible);

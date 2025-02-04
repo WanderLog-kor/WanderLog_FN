@@ -12,13 +12,13 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
   const [likedTravelCourse, setLikedTravelCourse] = useState([]);
 
   //각 카테고리를 선택할 때 결과가 다르게 나옴
-  const filteredPlanners = likedPlanners.filter((planner) => {
+  const filteredPlanners = (Array.isArray(likedPlanners) ? likedPlanners : []).filter((planner) => {
     if (category === "plan") return true;
     if (category === "tourist") return false;
     if (category === "travelcourse") return false;
     return true;
   });
-
+  console.log(filteredPlanners[1].plannerID);
   //관광지 데이터 받아옴
   const fetchLikedTourists = async () => {
     if (!userid) return;

@@ -6,6 +6,8 @@ import './Destination.scss';
 import findwayIcon from '../images/findway.png';
 import likeIcon from '../images/likeIcon.png';
 import moment from 'moment';
+import { useLoginStatus } from '../auth/PrivateRoute';
+
 
 const Destination = () => {
     const navigate = useNavigate();
@@ -15,16 +17,19 @@ const Destination = () => {
 
     const location = useLocation();
     const plannerID = new URLSearchParams(location.search).get("plannerID");
+    /* 마이페이지에서 상세계획으로 들어올 때 loginData가 늦게 받아져서 아무리해도 수정/삭제 버튼이 나오지 않음.
+     그래서 2초후에 렌더링을 하도록 변경하려고 한다. */
+    const [isLoading, setIsLoading] = useState(true); 
 
     const [destinations, setDestinations] = useState([]);
     const [username, setUsername] = useState('');
     const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [shownDays, setShownDays] = useState([]);
-    const [loginStatus, setLoginStatus] = useState([]);
+    const {loginStatus,loginData} = useLoginStatus();
     const [likeCount, setLikeCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
-
+    const [userId, setUserId] = useState(null); // 로그인된 사용자 ID 저장
 
 
     // 거리 계산 함수: 두 좌표 간의 거리 계산 (단위: km)
@@ -141,24 +146,12 @@ const Destination = () => {
                     console.error("Error fetching destinations:", error);
                 });
 
-            // 쿠키요청
-            axios.post('http://localhost:9000/api/cookie/validate', {}, {
-                withCredentials: true, // 쿠키 포함
-            })
-                .then(response => {
-                    console.log(response)
-                    setLoginStatus(response.data);
-                })
-                .catch(error => {
-                    setLoginStatus('');
-                    console.log('로그인 정보 없음')
-                })
         }
 
         // 좋아요 상태 확인 (몇개 눌렸는지 내가 눌렀는지)
         if (plannerID) {
 
-            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}&userId=${loginStatus.userid}`, {
+            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}&userId=${loginData?.userid}`, {
 
                 withCredentials: true, // 쿠키 포함
             })
@@ -172,18 +165,12 @@ const Destination = () => {
                 });
         }
 
-
     }, [plannerID]);
-
-
-
-
-
 
     // 좋아요 기능
     const handleLike = (plannerID) => {
-        console.log('loginstatus : ', loginStatus);
-        if (loginStatus == '') {
+        console.log('loginstatus : ', loginData);
+        if (loginData == '') {
             alert('로그인이 필요한 서비스입니다');
             return;
         }
@@ -191,7 +178,7 @@ const Destination = () => {
         axios.post('http://localhost:9000/planner/board/toggleLike',
             {
                 plannerID: plannerID,
-                userId: loginStatus.userid
+                userId: loginData.userid
             },
             {
                 headers: {
@@ -380,14 +367,11 @@ const Destination = () => {
 
                     {/* 로그인 돼 있는 유저의 pk와 planner의 유저가 일치 할 시 수정 삭제 버튼 */}
                     <div className="destination-plannerControl">
-                        {loginStatus && loginStatus.userid && loginStatus.userid === plannerItem.userId ? (
+                        {userId && userId === plannerItem.userId ? (
                             <>
-
                                 <button className="destination-plannerControl-button" onClick={() => { handleUpdatePlanner() }} >수정</button>
                                 <button className="destination-plannerControl-button" onClick={() => { handleDeletePlanner() }} >삭제</button>
-
                             </>
-
                         ) : (
                             <button className="destination-plannerControl-button" onClick={() => { handleAddToMyCourse() }}>내 코스로 담기</button>
                         )

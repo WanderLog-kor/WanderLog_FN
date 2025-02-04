@@ -10,6 +10,7 @@ import Image from "../images/main.jpg";
 const Planners = ({ detailProfile }) => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
+  const [loginStatus, setLoginStatus] = useState([]);
   const [error, setError] = useState(null);
   // const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
   // const [destinations, setDestinations] = useState([]);
@@ -20,9 +21,8 @@ const Planners = ({ detailProfile }) => {
   const { planners } = useMyPlanner();
 
   //좋아요 한 요소 불러오기
-  const { likedPlanners } = useLikePlanner(userData?.userid);
-  console.log("라이크입니다", likedPlanners);
-
+  const { likedPlanners } = useLikePlanner(userData?.userid) || {likedPlanners: [{}]};
+  console.log(likedPlanners);
   // 사용자 데이터 가져오기
   useEffect(() => {
     const fetchUserData = async () => {
@@ -35,7 +35,12 @@ const Planners = ({ detailProfile }) => {
           "http://localhost:9000/api/cookie/validate",
           {},
           { withCredentials: true }
-        );
+        ).then(response => {
+          setLoginStatus(response.data);
+        })
+        .catch(error=>{
+          setLoginStatus('');
+        });
 
         // 사용자 정보 가져오기
         const userResponse = await axios.get(
@@ -56,23 +61,20 @@ const Planners = ({ detailProfile }) => {
 
     fetchUserData();
   }, []);
-
+  
   // 플래너 클릭 핸들러
   const handlePlannerClick = (plannerID) => {
     if (!planners || planners.length === 0) {
       console.warn("플래너 데이터가 초기화되지 않았습니다.");
       return;
     }
-
     const plannerItem = planners.find((item) => item.plannerID === plannerID);
     if (!plannerItem) {
       console.warn("PlannerID에 해당하는 플래너가 없습니다.");
       return;
     }
-
-    navigate(`/planner/board/destination?plannerID=${plannerID}`, {
-      state: { plannerItem },
-    });
+    
+    navigate(`/planner/board/destination?plannerID=${plannerID}`, {state: { plannerItem } });
   };
 
   const handleClickMyPlanner = () => {
@@ -83,28 +85,6 @@ const Planners = ({ detailProfile }) => {
     setMyPlanner(false);
 
   }
-
-
-  // const handlelikePlannerClick = (plannerID) => {
-  //   if (!likedPlanners || likedPlanners.length === 0) {
-  //     console.warn("플래너 데이터가 초기화되지 않았습니다.");
-  //     return;
-  //   }
-
-  //   const plannerItem = likedPlanners.find((item) => item.plannerID === plannerID);
-  //   if (!plannerItem) {
-  //     console.warn("PlannerID에 해당하는 플래너가 없습니다.");
-  //     return;
-  //   }
-
-  //   navigate(`/planner/board/destination?plannerID=${plannerID}`, { state: { plannerItem } });
-  // };
-
-  // 로딩 상태
-  // if (loading || plannersLoading || likeLoading) return <div>로딩 중...</div>;
-
-  // 에러 상태
-  // if (error || plannersError || likeError) return <div>오류가 발생했습니다.</div>;
 
   return (
     <>
