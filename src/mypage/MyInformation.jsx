@@ -9,14 +9,14 @@ import Edit from "../images/edit.png";
 import Setting from "../images/settings.png";
 import { previousMonday } from "date-fns";
 
-const MyInformation = ({detailProfile,setDetailProfile}) => {
+const MyInformation = ({ detailProfile, setDetailProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const { loginData, loginStatus } = useLoginStatus();
   const [isSaveEnabled, setIsSaveEnabled] = useState(false);
-  const [originUsername , setOriginUsername] = useState(userData?.username || "");
+  const [originUsername, setOriginUsername] = useState(userData?.username || "");
   console.log(loginData);
 
   // 비밀번호 필드 활성화 상태 추가
@@ -30,7 +30,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
   const handleClosePasswordModal = () => {
     setIsPasswordModalOpen(false); // 
     setValidationMessages({});
-    setFormData((prev) => ({ ...prev, nowPassword: "", password: "", repassword: "" })); 
+    setFormData((prev) => ({ ...prev, nowPassword: "", password: "", repassword: "" }));
   };
 
   const [isEmailEditing, setIsEmailEditing] = useState(false);
@@ -71,13 +71,13 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
     handleCancelImage,
     handleResetToDefaultImage,
     setImagePreview,
-  } = useProfileImage(formData, setFormData,setIsSaveEnabled,userData); // 함수 자체로 전달
+  } = useProfileImage(formData, setFormData, setIsSaveEnabled, userData); // 함수 자체로 전달
 
-  useEffect(()=> {
-    if(userData?.username){
+  useEffect(() => {
+    if (userData?.username) {
       setOriginUsername(userData.username);
     }
-  },[userData?.username]);
+  }, [userData?.username]);
 
   // Fetch user data on load
   useEffect(() => {
@@ -114,7 +114,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
           // gender: userResponse.data.gender,
         });
         setLoading(false);
-        console.log("현재 유저 정보",userResponse.data);
+        console.log("현재 유저 정보", userResponse.data);
       } catch (err) {
         console.error("오류:", err);
         setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
@@ -182,7 +182,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
       authCode: "",
     }));
   };
-  console.log("유저데이터",userData);
+  console.log("유저데이터", userData);
 
   const handlePasswordChange = async (e) => {
     const { name, value } = e.target;
@@ -197,20 +197,20 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
 
     // 비밀번호 유효성 검사 호출
     if (name === "nowPassword") {
-      try{
+      try {
         const response = await axios.post(
           "http://localhost:9000/user/mypage/check-password",
-          {password : value},
-          {withCredentials: true}
+          { password: value },
+          { withCredentials: true }
         );
 
-        setValidationMessages((prev) =>({
+        setValidationMessages((prev) => ({
           ...prev,
           nowPassword: "현재 비밀번호가 확인되었습니다",
           nowPasswordColor: "validation-success",
         }));
-      }catch (error) {
-        setValidationMessages((prev) =>({
+      } catch (error) {
+        setValidationMessages((prev) => ({
           ...prev,
           nowPassword: "현재 비밀번호가 올바르지 않습니다.",
           nowPasswordColor: "validation-error",
@@ -221,22 +221,22 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
     // 비밀번호 확인 로직
     if (name === "password") {
       const validationResult = validatePassword(value);
-      setValidationMessages((prev)=>({
+      setValidationMessages((prev) => ({
         ...prev,
-        password:validationResult.message,
+        password: validationResult.message,
         passwordColor: validationResult.color,
       }));
     }
 
     if (name === "repassword") {
-      if(formData.password !== value){
-        setValidationMessages((prev)=>({
+      if (formData.password !== value) {
+        setValidationMessages((prev) => ({
           ...prev,
-          repassword : "비밀번호 확인이 일치하지 않습니다",
+          repassword: "비밀번호 확인이 일치하지 않습니다",
           repasswordColor: "validation-error",
         }));
         setIsPasswordValid(false);
-      }else {
+      } else {
         setValidationMessages((prev) => ({
           ...prev,
           repassword: "비밀번호가 일치합니다.",
@@ -246,57 +246,57 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
       }
     }
   };
-  
+
 
   const handleSaveChanges = async () => {
 
     try {
-      if(formData.password || formData.reapssword){
+      if (formData.password || formData.reapssword) {
         const passwordCheckResponse = await axios.post(
           "http://localhost:9000/user/mypage/check-password",
           { password: formData.nowPassword },
           { withCredentials: true }
         );
-  
-        if(passwordCheckResponse.data !== "비밀번호가 일치합니다"){
+
+        if (passwordCheckResponse.data !== "비밀번호가 일치합니다") {
           alert("현재 비밀번호가 일치하지 않습니다.");
-         return;
+          return;
         }
-  
-      if (!formData.password || !formData.repassword) {
-        alert("새 비밀번호를 입력해주세요!");
-        return;
-      }
-      if (formData.password !== formData.repassword) {
-        alert("비밀번호 확인이 일치하지 않습니다.");
-        return;
-      }
-  
-      // 비밀번호, 사용자 이름, 이메일 확인
-      const passwordValidationResult = validatePassword(formData.password);
-      if(passwordValidationResult.color === "validation-error"){
-        alert(passwordValidationResult.message);
-        return ;
+
+        if (!formData.password || !formData.repassword) {
+          alert("새 비밀번호를 입력해주세요!");
+          return;
+        }
+        if (formData.password !== formData.repassword) {
+          alert("비밀번호 확인이 일치하지 않습니다.");
+          return;
+        }
+
+        // 비밀번호, 사용자 이름, 이메일 확인
+        const passwordValidationResult = validatePassword(formData.password);
+        if (passwordValidationResult.color === "validation-error") {
+          alert(passwordValidationResult.message);
+          return;
         }
       }
 
-    const updateData = {};
-    if(formData.username) updateData.username = formData.username;
-    if(formData.profileImage) updateData.profileImage = formData.profileImage;
-    if(formData.password && formData.repassword) {
-      updateData.password = formData.password;
-      updateData.repassword = formData.repassword;
-    }
+      const updateData = {};
+      if (formData.username) updateData.username = formData.username;
+      if (formData.profileImage) updateData.profileImage = formData.profileImage;
+      if (formData.password && formData.repassword) {
+        updateData.password = formData.password;
+        updateData.repassword = formData.repassword;
+      }
 
       // 사용자 정보 업데이트
       await axios.put(
-        "http://localhost:9000/user/mypage/userupdate",updateData,        
+        "http://localhost:9000/user/mypage/userupdate", updateData,
         { withCredentials: true }
       );
       console.log("유저 정보가 성공적으로 변경되었습니다.");
       alert("유저 정보가 성공적으로 변경되었습니다.");
       window.location.reload();
-      setFormData((prev) => ({ ...prev, nowPassword:"", password: "", repassword: "" }));
+      setFormData((prev) => ({ ...prev, nowPassword: "", password: "", repassword: "" }));
       setIsPasswordEditing(false);
       // setIsPasswordValidationVisible(false);
       setValidationMessages({});
@@ -340,9 +340,9 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
     // 사용자 이름 유효성 검사
     const isValid = validateUsername(value);
 
-    if(isValid && value !== originUsername){
+    if (isValid && value !== originUsername) {
       setIsSaveEnabled(true);
-    }else{
+    } else {
       setIsSaveEnabled(false);
     }
   };
@@ -386,11 +386,11 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
   };
 
   return (
+
     <div className="mypage-container">
       {!detailProfile ? (
-        <div className="basic-profile">
-          <div className="profile-header">
-            <Header> </Header>
+        <div className="mypage-profile">
+          <div className="mypage-profile__image">
             <img
               src={
                 imagePreview ||
@@ -399,28 +399,26 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
                   : "/ProfileImg/anonymous.jpg")
               }
               alt="프로필 사진"
-              className="profile-img"
+              className="mypage-profile__img"
             />
+            <button
+              onClick={() => {
+                setDetailProfile(true);
+              }}
+              className="detailProfile-button"
+              title="정보 수정"
+            >
+              <img src={Setting} alt="세팅" className="setting-image" content="설정" />
+            </button>
+
           </div>
-          <div className="profile-body">
-                      
-          <h2>{userData.username}</h2>
-          <button
-            onClick={() => {
-              setDetailProfile(true);
-            }}
-            className="detailProfile-button"
-          >
-            프로필 관리
-            <img src={Setting} alt="세팅" className="setting-image"/>
-          </button>
-          </div>
+          <h2>{userData.username}님 환영합니다!</h2>
         </div>
       ) : (
         //상세 정보 보기
         <div className="detail-profile">
           <div className="profile-header">
-            <Header> </Header>
+
             <img
               src={
                 imagePreview ||
@@ -431,15 +429,15 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
               alt="프로필 사진"
               className="profile-img"
             />
-            <button onClick={()=> fileInputRef.current?.click()} className="editButton">
+            <button onClick={() => fileInputRef.current?.click()} className="editButton">
               <img src={Edit} alt="수정" />
             </button>
-            <input 
-            type="file"
-            ref={fileInputRef}
-            accept="image/*"
-            style={{display : "none"}}
-            onChange={handleFileChange}
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
             />
             <h2 className="detail-username">{userData.username}</h2>
           </div>
@@ -575,7 +573,7 @@ const MyInformation = ({detailProfile,setDetailProfile}) => {
               <div className="backAndSaveBtn">
                 <button
                   onClick={() => {
-                    setDetailProfile(false); 
+                    setDetailProfile(false);
                   }}
                   className="btn btn-secondary"
                 >
