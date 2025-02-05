@@ -7,10 +7,7 @@ import findwayIcon from '../images/findway.png';
 import likeIcon from '../images/likeIcon.png';
 import moment from 'moment';
 import { useLoginStatus } from '../auth/PrivateRoute';
-<<<<<<< HEAD
 
-=======
->>>>>>> 이영훈
 
 const Destination = () => {
     const navigate = useNavigate();
@@ -28,12 +25,9 @@ const Destination = () => {
     const [username, setUsername] = useState('');
     const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [shownDays, setShownDays] = useState([]);
-<<<<<<< HEAD
+
     const { loginStatus, loginData } = useLoginStatus();
-=======
-    // const [loginStatus, setLoginStatus] = useState([]);
-     const { loginStatus, loginData } = useLoginStatus();
->>>>>>> 이영훈
+
     const [likeCount, setLikeCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 

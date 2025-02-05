@@ -9,16 +9,9 @@ import { useLoginStatus } from '../../auth/PrivateRoute';
 const MakePlanner = ({}) => {
     const {loginData,loginStatus} = useLoginStatus();
     const location = useLocation();
-    // const { startDate, endDate, areaName, areaCode,coordinates } = location.state || {};
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     // 전달받은 데이터를 확인하는 로그
-    // }, [areaName, startDate, endDate]); // 의존성 배열에 데이터 추가
-    // ------------------------------------------------
 
-
-    // const [optionState, setOptionState] = useState();
     const [areaState, setAreaState] = useState([]);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
@@ -35,7 +28,6 @@ const MakePlanner = ({}) => {
     useEffect(()=>{
 
         if(travelData?.destinations) {
-            // console.log("Setting plannerData from travelData.destinations:", travelData.destinations);
 
             const formattedDestinations = travelData.destinations.map(dest => ({
                 day: dest.day,
@@ -54,7 +46,6 @@ const MakePlanner = ({}) => {
         }
     },[travelData]);
     
-
 
     useEffect(()=>{
         if(!location.state) {
