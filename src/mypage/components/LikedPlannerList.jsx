@@ -18,7 +18,7 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
     if (category === "travelcourse") return false;
     return true;
   });
-  console.log(filteredPlanners[1].plannerID);
+
   //관광지 데이터 받아옴
   const fetchLikedTourists = async () => {
     if (!userid) return;
