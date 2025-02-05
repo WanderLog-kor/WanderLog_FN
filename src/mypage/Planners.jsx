@@ -6,14 +6,15 @@ import { useNavigate } from "react-router-dom";
 import "./Planners.scss";
 import LikedPlannerList from "./components/LikedPlannerList";
 import Image from "../images/main.jpg";
+import moreIcon from './images/more-btn.png';
 
 const Planners = ({ detailProfile }) => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [loginStatus, setLoginStatus] = useState([]);
   const [error, setError] = useState(null);
-  // const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
-  // const [destinations, setDestinations] = useState([]);
+  const [activeTab, setActiveTab] = useState("myCourse"); // 카테고리 탭
+  const [expandedPlanner, setExpandedPlanner] = useState(null);
   const navigate = useNavigate();
   const [myPlanner, setMyPlanner] = useState(true);
 
@@ -71,33 +72,70 @@ const Planners = ({ detailProfile }) => {
     const plannerItem = planners.find((item) => item.plannerID === plannerID);
     if (!plannerItem) {
       console.warn("PlannerID에 해당하는 플래너가 없습니다.");
+      
       return;
     }
+
+    navigate(`/planner/board/destination?plannerID=${plannerID}`, {
+      state: { plannerItem },
+    });
     
-    navigate(`/planner/board/destination?plannerID=${plannerID}`, {state: { plannerItem } });
+
   };
 
-  const handleClickMyPlanner = () => {
+  // 삼선버튼 클릭시 편집, 삭제 버튼 띄우기
+  const toggleOptions = (plannerID) => {
+    setExpandedPlanner(expandedPlanner === plannerID ? null : plannerID);
+  };
+
+  const handleClickMyPlanner = (tab) => {
+    setActiveTab(tab);
     setMyPlanner(true);
   };
 
-  const handleClickLikePlanner = () => {
+  const handleClickLikePlanner = (tab) => {
+    setActiveTab(tab);
     setMyPlanner(false);
-
   }
+
+
+  // 플래너 편집
+  const handleEdit = (plannerID) => {
+
+  };
+  // 플래너 삭제
+  const handleDelete = (plannerID) => {
+
+  };
 
   return (
     <>
       {!detailProfile && (
         <div className={`planner-container`}>
           <div className="my-planner-container">
-            <div className="planner-option">
-              <div className={`planner-option-btn ${myPlanner ? "active" : ""}`} onClick={() => handleClickMyPlanner()}>
-                나의 일정{planners?.length}
+            {/* <div className="planner-option">
+              <div className={`planner-option-btn ${myPlanner ? "active" : ""}`} onClick={() => handleClickMyPlanner("board-myCourse")}>
+                나의 일정
               </div>
               <div className={`planner-option-btn ${!myPlanner ? "active" : ""}`} onClick={() => handleClickLikePlanner()} >나의 관심목록</div>
+            </div> */}
+            <div className="planner-tap">
+              <ul>
+                <li
+                  className={`planner-option-myCourse ${myPlanner ? "on" : ""}`}
+                  onClick={() => handleClickMyPlanner("myCourse")}
+                  style={activeTab === "myCourse" ? { pointerEvents: "none" } : {}}>
+                  <span>나의 일정</span>
+                  <em>{planners?.length}</em>
+                </li>
+                <li
+                  className={`planner-option-like ${!myPlanner ? "on" : ""}`}
+                  onClick={() => handleClickLikePlanner("like")}
+                  style={activeTab === "like" ? { pointerEvents: "none" } : {}}>
+                  <span>나의 관심목록</span>
+                </li>
+              </ul>
             </div>
-            <div className="planner-titletag">{!myPlanner ? "나의 관심목록" : "나의 일정"}</div>
 
             <div className="planner-list">
               {myPlanner ? (
@@ -109,20 +147,27 @@ const Planners = ({ detailProfile }) => {
                       <li
                         key={planner.plannerID || index}
                         className="planner-item"
-                        onClick={() => handlePlannerClick(planner.plannerID)}
+
                       >
-                        <div className="planner-thumbnail">
+                        <div className="planner-thumbnail" onClick={() => handlePlannerClick(planner.plannerID)}>
                           <img src={planner.destinations?.[0]?.image || Image} alt="없으" />
                         </div>
-                        <div className="planner-desription">
-                          <p>지역: {planner.area}</p>
-                          <h2>{planner.plannerTitle}</h2>
-                          <p>여행 일수: {planner.day}일</p>
-                          <p>여행 일정 : {planner.startDate} ~ {planner.endDate}</p>
+                        <div className="planner-info">
+                          <p className="planner-duration">{planner.startDate} ~ {planner.endDate}</p>
+                          <h2 className="planner-title">{planner.plannerTitle}</h2>
+                          <p className="planner-area">{planner.area}</p>
+                          <p className="planner-created-at">{planner.createAt.split('T')[0]} 생성</p>
+                          <div className="planner-moreIcon">
+                            <img className="" src={moreIcon} onClick={() => toggleOptions(planner.plannerID)} />
 
-                          <p>설명: {planner.description}</p>
-                          <p>생성 날짜: {planner.createAt.split('T')[0]}</p>
+                            {expandedPlanner === planner.plannerID && (
+                              <div className="planner-options">
+                                <button onClick={() => handleEdit(planner.plannerID)}>편집</button>
+                                <button onClick={() => handleDelete(planner.plannerID)}>삭제</button>
+                              </div>
 
+                            )}
+                          </div>
                         </div>
                       </li>
                     ))}
