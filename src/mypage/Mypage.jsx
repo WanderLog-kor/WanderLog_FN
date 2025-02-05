@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Planners from "./Planners";
-import MyInformation from "./MyInformation";
+
 import HeaderLogo from '../components/logoImage/logo2.png'
 import { useLoginStatus } from "../auth/PrivateRoute";
 import './Mypage.scss';
+import MyInformation from "./MyInformation";
 
 const Mypage = () => {
 
