@@ -6,6 +6,7 @@ import './Destination.scss';
 import findwayIcon from '../images/findway.png';
 import likeIcon from '../images/likeIcon.png';
 import moment from 'moment';
+import { useLoginStatus } from '../auth/PrivateRoute';
 
 const Destination = () => {
     const navigate = useNavigate();
@@ -20,7 +21,8 @@ const Destination = () => {
     const [username, setUsername] = useState('');
     const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [shownDays, setShownDays] = useState([]);
-    const [loginStatus, setLoginStatus] = useState([]);
+    // const [loginStatus, setLoginStatus] = useState([]);
+     const { loginStatus, loginData } = useLoginStatus();
     const [likeCount, setLikeCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
@@ -125,7 +127,7 @@ const Destination = () => {
 
             map.setBounds(bounds);
         }
-        console.log('destinations : ', destinations);
+
     }, [destinations]);
 
 
@@ -141,18 +143,6 @@ const Destination = () => {
                     console.error("Error fetching destinations:", error);
                 });
 
-            // 쿠키요청
-            axios.post('http://localhost:9000/api/cookie/validate', {}, {
-                withCredentials: true, // 쿠키 포함
-            })
-                .then(response => {
-                    console.log(response)
-                    setLoginStatus(response.data);
-                })
-                .catch(error => {
-                    setLoginStatus('');
-                    console.log('로그인 정보 없음')
-                })
         }
 
         // 좋아요 상태 확인 (몇개 눌렸는지 내가 눌렀는지)
@@ -163,7 +153,6 @@ const Destination = () => {
                 withCredentials: true, // 쿠키 포함
             })
                 .then((response) => {
-                    console.log('좋아요 확인 axios 제대로 완료')
                     setLikeCount(response.data.likeCount);
                     setIsLiked(response.data.isLiked); // 사용자가 좋아요를 눌렀는지 여부
                 })
@@ -182,12 +171,11 @@ const Destination = () => {
 
     // 좋아요 기능
     const handleLike = (plannerID) => {
-        console.log('loginstatus : ', loginStatus);
         if (loginStatus == '') {
             alert('로그인이 필요한 서비스입니다');
             return;
         }
-        console.log('axios"s plannerID : ', plannerID)
+
         axios.post('http://localhost:9000/planner/board/toggleLike',
             {
                 plannerID: plannerID,
@@ -283,7 +271,7 @@ const Destination = () => {
         전남: "38",
         제주: "39",
     };
-    console.log(plannerItem);
+    console.log('plannerItem : ',plannerItem);
     const handleUpdatePlanner = () => {
 
         const areaCode = areaCodeMap[plannerItem.area] || "0"; //areaName 없으면 도시코드 0
@@ -378,7 +366,7 @@ const Destination = () => {
 
                     {/* 로그인 돼 있는 유저의 pk와 planner의 유저가 일치 할 시 수정 삭제 버튼 */}
                     <div className="destination-plannerControl">
-                        {loginStatus && loginStatus.userid && loginStatus.userid === plannerItem.userId ? (
+                        {loginData && loginData.userid && loginData.userid === plannerItem.userId ? (
                             <>
 
                                 <button className="destination-plannerControl-button" onClick={() => { handleUpdatePlanner() }} >수정</button>

@@ -1,4 +1,3 @@
-import "./PlanList.scss";
 
 
 const PlanList = ({ filteredPlanners, handlePlannerClick }) => {
@@ -20,14 +19,11 @@ const PlanList = ({ filteredPlanners, handlePlannerClick }) => {
                 alt="없으"
               />
             </div>
-            <div className="planner-desription">
-              <p>지역: {likePlan.area}</p>
-              <h2>{likePlan.plannerTitle}</h2>
-              <p>여행 일수: {likePlan.day}일</p>
-              <p>여행 일정 : {likePlan.startDate} ~ {likePlan.endDate}</p>
-
-              <p>설명: {likePlan.description}</p>
-              <p>생성 날짜: {likePlan.createAt.split('T')[0]}</p>
+            <div className="planner-info">
+              <p className="planner-duration">{likePlan.startDate} ~ {likePlan.endDate}</p>
+              <h2 className="planner-title">{likePlan.plannerTitle}</h2>
+              <p className="planner-area">{likePlan.area}</p>
+              <p className="planner-created-at">생성 날짜: {likePlan.createAt.split('T')[0]}</p>
 
             </div>
           </li>

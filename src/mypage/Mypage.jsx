@@ -12,7 +12,7 @@ const Mypage = () => {
   const { loginStatus } = useLoginStatus();
 
   return (
-    <div className="mypage-wrapper">
+    <>
       <header className="mypage-header">
         <div className="mypage-header-content">
           <Link to="/"><img src={HeaderLogo}></img></Link>
@@ -26,10 +26,13 @@ const Mypage = () => {
 
 
       </header>
-      <MyInformation detailProfile={detailProfile} setDetailProfile={setDetailProfile} />
+      <div className="mypage-wrapper">
 
-      {!detailProfile && <Planners detailProfile={detailProfile} />}
-    </div>
+        <MyInformation detailProfile={detailProfile} setDetailProfile={setDetailProfile} />
+
+        {!detailProfile && <Planners detailProfile={detailProfile} />}
+      </div>
+    </>
   );
 };
 

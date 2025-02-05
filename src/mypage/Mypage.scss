@@ -1,98 +1,394 @@
-.mypage-wrapper {
+ // 마이페이지 헤더 (최상단)
+ .mypage-header {
+     width: 100%;
+     background-color: #fff;
+     box-shadow: 0px 0px 10px 0px rgba(51, 51, 51, 0.3);
+     z-index: 100;
+
+     .mypage-header-content {
+         width: 1500px;
+         margin: 0 auto;
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+
+         img {
+             width: 200px;
+             height: 90px;
+         }
+
+         .header-btns {
+             display: flex;
+             gap: 15px;
+
+             // 공통 버튼 스타일
+             button {
+
+                 height: 100%;
+                 padding: 20px;
+                 border: 0;
+                 background: transparent; // 배경 투명
+                 color: black; // 기본 글자 색상 흰색
+                 font-size: 1.2rem;
+                 font-weight: 100;
+                 transition: 0.3s;
 
 
-    // 마이페이지 헤더 (최상단)
-    .mypage-header {
-        width: 100%;
-        background-color: #fff;
-        box-shadow: 0px 0px 10px 0px rgba(51, 51, 51, 0.3);
-        z-index: 100;
+                 &:hover {
+                     color: #333;
+                     text-shadow: none;
+                     transform: scale(1.1);
+                 }
+             }
 
-        .mypage-header-content {
-            width: 1500px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+         }
+     }
 
-            img {
-                width: 200px;
-                height: 90px;
-            }
+ }
 
-            .header-btns {
-                display: flex;
-                gap: 15px;
-
-                // 공통 버튼 스타일
-                button {
-
-                    height: 100%;
-                    padding: 20px;
-                    border: 0;
-                    background: transparent; // 배경 투명
-                    color: black; // 기본 글자 색상 흰색
-                    font-size: 1.2rem;
-                    font-weight: 100;
-                    transition: 0.3s;
+ .mypage-wrapper {
+     display: flex;
+     width: 1500px;
+     margin: 0 auto;
+     margin-top: 50px;
 
 
-                    &:hover {
-                        color: #333;
-                        text-shadow: none;
-                        transform: scale(1.1);
-                    }
-                }
+     .mypage-container {
 
-            }
-        }
+         width: fit-content;
+         margin-top: 50px;
 
-    }
+         .mypage-profile {
+             position: relative;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+
+             .mypage-profile__image {
+                 position: relative;
+
+                 .mypage-profile__img {
+                     width: 150px;
+                     height: 150px;
+                     border: 4px solid white;
+                     border-radius: 50%;
+                 }
+
+                 .detailProfile-button {
+                     border: 0;
+                     padding: 0;
+                     position: absolute;
+                     bottom: 8px;
+                     right: -14px;
+                     border-radius: 50%;
+
+                     img {
+
+                         width: 40px;
+                         height: 40px;
+
+                     }
+                 }
+
+             }
+
+             h2 {
+                 margin-top: 10px;
+                 font-size: 1.2rem;
+                 font-weight: bold;
+             }
+         }
+     }
+
+     .planner-container {
+         width: 1200px;
+         margin: 0 auto;
+
+         .my-planner-container {
+
+             .planner-tap {
+                 width: 1200px;
+                 margin: 0 auto;
+                 margin-bottom: 50px;
+
+                 ul {
+
+                     display: flex;
+                     text-align: center;
+                     width: 1200px;
+                     margin: 0 auto;
+                     background: #20356f;
+                     // margin-top: -37px;
+
+                     li {
+                         flex: 1 1 30%;
+                         position: relative;
+
+                         &.on span {
+                             color: white;
+                             font-weight: 700;
+                         }
+
+                         span {
+                             display: block;
+                             height: 75px;
+                             line-height: 75px;
+                             color: #6a82c4;
+                             font-size: 20px;
+                             letter-spacing: -0.8px;
+                             position: relative;
+                         }
+
+                         span:hover {
+                             color: #fff;
+                             font-weight: 700;
+                             cursor: pointer;
+                         }
+
+                         &.on span::after {
+                             content: '';
+                             display: inline-block;
+                             width: 16px;
+                             height: 7px;
+                             position: absolute;
+                             left: 50%;
+                             bottom: -7px;
+                             transform: translateX(-50%);
+                             background: url(./images/board_tab.png);
+                         }
+                     }
+
+                     // 내 여행코스 탭
+                     .planner-option-myCourse {
+                         span::before {
+                             content: '';
+                             display: inline-block;
+                             width: 26px;
+                             margin-right: 10px;
+                             vertical-align: -7px;
+                             height: 24px;
+                             background: url(./images/mypageIcon.png);
+                             background-size: 26px auto;
+                             margin-bottom: 2px;
+                         }
+
+                         em {
+                             display: inline-block;
+                             position: absolute;
+                             left: 61%;
+                             top: 24px;
+                             height: 26px;
+                             min-width: 26px;
+                             line-height: 26px;
+                             padding: 0 7px;
+                             border-radius: 50px;
+                             color: #fff;
+                             font-size: 16px;
+                             background: #4765cf;
+                             box-sizing: border-box;
+                             font-style: normal;
+                             font-weight: normal;
+                         }
+                     }
+
+                     // 다른 사용자 여행코스 탭
+                     .planner-option-like {
+                         span::before {
+                             content: '';
+                             display: inline-block;
+                             width: 21px;
+                             height: 19px;
+                             margin-right: 10px;
+                             margin-bottom: 4px;
+                             vertical-align: -7px;
+                             background: url(./images/likeIcon.png);
+                             // background-position: 0 -155px;
+                         }
 
 
-    .mypage-container {
-        margin: 50px 0;
+                     }
 
-        .mypage-profile {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+                     .planner-option-like::before {
+                         content: '';
+                         display: inline-block;
+                         width: 1px;
+                         height: 21px;
+                         position: absolute;
+                         left: 0;
+                         top: 26px;
+                         background: #6a82c4;
+                     }
 
-            .mypage-profile__image {
-                position: relative;
+                 }
+             }
 
-                .mypage-profile__img {
-                    width: 150px;
-                    height: 150px;
-                    border: 4px solid white;
-                    border-radius: 50%;
-                }
+             .planner-list {
 
-                .detailProfile-button {
-                    border: 0;
-                    padding: 0;
-                    position: absolute;
-                    bottom: 8px;
-                    right: -14px;
-                    border-radius: 50%;
-                    img {
-                        
-                        width: 40px;
-                        height: 40px;
-
-                    }
-                }
-
-            }
-
-            h2 {
-                margin-top:10px;
-                font-size: 1.2rem;
-                font-weight: bold;
-            }
-        }
-    }
+                 // 리스트 전체 디자인
+                 ul {
+                     display: grid;
+                     grid-template-columns: repeat(4, 1fr);
+                     margin-bottom: 50px;
 
 
-}
+                     .planner-item {
+                         margin: 0 0 35px 20px;
+                         border-radius: 20px 20px 0 0;
+
+                         transition: transform 0.3s ease;
+
+
+                         .planner-thumbnail {
+                             cursor: pointer;
+
+                             img {
+                                 width: 100%;
+                                 height: 280px;
+                                 object-fit: cover;
+                                 border-radius: 5px;
+                             }
+
+                         }
+
+
+                         .planner-info {
+                             position: relative;
+                             padding-top: 15px;
+
+                             .planner-duration {
+                                 display: inline-block;
+                                 width: fit-content;
+                                 padding: 0 5px 0 5px;
+                                 height: 25px;
+                                 line-height: 25px;
+                                 color: #fff;
+                                 background: #567ff2;
+                                 font-size: 15px;
+                                 letter-spacing: -0.6px;
+                                 text-align: center;
+                             }
+
+                             .planner-title {
+                                 display: block;
+                                 margin: 13px 0;
+                                 text-overflow: ellipsis;
+                                 white-space: nowrap;
+                                 overflow: hidden;
+                                 font-weight: 700;
+                                 font-size: 18px;
+                                 line-height: 21px;
+                                 letter-spacing: -0.6px;
+                                 color: #333;
+                             }
+
+                             .planner-area {
+                                 font-size: 16px;
+                                 line-height: 18px;
+                                 letter-spacing: -0.5px;
+                                 font-weight: 300;
+                                 color: #666;
+                             }
+
+                             .planner-created-at {
+                                 margin: 8px 0 10px;
+                                 font-size: 16px;
+                                 font-weight: 300;
+                                 line-height: 18px;
+                                 color: #666;
+                             }
+
+                             .planner-moreIcon {
+                                 position: relative;
+                                 top: -122px;
+                                 right: -265px;
+                                 z-index: 90;
+                                 width: 14px;
+                                 height: 16px;
+
+
+                                 .planner-options {
+                                     width: fit-content;
+                                     position: absolute;
+                                     right: -38px;
+                                     top: 31px;
+
+                                     button {
+                                         background-color: white;
+                                         border: 1px solid;
+                                         font-size: 1.2rem;
+                                         padding: 10px;
+                                         margin-bottom:5px;
+                                         border-radius: 25px;
+                                         width: 80px;
+                                     }
+                                 }
+                             }
+
+                             .planner-moreIcon:hover {
+                                 cursor: pointer;
+                             }
+                         }
+                     }
+                 }
+
+
+
+                 // 좋아요한 목록들
+                 .liked-planner-container {
+                     display: flex;
+                     gap: 100px;
+
+                     // 좋아요한 플래너 리스트 스타일
+                     ul {
+                         grid-template-columns: repeat(3, 1fr);
+                     }
+
+                     // 필터 버튼들
+                     .filter-options {
+                         display: flex;
+                         flex-direction: column;
+                         gap: 30px;
+
+                         .plan-btn,
+                         .tourist-btn,
+                         .travelcourse-btn {
+                             height: 100px;
+                             width: 250px;
+                             border: 0;
+                             // box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                             border-radius: 35px;
+                             font-size: 1.2rem;
+                             background-color: white;
+                             padding: 10px 25px;
+                             color: black;
+                             transition: 0.25s;
+                             display: flex;
+                             align-items: center;
+                             justify-content: space-around;
+
+                             img {
+                                 width: 40px;
+                                 height: 40px;
+                             }
+
+                             &.active {
+                                 transform: scale(1.3);
+                             }
+                         }
+
+                         .plan-btn:hover,
+                         .tourist-btn:hover,
+                         .travelcourse-btn:hover {
+                             transform: scale(1.3);
+                             cursor: pointer;
+                         }
+                     }
+                 }
+             }
+         }
+
+
+     }
+
+
+ }

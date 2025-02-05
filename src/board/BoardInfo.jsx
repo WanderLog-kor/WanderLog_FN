@@ -7,6 +7,7 @@ import './Destination.scss';
 import Destination from './Destination.jsx';
 import LogoImage from '../components/logoImage/logo2.png';
 import LogoTitle from '../images/logotitle.png';
+import { useLoginStatus } from '../auth/PrivateRoute.jsx';
 
 
 const Destination1 = () => {
@@ -14,7 +15,7 @@ const Destination1 = () => {
     const plannerID = new URLSearchParams(location.search).get("plannerID");
     const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [destinations, setDestinations] = useState([]);
-    const [loginStatus, setLoginStatus] = useState([]);
+    const { loginStatus } = useLoginStatus();
     const [activeTab, setActiveTab] = useState("summary");  // 현재 활성화된 탭을 관리
 
     useEffect(() => {
@@ -27,11 +28,6 @@ const Destination1 = () => {
             .catch(error => {
                 console.error("Error fetching data:", error);
             });
-
-        // 로그인 상태 확인
-        axios.post('http://localhost:9000/api/cookie/validate', {}, { withCredentials: true })
-            .then(response => setLoginStatus(response.data))
-            .catch(error => setLoginStatus(error));
     }, []);
 
     const handleTabChange = (tab) => {

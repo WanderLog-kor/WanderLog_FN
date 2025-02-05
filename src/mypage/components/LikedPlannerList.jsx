@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import "../components/LikedPlannerList.scss";
 import axios from "axios";
-import useLikePlanner from "../useLikePlanner";
 import PlanList from "./PlanList";
 import TouristList from "./Tourist";
 import TravelCourseList from "./Travelcourse";
+
+import touristIcon from './images/tourist-attraction.png';
+import travelCourseIcon from './images/travel-guide.png';
+import courseIcon from './images/itinerary.png';
 
 const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
   const [category, setCategory] = useState("plan"); //카테고리 필터 상태 변수 ,, 기본적으로 여행 계획 먼저나옴
@@ -41,7 +43,6 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
 
   useEffect(() => {
     if (category === "tourist") {
-
       fetchLikedTourists();
     }
   }, [category, userid]);
@@ -58,8 +59,6 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
       );
 
       const likedTravelcourseData = response.data;
-      //   console.log("받아온 여행코스 ID 목록:", likedTravelcourseData);
-
       setLikedTravelCourse(likedTravelcourseData);
     } catch (err) {
       console.log(err);
@@ -68,29 +67,37 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
 
   useEffect(() => {
     if (category === "travelcourse") {
-
       fetchLikedTravelCourses();
     }
   }, [category, userid]);
 
   useEffect(() => {
     if (category === "plan") {
-      {
-        console.log(category);
-      }
-
+      console.log(category);
     }
   });
-
 
   return (
     <div className="liked-planner-container">
       <div className="filter-options">
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
-          <option value="plan">여행 계획</option>
-          <option value="tourist">관광지</option>
-          <option value="travelcourse">여행 코스</option>
-        </select>
+        <button
+          className={`plan-btn ${category === "plan" ? "active" : ""}`} 
+          onClick={() => setCategory("plan")}>
+          <img src={courseIcon} />
+          여행 계획
+        </button>
+        <button
+          className={`tourist-btn ${ category === "tourist" ? "active" : ""}`}
+          onClick={() => setCategory("tourist")}>
+          <img src={touristIcon} />
+          관광지
+        </button>
+        <button
+          className={`travelcourse-btn ${category === "travelcourse" ? "active" : ""}`}
+          onClick={() => setCategory("travelcourse")}>
+          <img src={travelCourseIcon} />
+          여행 코스
+        </button>
       </div>
 
       {category === "plan" && (
