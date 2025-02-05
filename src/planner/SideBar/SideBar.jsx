@@ -142,7 +142,7 @@ const SideBar = (props) => {
           const updatedSearch = new Array(pTotal).fill(null);
 
           const startIndex = (currentPage - 1) * resultsPerPage;
-          const endIndex = startIndex + currentPageData.length;
+          // const endIndex = startIndex + currentPageData.length;
 
           currentPageData.map((el, index) => {
             const data = {
