@@ -19,13 +19,15 @@ const Destination = () => {
     const plannerID = new URLSearchParams(location.search).get("plannerID");
     /* 마이페이지에서 상세계획으로 들어올 때 loginData가 늦게 받아져서 아무리해도 수정/삭제 버튼이 나오지 않음.
      그래서 2초후에 렌더링을 하도록 변경하려고 한다. */
-    const [isLoading, setIsLoading] = useState(true); 
+    const [isLoading, setIsLoading] = useState(true);
 
     const [destinations, setDestinations] = useState([]);
     const [username, setUsername] = useState('');
     const { plannerItem } = location.state || {}; // state에서 데이터 가져오기 (Planner의 정보)
     const [shownDays, setShownDays] = useState([]);
-    const {loginStatus,loginData} = useLoginStatus();
+
+    const { loginStatus, loginData } = useLoginStatus();
+
     const [likeCount, setLikeCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
@@ -129,7 +131,7 @@ const Destination = () => {
 
             map.setBounds(bounds);
         }
-        console.log('destinations : ', destinations);
+
     }, [destinations]);
 
 
@@ -155,7 +157,6 @@ const Destination = () => {
                 withCredentials: true, // 쿠키 포함
             })
                 .then((response) => {
-                    console.log('좋아요 확인 axios 제대로 완료')
                     setLikeCount(response.data.likeCount);
                     setIsLiked(response.data.isLiked); // 사용자가 좋아요를 눌렀는지 여부
                 })
@@ -168,12 +169,11 @@ const Destination = () => {
 
     // 좋아요 기능
     const handleLike = (plannerID) => {
-        console.log('loginstatus : ', loginData);
-        if (loginData == '') {
+        if (loginStatus == '') {
             alert('로그인이 필요한 서비스입니다');
             return;
         }
-        console.log('axios"s plannerID : ', plannerID)
+
         axios.post('http://localhost:9000/planner/board/toggleLike',
             {
                 plannerID: plannerID,
@@ -269,15 +269,16 @@ const Destination = () => {
         전남: "38",
         제주: "39",
     };
+
     const handleUpdatePlanner = () => {
-        
+
         const areaCode = areaCodeMap[plannerItem.area] || "0"; //areaName 없으면 도시코드 0
-        
+
         const updateData = {
             areaName: plannerItem.area,
             areaCode: areaCode,
-            startDate:plannerItem.startDate,
-            endDate:plannerItem.endDate,
+            startDate: plannerItem.startDate,
+            endDate: plannerItem.endDate,
             plannerid: plannerItem.plannerID,
             title: plannerItem.plannerTitle,
             description: plannerItem.description,
@@ -366,7 +367,9 @@ const Destination = () => {
 
                     {/* 로그인 돼 있는 유저의 pk와 planner의 유저가 일치 할 시 수정 삭제 버튼 */}
                     <div className="destination-plannerControl">
-                        {loginStatus && loginData.userid === plannerItem.userId ? (
+
+                        {loginData && loginData.userid && loginData.userid === plannerItem.userId ? (
+
                             <>
                                 <button className="destination-plannerControl-button" onClick={() => { handleUpdatePlanner() }} >수정</button>
                                 <button className="destination-plannerControl-button" onClick={() => { handleDeletePlanner() }} >삭제</button>

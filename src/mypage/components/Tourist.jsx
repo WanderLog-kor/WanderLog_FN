@@ -1,5 +1,4 @@
 import React from "react";
-import "./Tourist.scss";
 
 const TouristList = ({ likedTourists }) => {
   console.log(likedTourists);
@@ -12,7 +11,7 @@ const TouristList = ({ likedTourists }) => {
     <ul>
       {likedTourists.map((tourist, index) => {
         const item = tourist?.items?.item[0];
-        console.log(item);
+        console.log('관광지아이템 : ',item);
         return (
           <li key={item?.contentid || index} className="planner-item">
             <div className="planner-thumbnail">
@@ -21,10 +20,10 @@ const TouristList = ({ likedTourists }) => {
                 alt={item?.title || "이미지 없음"}
               />
             </div>
-            <div className="planner-description">
-              <p>이름: {item?.title || "이름 없음"}</p>
-              <p>주소: {item?.addr1  || "주소 없음"}</p>
-              <p>카테고리: {item?.cat1 || "카테고리 없음"}</p>
+            <div className="planner-info">
+              <p className="planner-title">{item?.title || "이름 없음"}</p>
+              <p>{item?.addr1  || "주소 없음"}</p>
+
             </div>
           </li>
         );

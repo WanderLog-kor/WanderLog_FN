@@ -9,16 +9,9 @@ import { useLoginStatus } from '../../auth/PrivateRoute';
 const MakePlanner = ({}) => {
     const {loginData,loginStatus} = useLoginStatus();
     const location = useLocation();
-    // const { startDate, endDate, areaName, areaCode,coordinates } = location.state || {};
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     // 전달받은 데이터를 확인하는 로그
-    // }, [areaName, startDate, endDate]); // 의존성 배열에 데이터 추가
-    // ------------------------------------------------
 
-
-    // const [optionState, setOptionState] = useState();
     const [areaState, setAreaState] = useState([]);
     const [plannerData, setPlannerData] = useState([]);
     const [selectedDay, setSelectedDay] = useState(1);
@@ -35,7 +28,6 @@ const MakePlanner = ({}) => {
     useEffect(()=>{
 
         if(travelData?.destinations) {
-            // console.log("Setting plannerData from travelData.destinations:", travelData.destinations);
 
             const formattedDestinations = travelData.destinations.map(dest => ({
                 day: dest.day,
@@ -54,35 +46,6 @@ const MakePlanner = ({}) => {
         }
     },[travelData]);
     
-    // useEffect(()=>{
-    //     if(travelData?.destinations){
-    //         setPlannerData(travelData.destinations);
-    //     }
-    // },[travelData]);
-
-    // const handleOption = (data) => { setOptionState(data); }
-
-    // const handleArea = (data) => {setAreaState(data);
-    //     console.log("Received areaCode:", data);
-    // }
-
-    // const handleData = async (data) => {
-    //     await axios.post('http://localhost:9000/planner/getImages',
-    //         {
-    //             'businessName':data.data.name
-    //         },
-    //     )
-    //     .then(resp=>{
-    //         const updatedData = {
-    //             ...data,  // 기존 data 객체를 복사
-    //             image: resp.data.image  // image 키 추가
-    //         };
-    
-    //         // plannerData에 updatedData 추가
-    //         setPlannerData((plannerData) => [...plannerData, updatedData]);
-    //     })
-    //     .catch(err=>{console.log(err)});
-    // }
 
     useEffect(()=>{
         if(!location.state) {
