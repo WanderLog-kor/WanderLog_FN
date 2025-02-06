@@ -1,4 +1,5 @@
  // 마이페이지 헤더 (최상단)
+
  .mypage-header {
      width: 100%;
      background-color: #fff;
@@ -230,12 +231,12 @@
                      grid-template-columns: repeat(4, 1fr);
                      margin-bottom: 50px;
 
-
                      .planner-item {
                          margin: 0 0 35px 20px;
                          border-radius: 20px 20px 0 0;
 
                          transition: transform 0.3s ease;
+                         width: 280px;
 
 
                          .planner-thumbnail {
@@ -317,7 +318,7 @@
                                          border: 1px solid;
                                          font-size: 1.2rem;
                                          padding: 10px;
-                                         margin-bottom:5px;
+                                         margin-bottom: 5px;
                                          border-radius: 25px;
                                          width: 80px;
                                      }
@@ -336,7 +337,7 @@
                  // 좋아요한 목록들
                  .liked-planner-container {
                      display: flex;
-                     gap: 100px;
+                     gap: 50px;
 
                      // 좋아요한 플래너 리스트 스타일
                      ul {
@@ -391,4 +392,106 @@
      }
 
 
+ }
+
+
+
+ // 페이지네이션 
+ .mypage-pagination {
+     display: flex;
+     justify-content: center;
+     margin: 0 50px 50px 10px;
+     width: 100%;
+     position: relative;
+
+     button {
+         padding: 10px 15px;
+         width: 120px;
+         height: 50px;
+         font-weight: bold;
+         border: 1px solid #333;
+         border-radius: 30px;
+         /* background-color: #f8f8f8; */
+         cursor: pointer;
+         transition: background-color 0.3s, color 0.3s;
+     }
+
+     .pagination-info {
+         position: absolute;
+         right: 5%;
+         font-weight: bold;
+         height: 100%;
+         line-height: 50px;
+
+     }
+
+ }
+
+ .mypage-tourist-like-content {
+     ul {
+         .planner-item {
+             .planner-info {
+                 padding-top: 5px !important;
+             }
+         }
+     }
+ }
+
+ .mypage-travelCourse-like-content {
+     ul {
+         .planner-item {
+             .planner-info {
+                 padding-top: 5px !important;
+             }
+
+             .planner-title {
+                 white-space: normal !important;
+
+             }
+         }
+     }
+ }
+
+ .mypage-pagination button:hover {
+     background-color: #76c7db;
+     color: white;
+     border: 0;
+ }
+
+ .mypage-like-btn-container {
+     text-align: center;
+     margin-top: 15px;
+
+     .like-button {
+         background-color: #ff4d4d;
+         /* 빨간색 배경 */
+         color: white;
+         /* 흰색 텍스트 */
+         padding: 10px 20px;
+         font-size: 16px;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         transition: background-color 0.3s ease;
+     }
+
+     .like-button:hover {
+         background-color: #e60000;
+         /* 버튼에 마우스 오버 시 색상 변경 */
+     }
+
+     .like-button:focus {
+         outline: none;
+         /* 포커스 시 테두리 제거 */
+     }
+
+     .like-button.liked {
+         background-color: #f44336;
+         /* 좋아요 취소 버튼이 활성화되면 빨간색 */
+     }
+
+     .like-button.liked:hover {
+         background-color: #d32f2f;
+         /* hover 상태일 때 조금 더 진한 빨간색 */
+     }
  }
