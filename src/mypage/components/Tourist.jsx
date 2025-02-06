@@ -1,11 +1,13 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const TravelCourseList = ({ likedTourists, userid, setLikedTourists }) => {
   const ITEMS_PER_PAGE = 6; // 한 번에 표시할 아이템 개수
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (likedTourists && likedTourists.length > 0) {
@@ -52,6 +54,10 @@ const TravelCourseList = ({ likedTourists, userid, setLikedTourists }) => {
     }
 
   };
+  // 관광지 클릭시 상세 페이지로 데이터 전달
+  const handleTouristClick = (contentId) => {
+    navigate(`/tourist-info?contentId=${contentId}`);
+  };
 
   // 데이터가 없으면 기본 메시지 출력
   if (loading) {
@@ -67,13 +73,13 @@ const TravelCourseList = ({ likedTourists, userid, setLikedTourists }) => {
   };
 
   return (
-    <div>
+    <div className="mypage-tourist-like-content">
       <ul>
         {likedTourists.slice(0, visibleCount).map((tourist, index) => {
           const item = tourist?.items?.item?.[0];
           return (
             <li key={item?.contentid || index} className="planner-item">
-              <div className="planner-thumbnail">
+              <div className="planner-thumbnail" onClick={() => handleTouristClick(item.contentid)} >
                 <img
                   src={item?.firstimage || "/default-image.jpg"}
                   alt={item?.title || "이미지 없음"}
@@ -85,7 +91,7 @@ const TravelCourseList = ({ likedTourists, userid, setLikedTourists }) => {
                 <p>{item?.cat1 || ""}</p>
               </div>
 
-              <div className="like-btn-container">
+              <div className="mypage-like-btn-container">
                 <button
                   className="like-button liked"
                   onClick={() => removeLike(item?.contentid)}>

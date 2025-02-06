@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 
 const ITEMS_PER_PAGE = 6; // 한 번에 표시할 아이템 개수
 
 const TravelCourseList = ({ likedTravelCourse, userid, setLikedTravelCourse }) => {
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE); // 현재 표시 중인 개수
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const navigate = useNavigate();
 
   // likedTravelCourse가 업데이트 될 때 로딩 상태 변경
   useEffect(() => {
+    console.log('likedTravelCourse : ', likedTravelCourse)
     if (likedTravelCourse && likedTravelCourse.length > 0) {
       setLoading(false);
     } else {
@@ -63,48 +66,60 @@ const TravelCourseList = ({ likedTravelCourse, userid, setLikedTravelCourse }) =
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
   };
+  // 여행 코스 클릭시 상세 페이지로 데이터 전달
+  const handleCourseClick = (contentId, hashtag) => {
+    setLoading(true); // 로딩 시작
+
+    navigate(`/travelcourse-info?contentId=${contentId}`, {
+      state: {
+        hashtag,
+      },
+    });
+  };
 
   return (
-    <div>
+    <div className="mypage-travelCourse-like-content">
       <ul>
         {likedTravelCourse.slice(0, visibleCount).map((tourist, index) => {
           const item = tourist?.items?.item[0];
           return (
-            <li key={item?.contentid || index} className="planner-item">
-              <div className="planner-thumbnail">
-                <img
-                  src={item?.firstimage || "/default-image.jpg"}
-                  alt={item?.title || "이미지 없음"}
-                />
-              </div>
-              <div className="planner-info">
-                <p className="planner-title">{item?.title || "이름 없음"}</p>
-                <p>{item?.addr1 || ""}</p>
-                <p>{item?.cat1 || ""}</p>
-              </div>
-
-              <div className="mypage-like-btn-container">
-                <button
-                  className="like-button liked"
-                  onClick={() => removeLike(item?.contentid)}
-                >
-                  좋아요 취소
-                </button>
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-
-      {visibleCount < likedTravelCourse.length && (
-        <div className="mypage-pagination">
-          <button onClick={handleLoadMore} className="load-more-btn">
-            더보기
-          </button>
-          <p className="pagination-info">{visibleCount} / {likedTravelCourse.length}개 항목</p>
+            <li key={item?.contentid || index} className="planner-item" >
+        <div className="planner-thumbnail" onClick = {() => handleCourseClick(item.contentid)}>
+          <img
+            src={item?.firstimage || "/default-image.jpg"}
+            alt={item?.title || "이미지 없음"}
+          />
         </div>
-      )}
-    </div>
+        <div className="planner-info">
+          <p className="planner-title">{item?.title || "이름 없음"}</p>
+          <p>{item?.addr1 || ""}</p>
+          <p>{item?.cat1 || ""}</p>
+        </div>
+
+        <div className="mypage-like-btn-container">
+          <button
+            className="like-button liked"
+            onClick={() => removeLike(item?.contentid)}
+          >
+            좋아요 취소
+          </button>
+        </div>
+      </li>
+      );
+        })}
+    </ul>
+
+      {
+    visibleCount < likedTravelCourse.length && (
+      <div className="mypage-pagination">
+        <button onClick={handleLoadMore} className="load-more-btn">
+          더보기
+        </button>
+        <p className="pagination-info">{visibleCount} / {likedTravelCourse.length}개 항목</p>
+      </div>
+    )
+  }
+    </div >
   );
 };
 

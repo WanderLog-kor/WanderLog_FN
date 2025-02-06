@@ -427,6 +427,30 @@
 
  }
 
+ .mypage-tourist-like-content {
+     ul {
+         .planner-item {
+             .planner-info {
+                 padding-top: 5px !important;
+             }
+         }
+     }
+ }
+
+ .mypage-travelCourse-like-content {
+     ul {
+         .planner-item {
+             .planner-info {
+                 padding-top: 5px !important;
+             }
+
+             .planner-title {
+                 white-space: normal !important;
+
+             }
+         }
+     }
+ }
 
  .mypage-pagination button:hover {
      background-color: #76c7db;
@@ -436,7 +460,7 @@
 
  .mypage-like-btn-container {
      text-align: center;
-     margin-top: 10px;
+     margin-top: 15px;
 
      .like-button {
          background-color: #ff4d4d;

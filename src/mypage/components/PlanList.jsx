@@ -49,7 +49,7 @@ const PlanList = ({ filteredPlanners, handlePlannerClick, removePlanLike, userid
                 </p>
               </div>
 
-              <div className="like-btn-container">
+              <div className="mypage-like-btn-container">
                 <button
                   className="like-button liked"
                   onClick={() => removePlanLike(likePlan.plannerID)} // 좋아요 취소 클릭 시 함수 호출
