@@ -31,7 +31,7 @@ const Destination = () => {
     const [likeCount, setLikeCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
-    // console.log(loginData?.userid,plannerItem);
+    console.log(loginData?.userid,plannerItem);
 
     // 거리 계산 함수: 두 좌표 간의 거리 계산 (단위: km)
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
