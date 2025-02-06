@@ -9,19 +9,62 @@ import travelCourseIcon from './images/travel-guide.png';
 import courseIcon from './images/itinerary.png';
 
 const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
-  const [category, setCategory] = useState("plan"); //카테고리 필터 상태 변수 ,, 기본적으로 여행 계획 먼저나옴
+  const [category, setCategory] = useState("plan");
   const [likedTourists, setLikedTourists] = useState([]);
   const [likedTravelCourse, setLikedTravelCourse] = useState([]);
+  const [likedPlannersState, setLikedPlannersState] = useState(likedPlanners);
 
-  //각 카테고리를 선택할 때 결과가 다르게 나옴
-  const filteredPlanners = (Array.isArray(likedPlanners) ? likedPlanners : []).filter((planner) => {
+  // 각 카테고리 필터 상태
+  const filteredPlanners = (Array.isArray(likedPlannersState) ? likedPlannersState : []).filter((planner) => {
     if (category === "plan") return true;
     if (category === "tourist") return false;
     if (category === "travelcourse") return false;
     return true;
   });
 
-  //관광지 데이터 받아옴
+  // 여행 계획 좋아요 취소 후 데이터 리로딩
+  const removePlanLike = (plannerId) => {
+    const isConfirmed = window.confirm("좋아요를 취소하시겠습니까?");
+    if (isConfirmed) {
+      console.log('userid:  ', userid);
+      console.log('plannerid : ', plannerId);
+      axios
+        .post(
+          `http://localhost:9000/planner/board/toggleLike`,
+          {
+            plannerID: plannerId,
+            userId: userid
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json', // JSON 포맷으로 전송
+            },
+            withCredentials: true
+          }) // 쿠키 포함
+        .then((response) => {
+          // 좋아요 취소 후, 여행 계획 데이터만 재로딩
+          fetchLikedPlanners();
+        })
+        .catch((error) => {
+          console.error("좋아요 취소 실패:", error);
+        });
+    }
+  };
+
+  // 여행 계획 데이터 새로 불러오기
+  const fetchLikedPlanners = async () => {
+    if (!userid) return;
+    try {
+      const response = await axios.get(`http://localhost:9000/user/mypage/${userid}/liked-planners`, {
+        withCredentials: true
+      });
+      setLikedPlannersState(response.data); // 받아온 데이터로 상태 업데이트
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // 관광지 데이터 새로 불러오기 (카테고리 변경 시만)
   const fetchLikedTourists = async () => {
     if (!userid) return;
 
@@ -31,63 +74,53 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
         `http://localhost:9000/user/mypage/${userid}/liked-tourists`,
         { withCredentials: true }
       );
-
       const likedTouristData = response.data;
       console.log("받아온 관광지 ID 목록:", likedTouristData);
-
-      setLikedTourists(likedTouristData);
+      setLikedTourists(likedTouristData); // 관광지 데이터 저장
     } catch (err) {
       console.log(err);
     }
   };
 
-  useEffect(() => {
-    if (category === "tourist") {
-      fetchLikedTourists();
-    }
-  }, [category, userid]);
-
-  //여행코스 데이터 받아옴
+  // 여행 코스 데이터 새로 불러오기 (카테고리 변경 시만)
   const fetchLikedTravelCourses = async () => {
     if (!userid) return;
 
     try {
-      console.log("여행코스 데이터를 불러옵니다.");
+      console.log("여행 코스 데이터를 불러옵니다.");
       const response = await axios.get(
         `http://localhost:9000/user/mypage/${userid}/liked-travelcourse`,
         { withCredentials: true }
       );
-
       const likedTravelcourseData = response.data;
-      setLikedTravelCourse(likedTravelcourseData);
+      setLikedTravelCourse(likedTravelcourseData); // 여행 코스 데이터 저장
     } catch (err) {
       console.log(err);
     }
   };
 
+  // 카테고리 변경 시, 해당 카테고리의 데이터를 불러옴
   useEffect(() => {
-    if (category === "travelcourse") {
+    if (category === "tourist") {
+      fetchLikedTourists();
+    } else if (category === "travelcourse") {
       fetchLikedTravelCourses();
+    } else if (category === "plan") {
+      fetchLikedPlanners();
     }
   }, [category, userid]);
-
-  useEffect(() => {
-    if (category === "plan") {
-      console.log(category);
-    }
-  });
 
   return (
     <div className="liked-planner-container">
       <div className="filter-options">
         <button
-          className={`plan-btn ${category === "plan" ? "active" : ""}`} 
+          className={`plan-btn ${category === "plan" ? "active" : ""}`}
           onClick={() => setCategory("plan")}>
           <img src={courseIcon} />
           여행 계획
         </button>
         <button
-          className={`tourist-btn ${ category === "tourist" ? "active" : ""}`}
+          className={`tourist-btn ${category === "tourist" ? "active" : ""}`}
           onClick={() => setCategory("tourist")}>
           <img src={touristIcon} />
           관광지
@@ -102,15 +135,25 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
 
       {category === "plan" && (
         <PlanList
-          filteredPlanners={likedPlanners}
+          filteredPlanners={likedPlannersState}
           handlePlannerClick={handlePlannerClick}
+          userid={userid}
+          removePlanLike={removePlanLike}
         />
       )}
       {category === "tourist" && (
-        <TouristList likedTourists={likedTourists} />
+        <TouristList
+          setLikedTourists={setLikedTourists}
+          likedTourists={likedTourists}
+          userid={userid}
+        />
       )}
       {category === "travelcourse" && (
-        <TravelCourseList likedTravelCourse={likedTravelCourse} />
+        <TravelCourseList
+          setLikedTravelCourse={setLikedTravelCourse}
+          likedTravelCourse={likedTravelCourse}
+          userid={userid}
+        />
       )}
     </div>
   );
