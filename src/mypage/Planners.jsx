@@ -75,7 +75,61 @@ const Planners = ({ detailProfile }) => {
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + ITEMS_PER_PAGE);
   };
+  const areaCodeMap = {
+    서울: "1",
+    인천: "2",
+    대전: "3",
+    대구: "4",
+    광주: "5",
+    부산: "6",
+    울산: "7",
+    세종: "8",
+    경기: "31",
+    강원도: "32",
+    충북: "33",
+    충남: "34",
+    경북: "35",
+    경남: "36",
+    전북: "37",
+    전남: "38",
+    제주: "39",
+  };
 
+  const handleClickPlannerUpdate = () => {
+
+    const plannerData = likedPlanners[0];
+    const areaCode = areaCodeMap[plannerData.area] || "0"; //areaName 없으면 도시코드 0
+
+    const updateData = {
+      areaName: plannerData.area,
+      areaCode: areaCode,
+      startDate: plannerData.startDate,
+      endDate: plannerData.endDate,
+      plannerid: plannerData.plannerID,
+      title: plannerData.plannerTitle,
+      description: plannerData.description,
+      isPublic: plannerData.public,
+      day: plannerData.day,
+      userid: plannerData.userId,
+      destinations: plannerData.destinations,
+    }
+    navigate('/makePlanner', { state: { updatePlannerData: updateData } });
+  }
+
+  const handleClickPlannerDelete = () => {
+    axios.post('http://localhost:9000/planner/deletePlanner',
+      { plannerid: String(likedPlanners[0].plannerID) },
+      { 'Content-Type': 'application/json' }
+    )
+      .then(resp => {
+        alert('플래너 삭제에 성공했습니다!');
+        window.location.reload();
+      })
+      .catch(err => {
+        console.error("Error Deleting to my course:", err);
+        alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
+      })
+  }
   return (
     <>
       {!detailProfile && (
@@ -134,8 +188,8 @@ const Planners = ({ detailProfile }) => {
                               <img src={moreIcon} onClick={() => setExpandedPlanner(expandedPlanner === planner.plannerID ? null : planner.plannerID)} />
                               {expandedPlanner === planner.plannerID && (
                                 <div className="planner-options">
-                                  <button>편집</button>
-                                  <button>삭제</button>
+                                  <button onClick={handleClickPlannerUpdate}>편집</button>
+                                  <button onClick={handleClickPlannerDelete}>삭제</button>
                                 </div>
                               )}
                             </div>

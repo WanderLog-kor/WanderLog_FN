@@ -1,9 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import PlannerDate from "../PlannerDate/PlannerDate";
 import axios from "axios";
 import "./SideBar.scss";
 import { useNavigate, useLocation } from "react-router-dom";
-import Logo from "../../images/logoImage.png";
 import NoImage from "../../images/noImage.png";
 import Search from "../../images/search.png";
 import Delete from "../../images/delete.png";
@@ -20,13 +18,6 @@ const SideBar = (props) => {
     (`${props.loginData.username} 님이 계획하신 여행계획입니다.`) : ("Guest 님이 계획하신 여행계획입니다.")); //내용
 
   const [addedItemsByDay, setAddedItemsByDay] = useState({}); //각 N일차에 대한 요소 추가 여부
-  const [isPlannerVisible, setIsPlannerVisible] = useState(true);
-  const [cardAdded, setCardAdded] = useState(false);
-
-  const togglePlannerVisibility = () => {
-    //플래너 부분 들어갔다 나오게 하기
-    setIsPlannerVisible(!isPlannerVisible);
-  };
 
   const openModal = () => {
     setIsModalOpen(true);

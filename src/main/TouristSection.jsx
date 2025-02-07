@@ -40,7 +40,7 @@ const TouristSection = () => {
         const data = {
             keyword: '',
             // 테스트용으로 1페이지 고정 (randomPage함수로 변경 해야함)
-            pageNo: 1,
+            pageNo: randomPage,
             hashtag: '',
             regionCode: '',
             numOfRows: 10,
