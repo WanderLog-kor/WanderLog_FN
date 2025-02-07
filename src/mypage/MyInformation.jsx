@@ -86,18 +86,9 @@ const MyInformation = ({ detailProfile, setDetailProfile }) => {
       try {
         setLoading(true);
 
-        // 쿠키 유효성 확인   //필요없음
-        // await axios.post(
-        //   "http://localhost:9000/api/cookie/validate",
-        //   {},
-        //   {
-        //     withCredentials: true,
-        //   }
-        // );
-
         // 사용자 데이터 가져오기
         const userResponse = await axios.get(
-          "http://localhost:9000/user/mypage",
+          "https://www.wanderlog.shop/user/mypage",
           {
             withCredentials: true,
           }
@@ -197,7 +188,7 @@ const MyInformation = ({ detailProfile, setDetailProfile }) => {
     if (name === "nowPassword") {
       try {
         const response = await axios.post(
-          "http://localhost:9000/user/mypage/check-password",
+          "https://www.wanderlog.shop/user/mypage/check-password",
           { password: value },
           { withCredentials: true }
         );
@@ -251,7 +242,7 @@ const MyInformation = ({ detailProfile, setDetailProfile }) => {
     try {
       if (formData.password || formData.reapssword) {
         const passwordCheckResponse = await axios.post(
-          "http://localhost:9000/user/mypage/check-password",
+          "https://www.wanderlog.shop/user/mypage/check-password",
           { password: formData.nowPassword },
           { withCredentials: true }
         );
@@ -288,26 +279,20 @@ const MyInformation = ({ detailProfile, setDetailProfile }) => {
 
       // 사용자 정보 업데이트
       await axios.put(
-        "http://localhost:9000/user/mypage/userupdate", updateData,
+        "https://www.wanderlog.shop/user/mypage/userupdate", updateData,
         { withCredentials: true }
       );
-      console.log("유저 정보가 성공적으로 변경되었습니다.");
       alert("유저 정보가 성공적으로 변경되었습니다.");
       window.location.reload();
       setFormData((prev) => ({ ...prev, nowPassword: "", password: "", repassword: "" }));
       setIsPasswordEditing(false);
-      // setIsPasswordValidationVisible(false);
       setValidationMessages({});
       setIsPasswordModalOpen(false);
       setDetailProfile(false);
     } catch (err) {
       console.error("유저 정보 변경 중 오류:", err);
       alert("서버 오류로 비밀번호를 변경할 수 없습니다.");
-      // setValidationMessages((prev) => ({
-      //   ...prev,
-      //   username: "서버 오류로 유저 정보를 변경할 수 없습니다.",
-      //   usernameColor: "validation-error",
-      // }));
+
     }
   };
 
@@ -360,7 +345,7 @@ const MyInformation = ({ detailProfile, setDetailProfile }) => {
 
     try {
       const response = await axios.delete(
-        "http://localhost:9000/user/mypage/delete",
+        "https://www.wanderlog.shop/user/mypage/delete",
         {
           withCredentials: true, // 쿠키 인증 정보를 함께 보냄
         }

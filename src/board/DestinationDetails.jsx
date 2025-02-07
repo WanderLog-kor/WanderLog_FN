@@ -43,14 +43,14 @@ const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab �
     // 장소 이름 클릭 시 관광지에 있는 정보이면 우리 페이지로 표시하고 없으면 카카오로 검색
     const desInfoClick = (item) => {
 
-        axios.post(`http://localhost:9000/destination-to-tourist`, {
+        axios.post(`https://www.wanderlog.shop/destination-to-tourist`, {
             mapX: item.x,
             mapY: item.y
         }).then((response) => {
 
             if (response.data.items.item[0].contentid) {
                 const contentId = response.data.items.item[0].contentid;
-                axios.get(`http://localhost:9000/tourist-info?id=${contentId}`)
+                axios.get(`https://www.wanderlog.shop/tourist-info?id=${contentId}`)
                     .then((response) => {
 
                         const detailCommon = response.data;
@@ -65,7 +65,6 @@ const Details = ({ plannerItem, destinations, activeTab }) => {  // activeTab �
 
             }
 
-            console.log(response.data.items.item[0]);
         }).catch(() => {
             // 데이터가 없으면 카카오지도에 장소 이름으로 검색
             const kakaoMapUrl = `https://map.kakao.com/link/search/${encodeURIComponent(item.name)}`;

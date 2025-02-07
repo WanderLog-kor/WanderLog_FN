@@ -19,7 +19,7 @@ export const LoginProvider = ({ children }) => {
         const validateCookie = async () => {
             try {
                 const response = await axios.post(
-                    "http://localhost:9000/api/cookie/validate",
+                    "https://www.wanderlog.shop/api/cookie/validate",
                     {},
                     { withCredentials: true }
                 );
@@ -28,7 +28,6 @@ export const LoginProvider = ({ children }) => {
                 setLoginStatus(true);
                 setLoginData(response.data);
             } catch (err) {
-                console.log("엑세스 토큰 갱신 시도");
                 await handleTokenRefresh();
             }
         };
@@ -81,7 +80,6 @@ const refreshAccessToken = async (userid) => {
         );
         return response.data;
     } catch (error) {
-        console.log("엑세스 토큰 재발급 실패", error);
         localStorage.removeItem("userid");
         throw new Error("엑세스 토큰 재발급 실패");
     }

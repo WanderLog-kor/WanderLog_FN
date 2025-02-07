@@ -31,22 +31,19 @@ const Planners = ({ detailProfile }) => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        console.log("사용자 데이터 요청 시작");
 
         // 사용자 정보 가져오기
         const userResponse = await axios.get(
-          "http://localhost:9000/user/mypage",
+          "https://www.wanderlog.shop/user/mypage",
           { withCredentials: true }
         );
 
-        console.log("사용자 데이터 가져오기 성공:", userResponse.data);
         setUserData(userResponse.data);
       } catch (err) {
         console.error("사용자 데이터를 가져오는 중 오류:", err);
         setError("사용자 데이터를 가져오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
-        console.log("사용자 데이터 요청 종료");
       }
     };
 

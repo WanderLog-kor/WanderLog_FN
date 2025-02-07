@@ -9,25 +9,21 @@ const useMyPlanner = (detailProfile) => {
   const fetchPlanners = async () => {
     try {
       setLoading(true);
-      console.log("플래너 요청 시작");
   
       const response = await axios.get(
-        "http://localhost:9000/user/mypage/my-planners",
+        "https://www.wanderlog.shop/user/mypage/my-planners",
         {
           withCredentials: true,
         }
       );
   for(let i=0;i<response.data.length;i++){
-    console.log("반복",response.data[i]);
   }
-  // console.log(response.data[1].destinations[0].image);
       setPlanners(response.data);
       setError(null); // 에러 초기화
     } catch (err) {
       console.error("플래너 데이터를 가져오는 중 오류:", err.response || err);
       setError("플래너 데이터를 가져오는 중 오류가 발생했습니다.");
     } finally {
-      console.log("플래너 요청 종료");
       setLoading(false); // 로딩 종료
     }
   };

@@ -17,7 +17,7 @@ const useLikePlanner = (userid) => {
       setLoading(true);
       try {
         // 백엔드 API 호출
-        const response = await axios.get(`http://localhost:9000/user/mypage/${userid}/liked-planners`);
+        const response = await axios.get(`https://www.wanderlog.shop/user/mypage/${userid}/liked-planners`);
         setLikedPlanners(response.data); // API 응답 데이터 저장
       } catch (error) {
 

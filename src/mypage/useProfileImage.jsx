@@ -9,12 +9,12 @@ const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
   }
 
   const [imagePreview, setImagePreview] = useState(
-    userData?.img ? `http://localhost:9000${userData.img}` : "/ProfileImg/anonymous.jpg"
+    userData?.img ? `https://www.wanderlog.shop${userData.img}` : "/ProfileImg/anonymous.jpg"
   );
 
   useEffect(() => {
     if (userData?.img) {
-      setImagePreview(`http://localhost:9000${userData.img}`);
+      setImagePreview(`https://www.wanderlog.shop${userData.img}`);
     } else {
       setImagePreview("/ProfileImg/anonymous.jpg");
     }
@@ -31,18 +31,16 @@ const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
       alert("파일 용량이 큽니다. 5MB 이하의 이미지를 선택해주세요.");
       return ;
     }
-    console.log("핸들업로그함수");
       const formData = new FormData();
       formData.append("file", file);
 
       try {
         const response = await axios.post(
-          "http://localhost:9000/user/mypage/upload",
+          "https://www.wanderlog.shop/user/mypage/upload",
           formData,
           { headers: { "Content-Type": "multipart/form-data" }, withCredentials: true }
         );
 
-        console.log("이미지 업로드 응답:", response.data);
 
         if (response.data === "파일 업로드 성공") {
           setFormData((prev) => ({
@@ -51,18 +49,16 @@ const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
           }));
 
           if(typeof setIsSaveEnabled === "function"){
-            setIsSaveEnabled(true); console.log("저장버튼 활성화")
+            setIsSaveEnabled(true);
           }
 
         } else {
-          console.error("이미지 업로드 실패:", response.data);
         }
       } catch (error) {
-        console.error("이미지 업로드 중 오류 발생:", error.message);
       }
     };
 
-  const handleImagePreview = useCallback((file) => { console.log("핸들프리뷰함수");
+  const handleImagePreview = useCallback((file) => { 
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -78,7 +74,6 @@ const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
     (e) => {
       const file = e.target.files[0]; 
       if (file) {
-        console.log("핸들파일체인지",file);
 
         if(file.size > MAX_FILE_SIZE){
           alert("파일 용량이 큽니다. 5MB 이하의 이미지를 선택해주세요");
@@ -127,7 +122,7 @@ const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
 
     try {
       const response = await axios.post(
-        "http://localhost:9000/user/mypage/set-default-image",
+        "https://www.wanderlog.shop/user/mypage/set-default-image",
         { profileImage: defaultImage },
         { headers: { "Content-Type": "application/json" }, withCredentials: true }
       );
@@ -137,12 +132,9 @@ const useProfileImage = (formData, setFormData,setIsSaveEnabled,userData) => {
           ...prev,
           profileImage: defaultImage,
         }));
-        console.log("기본 이미지로 변경 성공");
       } else {
-        console.error("기본 이미지로 변경 실패:", response.data);
       }
     } catch (error) {
-      console.error("기본 이미지 변경 중 오류 발생:", error.message);
     }
   }, [setFormData]);
 

@@ -54,7 +54,7 @@ const TravelCourseSection = () => {
 
     // 로그인 상태 확인
     useEffect(() => {
-        axios.post('http://localhost:9000/api/cookie/validate', {}, { withCredentials: true })
+        axios.post('https://www.wanderlog.shop/api/cookie/validate', {}, { withCredentials: true })
             .then(response => {
                 setLoginStatus(response.data);
             })
@@ -75,22 +75,21 @@ const TravelCourseSection = () => {
             numOfRows: 10
         };
 
-        axios.post('http://localhost:9000/api/getSearch', data, {
+        axios.post('https://www.wanderlog.shop/api/getSearch', data, {
             headers: { 'Content-Type': 'application/json' }
         })
             .then(response => {
                 setCourseData(response.data.items.item || []);
-                console.log('여행코스데이터 : ', response.data.items.item)
             })
             .catch((error) => {
-                console.error('Error fetching courses:', error);
+
             });
     };
 
     // 좋아요 상태 가져오기
     const getLikeStatus = (travelCourseId) => {
         if (loginStatus && loginStatus.userid) {  // 로그인 상태일 때만 호출
-            axios.get(`http://localhost:9000/travelCourse/likeStatus?travelCourseId=${travelCourseId}&userId=${loginStatus.userid}`, {
+            axios.get(`https://www.wanderlog.shop/travelCourse/likeStatus?travelCourseId=${travelCourseId}&userId=${loginStatus.userid}`, {
                 withCredentials: true,
             })
                 .then(response => {
@@ -131,7 +130,7 @@ const TravelCourseSection = () => {
             userId: loginStatus.userid
         };
 
-        axios.post('http://localhost:9000/travelCourse/toggleLike', likeRequest, {
+        axios.post('https://www.wanderlog.shop/travelCourse/toggleLike', likeRequest, {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
         })

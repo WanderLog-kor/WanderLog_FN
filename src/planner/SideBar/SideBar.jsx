@@ -11,8 +11,6 @@ import Modal from "./Modal";
 import { useLoginStatus } from "../../auth/PrivateRoute";
 
 const SideBar = (props) => {
-  // console.log("sibebarSelectedCity",props);
-  //주석 처리한 부분은 삭제 예정 코드.
   const { loginStatus } = useLoginStatus();
   const [isModalOpen, setIsModalOpen] = useState(false); //모달 오픈 상태
   const [plannerTitle, setPlannerTitle] = useState(loginStatus ? 
@@ -117,7 +115,6 @@ const SideBar = (props) => {
 
   // 검색을 위한 지역명 받아오기
   const handleAreaName = (data) => {
-    console.log("데타", data);
     setAreaName(data);
   };
 
@@ -126,7 +123,7 @@ const SideBar = (props) => {
     if (typeState == "관광지") {
       axios
         .post(
-          "http://localhost:9000/planner/searchDestination",
+          "https://www.wanderlog.shop/planner/searchDestination",
           {
             type: typeState,
             word: encodeURIComponent(word.trim()),
@@ -159,12 +156,11 @@ const SideBar = (props) => {
           setSearch(updatedSearch || []);
         })
         .catch((err) => {
-          console.log(err);
         });
     } else {
       axios
         .post(
-          "http://localhost:9000/planner/searchDestination",
+          "https://www.wanderlog.shop/planner/searchDestination",
           {
             type: typeState,
             word: word,
@@ -185,7 +181,7 @@ const SideBar = (props) => {
             currentPageData.map(async (el, index) => {
               try {
                 const imageResp = await axios.post(
-                  "http://localhost:9000/planner/getImages",
+                  "https://www.wanderlog.shop/planner/getImages",
                   {
                     businessName: el.name,
                   }
@@ -222,7 +218,6 @@ const SideBar = (props) => {
     props.DeleteDestination({ day, data }); // 부모 컴포넌트 업데이트
     setAddedItemsByDay((prev) => {
       const updatedDayItems = prev[day]?.filter((id) => id !== uniqueId) || [];
-      console.log("Removed Items:", updatedDayItems);
       return {
         ...prev,
         [day]: updatedDayItems,
@@ -265,7 +260,7 @@ const SideBar = (props) => {
 
       await axios
         .post(
-          "http://localhost:9000/planner/updatePlanner",
+          "https://www.wanderlog.shop/planner/updatePlanner",
           {
             plannerid:props.plannerid,
             areaName: props.areaName,
@@ -281,18 +276,16 @@ const SideBar = (props) => {
           { "Content-Type": "application/json" }
         )
         .then((resp) => {
-          console.log(resp);
           alert("플래너를 성공적으로 수정하였습니다!");
           navigate("/planner/board");
         })
         .catch((err) => {
-          console.log(err);
           alert("플래너를 수정하지 못했습니다.");
         });
     } else {
       await axios
         .post(
-          "http://localhost:9000/planner/addPlanner",
+          "https://www.wanderlog.shop/planner/addPlanner",
           {
             areaName: props.areaName,
             areaCode : props.areaCode,
@@ -308,13 +301,11 @@ const SideBar = (props) => {
           { "Content-Type": "application/json" }
         )
         .then((resp) => {
-          console.log(resp);
           alert("플래너를 성공적으로 작성하였습니다!");
           closeModal(); //모달 닫기
           navigate("/");
         })
         .catch((err) => {
-          console.log(err);
           alert("플래너를 작성하지 못했습니다.");
         });
     }
@@ -540,7 +531,6 @@ const SideBar = (props) => {
                 className={`search-btn ${typeState === "식당" ? "active" : ""}`}
                 onClick={(e) => {
                   setTypeState(e.target.innerText);
-                  console.log(e.target.innerText);
                 }}
               >
                 식당
@@ -585,7 +575,6 @@ const SideBar = (props) => {
                         className="search-card"
                         onClick={() => {
                           props.ClickSearch(el);
-                          console.log(el.image, el);
                         }}
                       >
                         <div className="card-image">
@@ -642,7 +631,6 @@ const SideBar = (props) => {
                         className="search-card"
                         onClick={() => {
                           props.ClickSearch(el);
-                          console.log(el);
                         }}
                       >
                         <div className="card-image">
@@ -773,7 +761,6 @@ const SideBar = (props) => {
                                 className="content-card"
                                 onClick={() => {
                                   props.ClickPlanner(destination);
-                                  console.log(destination.data);
                                 }}
                               >
                                 <div className="card-image">

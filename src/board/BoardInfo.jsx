@@ -20,7 +20,7 @@ const Destination1 = () => {
 
     useEffect(() => {
         // 데이터를 가져오는 로직
-        axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
+        axios.get(`https://www.wanderlog.shop/planner/board/destination?plannerID=${plannerID}`)
             .then((response) => {
 
                 setDestinations(response.data);

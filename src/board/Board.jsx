@@ -42,11 +42,8 @@ const Board = () => {
         };
 
         try {
-            const response = await axios.get(`http://localhost:9000/planner/board`, { params: query });
+            const response = await axios.get(`https://www.wanderlog.shop/planner/board`, { params: query });
             const fetchedPlanners = response.data.content;
-            console.log('데이터 : ', fetchedPlanners);
-            console.log('loginStatus : ', loginStatus);
-            console.log('로그인데이터', loginData);
 
             // 지역에 맞는 데이터가 없으면 메시지 설정
             if (fetchedPlanners.length === 0) {

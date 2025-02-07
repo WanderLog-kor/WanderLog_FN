@@ -24,7 +24,7 @@ const TravelCourseList = ({ likedTourists, userid, setLikedTourists }) => {
     if (isConfirmed) {
       // 좋아요 취소 API 요청
       axios.post(
-        `http://localhost:9000/tourist/toggleLike`,
+        `https://www.wanderlog.shop/tourist/toggleLike`,
         { touristId, userId: userid },
         { withCredentials: true }
       )
@@ -43,7 +43,7 @@ const TravelCourseList = ({ likedTourists, userid, setLikedTourists }) => {
   const fetchLikedTourists = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/user/mypage/${userid}/liked-tourists`,
+        `https://www.wanderlog.shop/user/mypage/${userid}/liked-tourists`,
         { withCredentials: true }
       );
       const likedTouristData = response.data;

@@ -139,10 +139,10 @@ const Destination = () => {
     // destination 데이터를 서버에서 가져오는 API 호출
     useEffect(() => {
         if (plannerID) {
-            axios.get(`http://localhost:9000/planner/board/destination?plannerID=${plannerID}`)
+            axios.get(`https://www.wanderlog.shop/planner/board/destination?plannerID=${plannerID}`)
                 .then((response) => {
                     setUsername(response.data[0].username);
-                    setDestinations(response.data); console.log(response);
+                    setDestinations(response.data);
                 })
                 .catch((error) => {
                     console.error("Error fetching destinations:", error);
@@ -153,7 +153,7 @@ const Destination = () => {
         // 좋아요 상태 확인 (몇개 눌렸는지 내가 눌렀는지)
         if (plannerID) {
 
-            axios.get(`http://localhost:9000/planner/board/likeStatus?plannerID=${plannerID}&userId=${loginData?.userid}`, {
+            axios.get(`https://www.wanderlog.shop/planner/board/likeStatus?plannerID=${plannerID}&userId=${loginData?.userid}`, {
 
                 withCredentials: true, // 쿠키 포함
             })
@@ -175,7 +175,7 @@ const Destination = () => {
             return;
         }
 
-        axios.post('http://localhost:9000/planner/board/toggleLike',
+        axios.post('https://www.wanderlog.shop/planner/board/toggleLike',
             {
                 plannerID: plannerID,
                 userId: loginData.userid
@@ -187,7 +187,6 @@ const Destination = () => {
                 withCredentials: true
             }) // 쿠키 포함
             .then((response) => {
-                console.log('response', response);
                 setLikeCount(response.data.likeCount); // 서버에서 업데이트된 좋아요 개수
                 setIsLiked(response.data.isLiked); // 서버에서 반환된 좋아요 상태
             })
@@ -201,7 +200,7 @@ const Destination = () => {
     // 내 코스로 담기 버튼
     const handleAddToMyCourse = () => {
 
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+        axios.post('https://www.wanderlog.shop/api/cookie/validate', {}, {
             withCredentials: true, // 쿠키 포함
         })
             .then(response => {
@@ -226,11 +225,10 @@ const Destination = () => {
     }
 
     const handleDeletePlanner = () => {
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+        axios.post('https://www.wanderlog.shop/api/cookie/validate', {}, {
             withCredentials: true, // 쿠키 포함
         })
             .then(response => {
-                console.log("Planner ITEM:", plannerItem);
             })
 
             .catch(error => {
@@ -238,7 +236,7 @@ const Destination = () => {
                 window.location.href = "/user/login";
             });
 
-        axios.post('http://localhost:9000/planner/deletePlanner',
+        axios.post('https://www.wanderlog.shop/planner/deletePlanner',
             { plannerid: plannerID },
             { 'Content-Type': 'application/json' }
         )
@@ -289,7 +287,6 @@ const Destination = () => {
             destinations: destinations,
         }
         navigate('/makePlanner', { state: { updatePlannerData: updateData } });
-        console.log(updateData);
     }
 
     return (

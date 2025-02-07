@@ -91,10 +91,8 @@ const MakePlanner = ({}) => {
     const handleClickSearch = (data) => {setSearchDestination(data);}
     
     useEffect(() => {
-        console.log("updatePlannerData:", updatePlannerData); // 🔥 데이터 확인
     }, [updatePlannerData]);
     useEffect(() => {
-        console.log("travelData:", travelData); // 🔥 데이터 확인
     }, [updatePlannerData]);
     
 

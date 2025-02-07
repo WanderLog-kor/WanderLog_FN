@@ -47,7 +47,7 @@ const TravelCourseInfo = () => {
     const fetchGoogleResults = async (items) => {
         const googleKeywordSearch = items.map((el, index) => {
             const currentEncodedData = encodeURIComponent(el.subname);
-            return axios.post("http://localhost:9000/google-search-places", { keyword: currentEncodedData })
+            return axios.post("https://www.wanderlog.shop/google-search-places", { keyword: currentEncodedData })
                 .then((response) => {
                     const { photoUrls, latitude, longitude } = response.data;
                     return { index, photoUrls, latitude, longitude };
@@ -68,13 +68,13 @@ const TravelCourseInfo = () => {
         const fetchData = async () => {
             try {
                 if (contentId) {
-                    const response = await axios.get(`http://localhost:9000/travelcourse-info?contentId=${contentId}`);
+                    const response = await axios.get(`https://www.wanderlog.shop/travelcourse-info?contentId=${contentId}`);
                     setCourseDetail(response.data);
 
-                    const response2 = await axios.post(`http://localhost:9000/travelcourse-info-detailCommon`, { contentId: contentId });
+                    const response2 = await axios.post(`https://www.wanderlog.shop/travelcourse-info-detailCommon`, { contentId: contentId });
                     setDetailCommon(response2.data.items.item[0]);
 
-                    const response3 = await axios.post(`http://localhost:9000/travelcourse-info-detailIntro`, { contentId: contentId });
+                    const response3 = await axios.post(`https://www.wanderlog.shop/travelcourse-info-detailIntro`, { contentId: contentId });
                     setDetailIntro(response3.data.items.item[0].taketime);
                 }
                 setLoading(false);

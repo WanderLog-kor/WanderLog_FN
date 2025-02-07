@@ -28,92 +28,6 @@ const Map = (props) => {
         iconSize:[25,50],
     })
 
-    // 지도에 마커 생성 (비동기요청)
-    // const MapRender = async (zoomlevel) => {
-    //     // 비동기요청
-    //     await axios.post('http://localhost:9000/planner/listDestination',
-    //         {"latitude":center.lat, "longitude":center.lng,"zoomlevel":zoomlevel},
-    //         {"Content-Type" : "application/json"},
-    //     )
-    //     .then(resp=>{
-    //         // 모든 마커 삭제
-    //         layerGroup.clearLayers();
-
-    //             // 음식리스트
-    //             const foodList = JSON.parse(resp.data.foodList);
-    //             foodList.forEach(el => {
-    //                 const lat = el.x; const lng = el.y;
-    //                 // 마커 생성 후 layerGroup에 추가
-    //                 const marker = L.marker([lng,lat],{icon: foodIcon}).addTo(layerGroup);
-    //                 // 마커 클릭시 팝업 생성
-    //                 marker.on('click', () => {
-    //                     marker.unbindPopup();
-    //                     marker.bindPopup(
-    //                         `
-    //                         <style></style>
-    //                         업장명 : ${el.name} <br/>
-    //                         카테고리 : ${el.category} <br/>
-    //                         주소 : ${el.address} <br/>
-    //                         <button class='planner_btn ${el.name}' >플래너에 추가</button>
-    //                         `
-    //                     ).openPopup();
-    //                 })
-    //                 // 팝업 오픈시 팝업 내에 있는 버튼의 이벤트리스너 추가
-    //                 marker.on('popupopen',function(e){
-    //                     const nodeList = e.target._popup._contentNode.childNodes;
-    //                     nodeList[9].addEventListener('click', async () => {
-    //                         await  axios.post('http://localhost:9000/planner/findDestination',
-    //                             {"businessName":el.name, "businessCategory":el.category,"streetFullAddress":el.address,"coordinate_x":el.x,"coordinate_y":el.y},
-    //                             {"Content-Type":"application/json"},
-    //                         )
-    //                         .then(resp=>{
-    //                             props.AddDestination({"day":props.DayData,"data":resp.data})
-    //                         })
-    //                         .catch(err=>{console.log(err)})
-    //                     });
-    //                 })
-
-    //             });
-
-    //             // 숙소리스트
-    //             const accomList = JSON.parse(resp.data.accomList);
-    //             accomList.forEach(el => {
-    //                 const lat = el.x; const lng = el.y;
-    //                 // 마커 생성 후 layerGroup에 추가
-    //                 const marker = L.marker([lng,lat]).addTo(layerGroup);
-    //                 // 마커 클릭시 팝업 생성
-    //                 marker.on('click', () => {
-    //                     marker.unbindPopup();
-    //                     marker.bindPopup(
-    //                         `
-    //                         <style></style>
-    //                         업장명 : ${el.name} <br/>
-    //                         카테고리 : ${el.category} <br/>
-    //                         주소 : ${el.address} <br/>
-    //                         <button class='planner_btn ${el.name}' >플래너에 추가</button>
-    //                         `
-    //                     ).openPopup();
-    //                 })
-    //                 // 팝업 오픈시 팝업 내에 있는 버튼의 이벤트리스너 추가
-    //                 marker.on('popupopen',function(e){
-    //                     const nodeList = e.target._popup._contentNode.childNodes;
-    //                     nodeList[9].addEventListener('click', async () => {
-    //                         await  axios.post('http://localhost:9000/planner/findDestination',
-    //                             {"businessName":el.name, "businessCategory":el.category,"streetFullAddress":el.address,"coordinate_x":el.x,"coordinate_y":el.y},
-    //                             {"Content-Type":"application/json"},
-    //                         )
-    //                         .then(resp=>{
-    //                             props.AddDestination({"day":props.DayData,"data":resp.data})
-    //                         })
-    //                         .catch(err=>{console.log(err)})
-    //                     });
-    //                 })
-
-    //             });
-    //         layerGroup.addTo(map);
-    //     })
-    //     .catch(err=>{console.log(err)});
-    // }
 
     const handleClickMarker = async (data) => {
         const lat = data.y; const lng = data.x;
@@ -121,11 +35,11 @@ const Map = (props) => {
         var image;
         layerGroup.clearLayers();
 
-        await axios.post('http://localhost:9000/planner/getImages',
+        await axios.post('https://www.wanderlog.shop/planner/getImages',
             { 'businessName':data.name },
         )
         .then(resp=>{ image=resp.data.image })
-        .catch(err=>{console.log(err)});
+        .catch(error);
 
         const marker = L.marker([lat,lng]).addTo(layerGroup);
         marker.on('click', () => {
@@ -159,17 +73,16 @@ const Map = (props) => {
               ).openPopup();
         })
         marker.on('popupopen',function(e){
-            console.log(e);
         const nodeList = e.target._popup._contentNode.childNodes[1].childNodes[1].childNodes[1].childNodes;
         nodeList[1].addEventListener('click', async () => {
-            await  axios.post('http://localhost:9000/planner/findDestination',
+            await  axios.post('https://www.wanderlog.shop/planner/findDestination',
                     {"businessName":data.name, "businessCategory":data.category,"streetFullAddress":data.address,"coordinate_x":data.x,"coordinate_y":data.y},
                     {"Content-Type":"application/json"},
             )
             .then(resp=>{
                 // props.AddDestination({"day":props.DayData,"data":resp.data})
             })
-            .catch(err=>{console.log(err)})
+            .catch(err=>{})
         });
         })
         layerGroup.addTo(map);

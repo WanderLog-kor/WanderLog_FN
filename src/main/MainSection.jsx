@@ -202,7 +202,6 @@ const MainSection = () => {
 
   const handleDateChange = (ranges) => {
     const { startDate, endDate } = ranges.selection;
-    console.log("StartDate : , EndDate : ", startDate, endDate);
 
     setDateRange([
       {

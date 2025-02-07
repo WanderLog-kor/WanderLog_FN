@@ -6,7 +6,6 @@ const PlanList = ({ filteredPlanners, handlePlannerClick, removePlanLike, userid
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
   useEffect(() => {
-    console.log('filteredPlanners : ', filteredPlanners);
     if (filteredPlanners.length > 0) {
       setLoading(false);
     } else {

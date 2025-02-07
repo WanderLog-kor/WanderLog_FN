@@ -11,16 +11,16 @@ const TouristSection = () => {
 
     useEffect(() => {
         // 로그인 상태 확인
-        axios.post('http://localhost:9000/api/cookie/validate', {}, {
+        axios.post('https://www.wanderlog.shop/api/cookie/validate', {}, {
             withCredentials: true,
         })
             .then(response => {
                 setLoginStatus(response.data);  // 로그인 상태
-                console.log(response.data);
+           
             })
             .catch(error => {
                 setLoginStatus('');  // 로그인되지 않은 상태
-                console.log('로그인 정보 없음');
+
             });
 
         // 관광지 데이터 로드
@@ -48,7 +48,7 @@ const TouristSection = () => {
             contentTypeId: '12',
         };
 
-        axios.post('http://localhost:9000/api/getSearch', data, {
+        axios.post('https://www.wanderlog.shop/api/getSearch', data, {
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -56,17 +56,15 @@ const TouristSection = () => {
         })
             .then((response) => {
                 setTouristData(response.data.items.item || []);
-                console.log(response.data.items);
             })
             .catch((error) => {
-                console.error('Error fetching courses:', error);
             });
     };
 
     // 좋아요 상태 가져오기
     const getLikeStatus = (touristId) => {
         if (loginStatus && loginStatus.userid) {  // 로그인 상태가 있을 때만 호출
-            axios.get(`http://localhost:9000/tourist/likeStatus?touristId=${touristId}&userId=${loginStatus.userid}`, {
+            axios.get(`https://www.wanderlog.shop/tourist/likeStatus?touristId=${touristId}&userId=${loginStatus.userid}`, {
                 withCredentials: true,
             })
                 .then(response => {
@@ -105,7 +103,7 @@ const TouristSection = () => {
             userId: loginStatus.userid
         };
 
-        axios.post('http://localhost:9000/tourist/toggleLike', likeRequest, {
+        axios.post('https://www.wanderlog.shop/tourist/toggleLike', likeRequest, {
             headers: {
                 'Content-Type': 'application/json', // JSON 포맷으로 전송
             },

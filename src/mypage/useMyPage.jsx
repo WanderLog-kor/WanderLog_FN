@@ -126,7 +126,7 @@ const useMyPage = () => {
   
     try {
       const response = await axios.post(
-        "http://localhost:9000/user/send-auth-code",
+        "https://www.wanderlog.shop/user/send-auth-code",
         { email: formData.email }, // 이메일 전달
         { headers: { "Content-Type": "application/json" } }
       );
@@ -157,7 +157,7 @@ const useMyPage = () => {
 
   const verifyAuthCode = async () => {
     try {
-        const response = await axios.post("http://localhost:9000/user/verify-auth-code", {
+        const response = await axios.post("https://www.wanderlog.shop/user/verify-auth-code", {
             email: formData.email,
             code: formData.authCode,
         });

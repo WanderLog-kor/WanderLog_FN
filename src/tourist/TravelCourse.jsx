@@ -66,13 +66,12 @@ const TravelCourse = () => {
             contentTypeId: contentTypeId
         };
 
-        axios.post('http://localhost:9000/api/getSearch', data, {
+        axios.post('https://www.wanderlog.shop/api/getSearch', data, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
             .then((response) => {
-                console.log('response : ', response)
                 setCourseData(response.data.items.item || []); // 빈 배열로 안전하게 설정
                 setTotalCount(response.data.totalCount);
                 setLoading(false);
@@ -205,7 +204,7 @@ const TravelCourse = () => {
             userId: loginStatus.userid
         };
 
-        axios.post('http://localhost:9000/tourist/toggleLike', likeRequest, {
+        axios.post('https://www.wanderlog.shop/tourist/toggleLike', likeRequest, {
             headers: {
                 'Content-Type': 'application/json', // JSON 포맷으로 전송
             },
@@ -223,7 +222,7 @@ const TravelCourse = () => {
     // 좋아요 상태 가져오기
     const getLikeStatus = (touristId) => {
         if (loginStatus && loginStatus.userid) {  // 로그인 상태가 있을 때만 호출
-            axios.get(`http://localhost:9000/tourist/likeStatus?touristId=${touristId}&userId=${loginStatus.userid}`, {
+            axios.get(`https://www.wanderlog.shop/tourist/likeStatus?touristId=${touristId}&userId=${loginStatus.userid}`, {
                 withCredentials: true,
             })
                 .then(response => {

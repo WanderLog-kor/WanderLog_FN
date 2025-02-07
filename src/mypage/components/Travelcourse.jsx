@@ -11,7 +11,6 @@ const TravelCourseList = ({ likedTravelCourse, userid, setLikedTravelCourse }) =
 
   // likedTravelCourse가 업데이트 될 때 로딩 상태 변경
   useEffect(() => {
-    console.log('likedTravelCourse : ', likedTravelCourse)
     if (likedTravelCourse && likedTravelCourse.length > 0) {
       setLoading(false);
     } else {
@@ -23,7 +22,7 @@ const TravelCourseList = ({ likedTravelCourse, userid, setLikedTravelCourse }) =
   const fetchLikedTravelCourses = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:9000/user/mypage/${userid}/liked-travelcourse`,
+        `https://www.wanderlog.shop/user/mypage/${userid}/liked-travelcourse`,
         { withCredentials: true }
       );
       const likedTravelcourseData = response.data;
@@ -39,7 +38,7 @@ const TravelCourseList = ({ likedTravelCourse, userid, setLikedTravelCourse }) =
     if (isConfirmed) {
       // 좋아요 취소 API 요청
       axios.post(
-        `http://localhost:9000/travelCourse/toggleLike`,
+        `https://www.wanderlog.shop/travelCourse/toggleLike`,
         { travelCourseId, userId: userid },
         { withCredentials: true }
       )

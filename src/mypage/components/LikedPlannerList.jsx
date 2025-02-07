@@ -26,11 +26,9 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
   const removePlanLike = (plannerId) => {
     const isConfirmed = window.confirm("좋아요를 취소하시겠습니까?");
     if (isConfirmed) {
-      console.log('userid:  ', userid);
-      console.log('plannerid : ', plannerId);
       axios
         .post(
-          `http://localhost:9000/planner/board/toggleLike`,
+          `https://www.wanderlog.shop/planner/board/toggleLike`,
           {
             plannerID: plannerId,
             userId: userid
@@ -55,12 +53,11 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
   const fetchLikedPlanners = async () => {
     if (!userid) return;
     try {
-      const response = await axios.get(`http://localhost:9000/user/mypage/${userid}/liked-planners`, {
+      const response = await axios.get(`https://www.wanderlog.shop/user/mypage/${userid}/liked-planners`, {
         withCredentials: true
       });
       setLikedPlannersState(response.data); // 받아온 데이터로 상태 업데이트
     } catch (err) {
-      console.log(err);
     }
   };
 
@@ -69,16 +66,16 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
     if (!userid) return;
 
     try {
-      console.log("관광지 데이터를 불러옵니다.");
+
       const response = await axios.get(
-        `http://localhost:9000/user/mypage/${userid}/liked-tourists`,
+        `https://www.wanderlog.shop/user/mypage/${userid}/liked-tourists`,
         { withCredentials: true }
       );
       const likedTouristData = response.data;
-      console.log("받아온 관광지 ID 목록:", likedTouristData);
+
       setLikedTourists(likedTouristData); // 관광지 데이터 저장
     } catch (err) {
-      console.log(err);
+
     }
   };
 
@@ -87,15 +84,13 @@ const LikedPlannerList = ({ likedPlanners, handlePlannerClick, userid }) => {
     if (!userid) return;
 
     try {
-      console.log("여행 코스 데이터를 불러옵니다.");
       const response = await axios.get(
-        `http://localhost:9000/user/mypage/${userid}/liked-travelcourse`,
+        `https://www.wanderlog.shop/user/mypage/${userid}/liked-travelcourse`,
         { withCredentials: true }
       );
       const likedTravelcourseData = response.data;
       setLikedTravelCourse(likedTravelcourseData); // 여행 코스 데이터 저장
     } catch (err) {
-      console.log(err);
     }
   };
 
