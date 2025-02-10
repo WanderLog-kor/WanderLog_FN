@@ -2,7 +2,7 @@
   "name": "trip_planner_fn",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "https://GotChun.github.io/WanderLog/",
+  "homepage" : "https://wanderlog-kor.github.io/WanderLog_FN/",
   "dependencies": {
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
