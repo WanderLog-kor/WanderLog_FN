@@ -38,7 +38,7 @@ const Map = (props) => {
             { 'businessName':data.name },
         )
         .then(resp=>{ image=resp.data.image })
-        .catch(error);
+        .catch(error => {console.log(error)});
 
         const marker = L.marker([lat,lng]).addTo(layerGroup);
         marker.on('click', () => {
