@@ -31,8 +31,7 @@ const Destination = () => {
     const [likeCount, setLikeCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
 
-    const [userId, setUserId] = useState(null); // 로그인된 사용자 ID 저장
-
+    console.log(loginData?.userid,plannerItem);
 
     // 거리 계산 함수: 두 좌표 간의 거리 계산 (단위: km)
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
@@ -367,6 +366,7 @@ const Destination = () => {
                     <div className="destination-plannerControl">
 
                         {loginData && loginData.userid && loginData.userid === plannerItem.userId ? (
+
                             <>
                                 <button className="destination-plannerControl-button" onClick={() => { handleUpdatePlanner() }} >수정</button>
                                 <button className="destination-plannerControl-button" onClick={() => { handleDeletePlanner() }} >삭제</button>
