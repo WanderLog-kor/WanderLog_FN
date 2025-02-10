@@ -96,29 +96,7 @@ const Planners = ({ detailProfile }) => {
     제주: "39",
   };
 
-<<<<<<< HEAD
-=======
-  const areaCodeMap = {
-    서울: "1",
-    인천: "2",
-    대전: "3",
-    대구: "4",
-    광주: "5",
-    부산: "6",
-    울산: "7",
-    세종: "8",
-    경기: "31",
-    강원도: "32",
-    충북: "33",
-    충남: "34",
-    경북: "35",
-    경남: "36",
-    전북: "37",
-    전남: "38",
-    제주: "39",
-  };
 
->>>>>>> 박대해
   const handleClickPlannerUpdate = () => {
 
     const plannerData = likedPlanners[0];
@@ -154,10 +132,7 @@ const Planners = ({ detailProfile }) => {
         alert("플래너 삭제에 실패했습니다. 다시 시도해주세요.");
       })
   }
-<<<<<<< HEAD
-=======
 
->>>>>>> 박대해
   return (
     <>
       {!detailProfile && (
