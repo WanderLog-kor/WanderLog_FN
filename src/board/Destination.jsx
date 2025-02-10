@@ -293,18 +293,18 @@ const Destination = () => {
         <>
 
             {/* 페이지 설명 컨탠트 */}
-            < div className="destination-content" >
+            <div className="destination-content" >
 
                 {/* 설명 부분 */}
-                < div className="destination-topcard" >
+                <div className="destination-topcard" >
 
                     {/* 설명의 헤더 */}
-                    < div className="topcard-header" >
+                    <div className="topcard-header" >
                         {/* 플래너 타이틀 */}
-                        <div div className="topcard-title" > {plannerItem.plannerTitle}</div>
+                        <div className="topcard-title" > {plannerItem.plannerTitle}</div>
 
                         {/* 타이틀 바로 밑 서브헤더 */}
-                        < div className="topcard-subheader" >
+                        <div className="topcard-subheader" >
                             <span>{plannerItem.area}</span>
 
                             {/* 기간 : */}

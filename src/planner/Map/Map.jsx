@@ -28,7 +28,6 @@ const Map = (props) => {
         iconSize:[25,50],
     })
 
-
     const handleClickMarker = async (data) => {
         const lat = data.y; const lng = data.x;
         map.setView([lat,lng], 13);

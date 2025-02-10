@@ -1,4 +1,6 @@
-import {useState, useEffect, React} from 'react';
+
+import React, { useState, useEffect } from 'react';
+
 import '../../public/reset.css'
 import {useLocation, useNavigate} from 'react-router-dom';
 import Map from '../Map/Map';
