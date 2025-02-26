@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/WanderLog/static/css/main.9c67cb5e.css",
-    "main.js": "/WanderLog/static/js/main.d776069c.js",
-    "static/media/signup.png": "/WanderLog/static/media/signup.ca163bef2cf7eb435a41.png",
-    "static/media/header3.png": "/WanderLog/static/media/header3.9feb3f8eafd1f61b8709.png",
-    "static/media/trip2.png": "/WanderLog/static/media/trip2.7d8e514109512446c2b0.png",
-    "static/media/modal.png": "/WanderLog/static/media/modal.7d5611a9d40777e3cef5.png",
-    "static/media/main.jpg": "/WanderLog/static/media/main.0561cf24670ff6369b8c.jpg",
-    "static/media/tourist-attraction.png": "/WanderLog/static/media/tourist-attraction.0ce40bb011207d589f2d.png",
-    "static/media/house.png": "/WanderLog/static/media/house.cf7432bada874a067e08.png",
-    "static/media/travel-guide.png": "/WanderLog/static/media/travel-guide.c919660685dbede604ca.png",
-    "static/media/footPrint.png": "/WanderLog/static/media/footPrint.6bcb74259d7fa1c4cc48.png",
-    "static/media/itinerary.png": "/WanderLog/static/media/itinerary.c85807e8379a45849778.png",
-    "static/media/logo2.png": "/WanderLog/static/media/logo2.23410fdc8e12e9fae214.png",
-    "static/media/likeIcon.png": "/WanderLog/static/media/likeIcon.afc97638893d6476fd19.png",
-    "static/media/more-btn.png": "/WanderLog/static/media/more-btn.074d8cb58ed8faf15183.png",
-    "static/media/delete.png": "/WanderLog/static/media/delete.ab198e4b0820e312bda2.png",
-    "index.html": "/WanderLog/index.html",
-    "main.9c67cb5e.css.map": "/WanderLog/static/css/main.9c67cb5e.css.map",
-    "main.d776069c.js.map": "/WanderLog/static/js/main.d776069c.js.map"
+    "main.css": "/WanderLog_FN/static/css/main.d5e23e61.css",
+    "main.js": "/WanderLog_FN/static/js/main.b5b469e3.js",
+    "static/media/signup.png": "/WanderLog_FN/static/media/signup.ca163bef2cf7eb435a41.png",
+    "static/media/header3.png": "/WanderLog_FN/static/media/header3.9feb3f8eafd1f61b8709.png",
+    "static/media/trip2.png": "/WanderLog_FN/static/media/trip2.7d8e514109512446c2b0.png",
+    "static/media/modal.png": "/WanderLog_FN/static/media/modal.7d5611a9d40777e3cef5.png",
+    "static/media/main.jpg": "/WanderLog_FN/static/media/main.0561cf24670ff6369b8c.jpg",
+    "static/media/tourist-attraction.png": "/WanderLog_FN/static/media/tourist-attraction.0ce40bb011207d589f2d.png",
+    "static/media/house.png": "/WanderLog_FN/static/media/house.cf7432bada874a067e08.png",
+    "static/media/travel-guide.png": "/WanderLog_FN/static/media/travel-guide.c919660685dbede604ca.png",
+    "static/media/footPrint.png": "/WanderLog_FN/static/media/footPrint.6bcb74259d7fa1c4cc48.png",
+    "static/media/itinerary.png": "/WanderLog_FN/static/media/itinerary.c85807e8379a45849778.png",
+    "static/media/logo2.png": "/WanderLog_FN/static/media/logo2.23410fdc8e12e9fae214.png",
+    "static/media/likeIcon.png": "/WanderLog_FN/static/media/likeIcon.afc97638893d6476fd19.png",
+    "static/media/more-btn.png": "/WanderLog_FN/static/media/more-btn.074d8cb58ed8faf15183.png",
+    "static/media/delete.png": "/WanderLog_FN/static/media/delete.ab198e4b0820e312bda2.png",
+    "index.html": "/WanderLog_FN/index.html",
+    "main.d5e23e61.css.map": "/WanderLog_FN/static/css/main.d5e23e61.css.map",
+    "main.b5b469e3.js.map": "/WanderLog_FN/static/js/main.b5b469e3.js.map"
   },
   "entrypoints": [
-    "static/css/main.9c67cb5e.css",
-    "static/js/main.d776069c.js"
+    "static/css/main.d5e23e61.css",
+    "static/js/main.b5b469e3.js"
   ]
 }
