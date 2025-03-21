@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/WanderLog_FN/static/css/main.d5e23e61.css",
-    "main.js": "/WanderLog_FN/static/js/main.ba162df5.js",
+    "main.js": "/WanderLog_FN/static/js/main.30388369.js",
     "static/media/signup.png": "/WanderLog_FN/static/media/signup.ca163bef2cf7eb435a41.png",
     "static/media/header3.png": "/WanderLog_FN/static/media/header3.9feb3f8eafd1f61b8709.png",
     "static/media/trip2.png": "/WanderLog_FN/static/media/trip2.7d8e514109512446c2b0.png",
@@ -18,10 +18,10 @@
     "static/media/delete.png": "/WanderLog_FN/static/media/delete.ab198e4b0820e312bda2.png",
     "index.html": "/WanderLog_FN/index.html",
     "main.d5e23e61.css.map": "/WanderLog_FN/static/css/main.d5e23e61.css.map",
-    "main.ba162df5.js.map": "/WanderLog_FN/static/js/main.ba162df5.js.map"
+    "main.30388369.js.map": "/WanderLog_FN/static/js/main.30388369.js.map"
   },
   "entrypoints": [
     "static/css/main.d5e23e61.css",
-    "static/js/main.ba162df5.js"
+    "static/js/main.30388369.js"
   ]
 }
