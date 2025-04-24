@@ -13,7 +13,7 @@ const UseridInputPage = ()=>{
         setError("");
 
         try{
-            await axios.post("http://localhost:9000/user/check-userid", {userid});
+            await axios.post("https://www.wanderlog.shop/user/check-userid", {userid});
             navigate(`/email-auth?userid=${userid}`); //이메일 인증 페이지로 이동
         }catch(err){
             setError("해당 사용자 ID가 존재하지 않습니다.");

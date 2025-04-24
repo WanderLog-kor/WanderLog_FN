@@ -51,7 +51,7 @@ const Footer = () => {
 
       </div>
       <div className="footer-bottom">
-        <em className="footer-copyright">© 2025 여행가자. All rights reserved.</em>
+        <em className="footer-copyright">© 2025 WanderLog. All rights reserved.</em>
       </div>
     </footer>
   );

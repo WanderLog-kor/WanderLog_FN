@@ -6,6 +6,7 @@ import '../src/public/public.css';
 import '../src/public/reset.css';
 import PrivateRoute, { LoginProvider } from './auth/PrivateRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const App = () => {
 

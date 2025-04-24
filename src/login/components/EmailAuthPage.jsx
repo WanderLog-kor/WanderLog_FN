@@ -17,7 +17,7 @@ const EmailAuthPage = ()=>{
         setMessage("");
 
         try{
-            await axios.post("http://localhost:9000/user/send-verify-code",{userid,email});
+            await axios.post("https://www.wanderlog.shop/user/send-verify-code",{userid,email});
             setMessage("인증 코드가 이메일로 발송되었습니다. 메일을 확인하세요.");
             navigate(`/verify-code?userid=${userid}&email=${email}`); //인증 코드 입력페이지로 이동
         }catch(err){

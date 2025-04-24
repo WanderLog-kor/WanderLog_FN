@@ -2,7 +2,6 @@
   "name": "trip_planner_fn",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "https://wanderlog-kor.github.io/WanderLog_FN/",
   "dependencies": {
     "axios": "^1.7.9",
     "bootstrap": "^5.3.3",
@@ -32,7 +31,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "predeploy" : "npm run build",
+    "predeploy": "npm run build && node copyapp.js",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
@@ -56,5 +55,6 @@
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "gh-pages": "^6.3.0"
-  }
+  },
+  "homepage": "https://wanderlogg.store"
 }

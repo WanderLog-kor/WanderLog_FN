@@ -19,7 +19,7 @@ const VerifyCodePage = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:9000/user/verify-code", { email, code ,userid});
+      const response = await axios.post("https://www.wanderlog.shop/user/verify-code", { email, code ,userid});
 
       const {resetToken} = response.data;
       localStorage.setItem("resetToken",resetToken); //로컬스토리지에 리셋토큰저장

@@ -44,7 +44,7 @@ export const LoginProvider = ({ children }) => {
             try {
                 await refreshAccessToken(userid);  // 리프레시 토큰 갱신
                 const retryResponse = await axios.post(
-                    "http://localhost:9000/api/cookie/validate",
+                    "https://www.wanderlog.shop/api/cookie/validate",
                     {},
                     { withCredentials: true }
                 );
@@ -74,7 +74,7 @@ export const LoginProvider = ({ children }) => {
 const refreshAccessToken = async (userid) => {
     try {
         const response = await axios.post(
-            'http://localhost:9000/api/cookie/refresh',
+            'https://www.wanderlog.shop/api/cookie/refresh',
             { userid },
             { withCredentials: true, headers: { userid } }
         );

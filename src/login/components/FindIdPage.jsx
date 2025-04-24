@@ -15,7 +15,7 @@ const FindIdPage = ()=>{
         setUserIds([]);
 
         try{
-            const response = await axios.post("http://localhost:9000/user/findId",{email} );
+            const response = await axios.post("https://www.wanderlog.shop/user/findId",{email} );
             const userIds = response.data.userid;
             
             if(userIds && userIds.length > 0){

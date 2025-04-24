@@ -27,7 +27,7 @@ const LoginForm = () => {
   };
 
   const kakaoLogin = () => {
-    window.location.href = "https://www.wanderlog.shop/oauth2/authorization/kakao ";
+    window.location.href = "https://wanderlog.shop/oauth2/authorization/kakao";
   }
 
   const googleLogin = () => {

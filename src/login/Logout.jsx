@@ -1,17 +1,19 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { useLoginStatus } from "../auth/PrivateRoute";
 
 
 const Logout = () => {
     const navigate = useNavigate();
-
+    const {loginStatus} = useLoginStatus();
     useEffect(() => {
 
 
         axios.post('https://www.wanderlog.shop/user/logout',{},{withCredentials:true})
         .then((response)=>{
             localStorage.removeItem("userid");
+            alert("로그아웃합니다");
             window.location.href="/";
         })      
         .catch((error) =>{
